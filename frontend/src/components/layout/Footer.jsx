@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Snowflake, Twitter, Youtube, Github } from "lucide-react";
+import { Snowflake, Twitch, Youtube } from "lucide-react";
+import { creator } from "../../data/creator";
 
 export const Footer = () => {
   return (
@@ -13,12 +14,11 @@ export const Footer = () => {
           <div className="flex items-center gap-2 mb-3">
             <Snowflake className="w-5 h-5 text-cyan-400" />
             <span className="font-display text-xl text-slate-50">
-              frostbyte<span className="text-cyan-400">.</span>
+              {creator.name}<span className="text-cyan-400">.</span>
             </span>
           </div>
           <p className="text-sm text-slate-400 max-w-xs leading-relaxed">
-            Cold takes on hot games. Independent reviews, no review-bombing
-            agenda, just honest play.
+            {creator.tagline}. Long reviews on cold days. Live chaos most nights.
           </p>
         </div>
 
@@ -52,29 +52,32 @@ export const Footer = () => {
 
         <div>
           <p className="text-xs tracking-[0.2em] uppercase text-cyan-500 mb-4">
-            Elsewhere
+            Catch me streaming
           </p>
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-2">
             <a
-              href="#"
-              data-testid="social-twitter"
-              className="w-10 h-10 rounded-full border border-white/10 grid place-items-center text-slate-300 hover:text-cyan-300 hover:border-cyan-400/40 transition"
+              href={creator.twitch.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="footer-twitch"
+              className="inline-flex items-center gap-3 text-sm text-slate-300 hover:text-purple-300 group"
             >
-              <Twitter className="w-4 h-4" />
+              <span className="w-9 h-9 rounded-full border border-white/10 grid place-items-center group-hover:border-purple-400/40 group-hover:bg-purple-500/10 transition">
+                <Twitch className="w-4 h-4" />
+              </span>
+              Twitch · {creator.twitch.handle}
             </a>
             <a
-              href="#"
-              data-testid="social-youtube"
-              className="w-10 h-10 rounded-full border border-white/10 grid place-items-center text-slate-300 hover:text-cyan-300 hover:border-cyan-400/40 transition"
+              href={creator.youtube.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="footer-youtube"
+              className="inline-flex items-center gap-3 text-sm text-slate-300 hover:text-rose-300 group"
             >
-              <Youtube className="w-4 h-4" />
-            </a>
-            <a
-              href="#"
-              data-testid="social-github"
-              className="w-10 h-10 rounded-full border border-white/10 grid place-items-center text-slate-300 hover:text-cyan-300 hover:border-cyan-400/40 transition"
-            >
-              <Github className="w-4 h-4" />
+              <span className="w-9 h-9 rounded-full border border-white/10 grid place-items-center group-hover:border-rose-400/40 group-hover:bg-rose-500/10 transition">
+                <Youtube className="w-4 h-4" />
+              </span>
+              YouTube · {creator.youtube.handle}
             </a>
           </div>
         </div>
@@ -82,8 +85,8 @@ export const Footer = () => {
 
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between gap-3 text-xs text-slate-500">
-          <span>© {new Date().getFullYear()} Frostbyte. Played, written, and chilled.</span>
-          <span>Built in icy blues.</span>
+          <span>© {new Date().getFullYear()} {creator.name}. Played, written, and streamed in icy blues.</span>
+          <span>Reviews by day. VTuber by night.</span>
         </div>
       </div>
     </footer>

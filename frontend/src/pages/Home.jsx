@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { reviews } from "../data/reviews";
+import { creator } from "../data/creator";
 import { ReviewCard } from "../components/ReviewCard";
-import { ArrowUpRight, Snowflake, Star, Trophy } from "lucide-react";
+import { ArrowUpRight, Snowflake, Star, Trophy, Twitch } from "lucide-react";
 
 const heroBg =
   "https://static.prod-images.emergentagent.com/jobs/92760775-486b-4dcb-9506-0ee67c0055c1/images/57bbd4568ba5fe66ce9f60834b97aab84841af000b9b8e142606bd422c8f5a3f.png";
@@ -64,6 +65,22 @@ export default function Home() {
               >
                 How I score
               </Link>
+              {creator.isLive && (
+                <a
+                  href={creator.twitch.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-testid="hero-live-cta"
+                  className="group inline-flex items-center gap-2 px-5 py-3 rounded-full bg-rose-500/15 border border-rose-400/40 text-rose-200 hover:bg-rose-500/25 transition"
+                >
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
+                  </span>
+                  <Twitch className="w-4 h-4" />
+                  <span className="text-sm">Live now · {creator.liveGame}</span>
+                </a>
+              )}
             </div>
           </div>
         </div>
