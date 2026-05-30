@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { PLATFORMS, GENRES } from "../data/reviews";
 import { ReviewCard } from "../components/ReviewCard";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "../components/ui/input";
@@ -27,9 +26,12 @@ export default function Reviews() {
 
   useEffect(() => {
     fetchReviews()
-      .then((d) => setAllReviews(d))
+      .then((d) => setAllReviews(Array.isArray(d) ? d : d?.items ?? []))
       .finally(() => setLoading(false));
   }, []);
+
+  const PLATFORMS = useMemo(() => [...new Set(allReviews.map((r) => r.platform).filter(Boolean))].sort(), [allReviews]);
+  const GENRES = useMemo(() => [...new Set(allReviews.map((r) => r.genre).filter(Boolean))].sort(), [allReviews]);
 
   const toggle = (list, setList, value) => {
     setList(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);

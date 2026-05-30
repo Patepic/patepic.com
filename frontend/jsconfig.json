@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "baseUrl": "src",
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler"
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }

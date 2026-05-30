@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Coffee, Headphones, Snowflake, Twitch, Youtube, Sparkles, Image as ImageIcon, Heart, Clock, Gamepad2 } from "lucide-react";
 import { creator } from "../data/creator";

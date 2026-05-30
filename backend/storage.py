@@ -1,4 +1,3 @@
-"""Cloudflare R2 storage helper (S3-compatible API via boto3)."""
 import os
 import uuid
 import logging

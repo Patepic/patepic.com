@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { scoreToTier } from "../data/reviews";
 import { Gamepad2 } from "lucide-react";

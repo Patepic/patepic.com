@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Snowflake, Twitch, Youtube } from "lucide-react";
 import { creator } from "../../data/creator";
