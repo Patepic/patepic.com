@@ -1,51 +1,55 @@
-# Frostbyte — Game Review Blog (PRD)
+# Patepic — Game Review Blog (PRD)
 
 ## Original Problem Statement
-Build a game review style blog site with:
-1. Landing page with review stats and recent reviews
-2. About page
-3. Reviews page with search bar and filters (platform, genre, etc.)
-4. Review guidelines explaining scoring methodology
-5. Tier list page
-6. Contact form page
-
-Theme: icy blues. Originally requested Astro.js → user agreed to React (Astro unsupported on Emergent).
+Build a game review blog for Patepic, a VTuber + game reviewer. Pages: Landing (stats + recent), About (lore + avatar slot), Reviews (search + filters), Review Guidelines, Tier List, Contact form. Stack: React (Astro unsupported). Theme: icy frost-light, wintery, soft pale blues. Reviews stored in MongoDB. Images on Cloudflare R2. Resend for contact emails. JWT admin for /admin CRUD.
 
 ## Architecture
-- **Frontend**: React (CRA) + React Router + Tailwind + Shadcn UI + Framer Motion + lucide-react + react-markdown
-- **Backend**: FastAPI single endpoint `/api/contact` using **Resend** (currently in DEV MODE with placeholder API key)
-- **No database**: All review content lives in `/app/frontend/src/data/reviews.js` as JS objects with markdown body strings
+- **Frontend**: React + Tailwind + Shadcn UI + react-markdown + axios. AuthContext + ProtectedRoute. Light icy theme (#f4f8fc base, slate text, sky-700 accents). Fraunces (display) + Inter (body).
+- **Backend**: FastAPI single module `server.py` + `auth.py` (bcrypt/JWT) + `storage.py` (R2 via boto3). MongoDB (motor) for reviews + users. Resend for email. Cloudflare R2 (S3-compatible) for cover images.
+- **Auth**: Single admin seeded on startup from `ADMIN_EMAIL` + `ADMIN_PASSWORD` env vars. Bearer token in `localStorage` (`patepic_token`).
 
 ## User Choices
-- Stack: React (no Astro), no DB, markdown-style content in JS data file
-- Theme: icy blues (Cinematic Frost archetype, deep navy + cyan accents)
-- Fonts: **Fraunces** (display) + **Inter** (body)
-- Contact form: Resend integration (placeholder API key — user will replace later)
-- 8 seeded sample reviews included
+- React + Tailwind + Shadcn (no Astro, supported stack)
+- Light icy theme, pale blues, NOT cyan-heavy
+- Fraunces + Inter typography
+- VTuber brand: "Patepic", live on Twitch (placeholder URL until user replaces)
+- Admin: patrickcoulter01@gmail.com / password
+- Real Resend key in `.env`
+- Real Cloudflare R2 bucket `review-images`
 
-## What's Been Implemented (2026-12)
-- Landing page with bento stats (total reviews, avg score, top platform, gold standard) + featured recent reviews grid
-- Reviews listing with full-text search, platform/genre checkboxes, score range slider, sort select
-- Review detail page with floating glowing score badge, pros/cons cards, markdown body, related-by-genre recs
-- Tier list page (S/A/B/C/D/F) with auto-grouping by score
-- Guidelines page with 6-tier scoring breakdown + 5 house-rule principles
-- About page with bio + photo
-- Contact page with validated form + Resend backend (dev-mode safe)
-- Navbar (mobile responsive) + Footer with social links
-- Sonner toast notifications for form feedback
-- 100% backend + frontend test coverage on iteration_1
+## What's Been Implemented
+### MVP (2026-12, iteration_1)
+- 7 public pages (Home, About, Reviews, Review Detail, Guidelines, Tier List, Contact)
+- Static review data in `/app/frontend/src/data/reviews.js`
+- Contact form via Resend (dev-mode placeholder)
+- VTuber touches (LIVE badge, lore on About, channel stats)
+
+### Major upgrade (2026-12, iteration_2)
+- **Light theme** — full repaint to icy frost-light with snow noise overlay
+- **MongoDB-backed reviews** — frontend pulls from `/api/reviews` (collection seeded by `seed_reviews.py`)
+- **Cloudflare R2 image hosting** — admin uploads covers via `/api/admin/upload`
+- **Resend live** — real API key, sends to patrickcoulter01@gmail.com
+- **JWT admin auth** — `/admin/login` + protected `/admin` dashboard with full review CRUD
+- **Admin dashboard** — table of reviews, create/edit (Dialog), delete (AlertDialog), inline R2 upload + upload-progress
+- 100% backend (17/17) + 100% frontend test pass
 
 ## Files of Reference
-- `backend/server.py` — `/api/health`, `/api/contact`
-- `frontend/src/data/reviews.js` — review data + `scoreToTier()`
-- `frontend/src/pages/*` — Home, About, Reviews, ReviewDetail, Guidelines, TierList, Contact
-- `frontend/src/components/layout/*` — Navbar, Footer, Layout
-- `frontend/src/components/ReviewCard.jsx`
+- `backend/server.py` — public + auth + admin endpoints
+- `backend/auth.py` — bcrypt + JWT + `require_admin`
+- `backend/storage.py` — R2 upload/delete via boto3
+- `backend/seed_reviews.py` — idempotent migration of 8 sample reviews
+- `frontend/src/lib/api.js` — axios + helpers
+- `frontend/src/context/AuthContext.jsx`
+- `frontend/src/pages/Admin.jsx` — dashboard + editor dialog
+- `frontend/src/pages/AdminLogin.jsx`
+- `frontend/src/index.css` — light theme CSS variables
 
-## Backlog / Next Tasks
-- **P1**: Plug in real Resend API key + verified domain in `backend/.env`
-- **P2**: Add RSS / sitemap for SEO
-- **P2**: Newsletter signup (Resend Audiences)
-- **P3**: Convert reviews from JS file → real `.md` files with frontmatter (needs CRA loader config or migration to Vite)
-- **P3**: Add cover image upload helper or use proper game key art
-- **P3**: Reading-time estimate on review cards
+## Backlog
+- **P1**: Verify a sender domain in Resend so emails deliver beyond verified addresses
+- **P2**: Migrate FastAPI `on_event` → lifespan handler (deprecation note)
+- **P2**: Tighten CORS — explicit origins instead of `*`
+- **P2**: Allow admin update to clear optional string fields (verdict / cover_url)
+- **P3**: Brute-force protection on `/api/auth/login` (5-fail lockout)
+- **P3**: Admin: drag-and-drop multi-cover, image cropping, markdown live preview
+- **P3**: RSS feed + sitemap for SEO
+- **P3**: Newsletter signup via Resend Audiences
