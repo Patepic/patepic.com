@@ -1,72 +1,86 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import asyncio
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
-import uuid
-from datetime import datetime, timezone
-
+from pydantic import BaseModel, EmailStr, Field
+import resend
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
+CONTACT_RECIPIENT_EMAIL = os.environ.get('CONTACT_RECIPIENT_EMAIL', 'you@example.com')
 
-# Create the main app without a prefix
-app = FastAPI()
+resend.api_key = RESEND_API_KEY
 
-# Create a router with the /api prefix
+app = FastAPI(title="Frostbyte API")
 api_router = APIRouter(prefix="/api")
 
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+class ContactRequest(BaseModel):
+    name: str = Field(..., min_length=1, max_length=120)
+    email: EmailStr
+    subject: str = Field(..., min_length=1, max_length=200)
+    message: str = Field(..., min_length=1, max_length=5000)
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
 
-# Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Frostbyte API up"}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+@api_router.get("/health")
+async def health():
+    return {
+        "status": "ok",
+        "resend_configured": bool(RESEND_API_KEY) and not RESEND_API_KEY.startswith("re_placeholder"),
+    }
 
-# Include the router in the main app
+
+@api_router.post("/contact")
+async def send_contact(req: ContactRequest):
+    if not RESEND_API_KEY or RESEND_API_KEY.startswith("re_placeholder"):
+        # Simulate success in dev mode (no real key set) so UI flow works
+        logger.info(f"[DEV MODE] Contact form submission from {req.email}: {req.subject}")
+        return {
+            "status": "queued",
+            "dev_mode": True,
+            "detail": "Resend API key not configured. Submission logged but not emailed."
+        }
+
+    html = f"""
+    <div style="font-family: Arial, sans-serif; max-width:600px; margin:0 auto; background:#0f172a; color:#f8fafc; padding:24px; border-radius:12px;">
+      <h2 style="color:#22d3ee; margin-top:0;">New Frostbyte Contact Submission</h2>
+      <table style="width:100%; border-collapse:collapse;">
+        <tr><td style="padding:8px 0; color:#94a3b8;">Name</td><td style="padding:8px 0;">{req.name}</td></tr>
+        <tr><td style="padding:8px 0; color:#94a3b8;">Email</td><td style="padding:8px 0;">{req.email}</td></tr>
+        <tr><td style="padding:8px 0; color:#94a3b8;">Subject</td><td style="padding:8px 0;">{req.subject}</td></tr>
+      </table>
+      <hr style="border:none; border-top:1px solid #1e293b; margin:16px 0;" />
+      <p style="white-space:pre-wrap; line-height:1.6;">{req.message}</p>
+    </div>
+    """
+
+    params = {
+        "from": SENDER_EMAIL,
+        "to": [CONTACT_RECIPIENT_EMAIL],
+        "reply_to": req.email,
+        "subject": f"[Frostbyte] {req.subject}",
+        "html": html,
+    }
+
+    try:
+        result = await asyncio.to_thread(resend.Emails.send, params)
+        return {"status": "success", "email_id": result.get("id")}
+    except Exception as e:
+        logger.error(f"Resend send failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to send email: {e}")
+
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -77,13 +91,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
