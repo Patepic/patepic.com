@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html, body {
-  background-color: #030712;
-  color: #f8fafc;
+  background-color: #f4f8fc;
+  color: #1e293b;
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -17,75 +17,77 @@ html, body {
 body {
   margin: 0;
   background-image:
-    radial-gradient(at 12% 8%, rgba(34, 211, 238, 0.08) 0px, transparent 55%),
-    radial-gradient(at 88% 92%, rgba(59, 130, 246, 0.07) 0px, transparent 55%);
+    radial-gradient(at 8% 4%, rgba(186, 230, 253, 0.55) 0px, transparent 50%),
+    radial-gradient(at 92% 0%, rgba(224, 242, 254, 0.7) 0px, transparent 55%),
+    radial-gradient(at 50% 100%, rgba(241, 245, 249, 0.85) 0px, transparent 60%);
   background-attachment: fixed;
+  background-color: #f4f8fc;
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.35);
-  color: #f8fafc;
+  background: rgba(2, 132, 199, 0.18);
+  color: #0c4a6e;
 }
 
-/* Grain texture overlay */
-.grain::before {
+/* Decorative subtle "snow" noise overlay */
+.snow::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.04 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.55;
   z-index: 1;
-  mix-blend-mode: overlay;
+  mix-blend-mode: multiply;
 }
 
 .font-display { font-family: 'Fraunces', 'Times New Roman', serif; font-optical-sizing: auto; }
 .font-body { font-family: 'Inter', system-ui, sans-serif; }
 
-/* Shimmer animation for score badge */
-@keyframes shimmer {
-  0%, 100% { box-shadow: 0 0 24px rgba(34, 211, 238, 0.4), inset 0 0 0 1px rgba(34, 211, 238, 0.4); }
-  50% { box-shadow: 0 0 36px rgba(34, 211, 238, 0.7), inset 0 0 0 1px rgba(34, 211, 238, 0.6); }
+/* Score badge subtle pulse (light) */
+@keyframes shimmer-light {
+  0%, 100% { box-shadow: 0 8px 24px rgba(2, 132, 199, 0.18), inset 0 0 0 1px rgba(255,255,255,0.6); }
+  50%       { box-shadow: 0 12px 32px rgba(2, 132, 199, 0.28), inset 0 0 0 1px rgba(255,255,255,0.8); }
 }
-.score-glow { animation: shimmer 3.5s ease-in-out infinite; }
+.score-glow { animation: shimmer-light 4s ease-in-out infinite; }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #030712; }
-::-webkit-scrollbar-thumb { background: #164e63; border-radius: 8px; }
-::-webkit-scrollbar-thumb:hover { background: #22d3ee; }
+::-webkit-scrollbar-track { background: #eef4f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-/* Prose tweaks */
-.prose-frost h2 { font-family: 'Fraunces', serif; color: #e0f2fe; }
-.prose-frost h3 { font-family: 'Fraunces', serif; color: #cffafe; }
-.prose-frost p { color: #cbd5e1; line-height: 1.75; }
-.prose-frost a { color: #22d3ee; }
-.prose-frost blockquote { border-left: 3px solid #22d3ee; padding-left: 1rem; color: #94a3b8; font-style: italic; }
-.prose-frost strong { color: #f8fafc; }
-.prose-frost ul { list-style: disc; padding-left: 1.25rem; color: #cbd5e1; }
-.prose-frost code { background: #0f172a; padding: 0.15rem 0.4rem; border-radius: 4px; color: #67e8f9; font-size: 0.9em; }
+/* Prose tweaks (light) */
+.prose-frost h2 { font-family: 'Fraunces', serif; color: #0f172a; }
+.prose-frost h3 { font-family: 'Fraunces', serif; color: #1e293b; }
+.prose-frost p { color: #334155; line-height: 1.8; }
+.prose-frost a { color: #0284c7; text-decoration: underline; text-decoration-color: #bae6fd; text-underline-offset: 3px; }
+.prose-frost blockquote { border-left: 3px solid #7dd3fc; padding-left: 1rem; color: #475569; font-style: italic; }
+.prose-frost strong { color: #0f172a; }
+.prose-frost ul { list-style: disc; padding-left: 1.25rem; color: #334155; }
+.prose-frost code { background: #e0f2fe; padding: 0.15rem 0.4rem; border-radius: 4px; color: #075985; font-size: 0.9em; }
 
 @layer base {
   :root {
-    --background: 222 47% 4%;
-    --foreground: 210 40% 98%;
-    --card: 222 47% 7%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 47% 7%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 188 86% 53%;
-    --primary-foreground: 222 47% 4%;
-    --secondary: 217 33% 18%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 18%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 188 86% 53%;
-    --accent-foreground: 222 47% 4%;
+    --background: 210 40% 97%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 200 95% 39%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 200 95% 39%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 51%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217 33% 18%;
-    --input: 217 33% 18%;
-    --ring: 188 86% 53%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 200 95% 60%;
     --radius: 0.75rem;
   }
 }

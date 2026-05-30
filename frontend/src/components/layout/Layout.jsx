@@ -11,7 +11,7 @@ export const Layout = () => {
   }, [pathname]);
 
   return (
-    <div className="grain relative min-h-screen flex flex-col">
+    <div className="snow relative min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 relative z-10">
         <Outlet />
