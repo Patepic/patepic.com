@@ -52,15 +52,15 @@ export const Navbar = () => {
 
         <div className="flex items-center gap-2">
           <LiveBadge />
-          {user && (
-            <div className="hidden md:flex items-center gap-1">
-              <Link
-                to="/admin"
-                data-testid="nav-admin"
-                className="px-3 h-9 inline-flex items-center gap-1.5 rounded-full bg-slate-900 text-white hover:bg-slate-700 text-xs font-medium tracking-wide transition"
-              >
-                <Lock className="w-3.5 h-3.5" /> Admin
-              </Link>
+          <div className="hidden md:flex items-center gap-1">
+            <Link
+              to={user ? "/admin" : "/admin/login"}
+              data-testid="nav-admin"
+              className="px-3 h-9 inline-flex items-center gap-1.5 rounded-full bg-slate-900 text-white hover:bg-slate-700 text-xs font-medium tracking-wide transition"
+            >
+              <Lock className="w-3.5 h-3.5" /> Admin
+            </Link>
+            {user && (
               <button
                 onClick={logout}
                 data-testid="nav-logout"
@@ -69,8 +69,8 @@ export const Navbar = () => {
               >
                 <LogOut className="w-4 h-4" />
               </button>
-            </div>
-          )}
+            )}
+          </div>
 
           <button
             data-testid="mobile-menu-toggle"
@@ -102,15 +102,15 @@ export const Navbar = () => {
                 {l.label}
               </NavLink>
             ))}
+            <Link
+              to={user ? "/admin" : "/admin/login"}
+              onClick={() => setOpen(false)}
+              className="px-3 py-2.5 text-sm rounded-lg bg-slate-900 text-white inline-flex items-center gap-2"
+            >
+              <Lock className="w-4 h-4" /> Admin
+            </Link>
             {user && (
               <>
-                <Link
-                  to="/admin"
-                  onClick={() => setOpen(false)}
-                  className="px-3 py-2.5 text-sm rounded-lg bg-slate-900 text-white inline-flex items-center gap-2"
-                >
-                  <Lock className="w-4 h-4" /> Admin
-                </Link>
                 <button
                   onClick={() => {
                     logout();

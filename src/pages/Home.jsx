@@ -27,7 +27,6 @@ export default function Home() {
 
   return (
     <div data-testid="home-page">
-      {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:pt-24 lg:pb-32">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -94,7 +93,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STATS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
           <StatCard className="md:col-span-4" label="Reviews shipped" value={String(totalReviews).padStart(2, "0")} icon={<Snowflake className="w-4 h-4" />} testId="stat-total-reviews" />
@@ -119,7 +117,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* RECENT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24" data-testid="recent-reviews">
         <div className="flex items-end justify-between mb-10 gap-4 flex-wrap">
           <div>
@@ -149,7 +146,6 @@ export default function Home() {
         )}
       </section>
 
-      {/* CALLOUT */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white via-sky-50/60 to-white border border-sky-100 p-10 lg:p-16 shadow-[0_30px_80px_-30px_rgba(2,132,199,0.25)]">
           <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-sky-200/40 blur-3xl" />

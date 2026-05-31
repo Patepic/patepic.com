@@ -1,6 +1,3 @@
-// Static constants and helpers used across the UI.
-// Review *data* now lives in MongoDB and is fetched via /api/reviews.
-
 import { fetchReviews } from "../lib/api";
 
 export async function getPlatforms() {

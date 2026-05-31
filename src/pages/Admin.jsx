@@ -283,8 +283,6 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
         </DialogHeader>
 
         <form onSubmit={submit} className="space-y-5 mt-2">
-
-          {/* Image */}
           <div>
             <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">Image</Label>
             <div className="mt-2 flex gap-4 items-start">
@@ -311,13 +309,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             </div>
           </div>
 
-          {/* Title & Platform */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FieldText label="Title" required value={form.title} onChange={(v) => set("title", v)} testId="admin-field-title" />
             <FieldText label="Platform" value={form.platform} onChange={(v) => set("platform", v)} testId="admin-field-platform" />
           </div>
 
-          {/* Genre */}
           <ListEditor
             label="Genre"
             items={form.genre}
@@ -328,14 +324,12 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             testId="admin-genre"
           />
 
-          {/* Rating & Date & Release Date */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <FieldText label="Rating" value={form.rating} onChange={(v) => set("rating", v)} testId="admin-field-rating" />
             <FieldText label="Date" value={form.date} onChange={(v) => set("date", v)} testId="admin-field-date" />
             <FieldText label="Release Date" value={form.releaseDate} onChange={(v) => set("releaseDate", v)} testId="admin-field-releaseDate" />
           </div>
 
-          {/* Recommended dropdown */}
           <div>
             <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">Recommended</Label>
             <Select value={form.recommended} onValueChange={(v) => set("recommended", v)}>
@@ -349,7 +343,6 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             </Select>
           </div>
 
-          {/* Content Type dropdown */}
           <div>
             <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">Content Type</Label>
             <Select value={form.contentType} onValueChange={(v) => set("contentType", v)}>
@@ -366,7 +359,6 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             </Select>
           </div>
 
-          {/* Summary */}
           <div>
             <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">Summary</Label>
             <Input
@@ -378,7 +370,6 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             />
           </div>
 
-          {/* Pros */}
           <ListEditor
             label="Pros"
             items={form.pros}
@@ -389,7 +380,6 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             testId="admin-pros"
           />
 
-          {/* Cons */}
           <ListEditor
             label="Cons"
             items={form.cons}
@@ -400,7 +390,6 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             testId="admin-cons"
           />
 
-          {/* Review Body */}
           <div>
             <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
               Review Body (Markdown)

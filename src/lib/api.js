@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const BACKEND = import.meta.env.VITE_BACKEND_URL;
+const BACKEND = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
 export const API_BASE = `${BACKEND}/api`;
 
 export const api = axios.create({ baseURL: API_BASE });
 
-// Attach JWT from localStorage on every request when present.
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("patepic_token");
   if (token) {
@@ -14,7 +13,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Convenience helpers
 export const fetchReviews = async (params = {}) => {
   const { data } = await api.get("/reviews", { params });
   return data;

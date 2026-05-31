@@ -38,7 +38,7 @@ export default function About() {
               <div className="absolute -inset-3 bg-gradient-to-br from-sky-200/60 via-blue-100/40 to-white rounded-3xl blur-2xl" />
               <div className="relative rounded-3xl border border-white overflow-hidden aspect-[4/5] bg-gradient-to-br from-sky-50 via-white to-blue-50 shadow-[0_30px_80px_-30px_rgba(2,132,199,0.35)]">
                 {creator.avatarUrl ? (
-                  <img src={creator.avatarUrl} alt={`${creator.name} VTuber avatar`} className="w-full h-full object-cover" />
+                  <img src={creator.avatarUrl} alt={`${creator.name} VTuber avatar`} className="w-full h-full object-contain" />
                 ) : (
                   <div className="absolute inset-0 grid place-items-center text-center p-8">
                     <div className="absolute inset-8 rounded-3xl border border-dashed border-sky-300" />
