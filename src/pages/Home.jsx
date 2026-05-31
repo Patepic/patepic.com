@@ -13,17 +13,23 @@ export default function Home() {
   if (loading) return <PageLoader />;
 
   const totalReviews = reviews.length;
+
   const averageScore = totalReviews
-    ? (reviews.reduce((s, r) => s + r.score, 0) / totalReviews).toFixed(1)
+    ? (reviews.reduce((s, r) => s + (parseFloat(r.rating) || 0), 0) / totalReviews).toFixed(1)
     : "—";
+
   const platformCounts = reviews.reduce((acc, r) => {
-    acc[r.platform] = (acc[r.platform] || 0) + 1;
+    if (r.platform) acc[r.platform] = (acc[r.platform] || 0) + 1;
     return acc;
   }, {});
   const topPlatform = Object.entries(platformCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
-  const highestScore = reviews.length ? Math.max(...reviews.map((r) => r.score)) : 0;
-  const goldStandard = reviews.find((r) => r.score === highestScore);
-  const recent = [...reviews].sort((a, b) => b.year - a.year).slice(0, 5);
+
+  const highestScore = reviews.length ? Math.max(...reviews.map((r) => parseFloat(r.rating) || 0)) : 0;
+  const goldStandard = reviews.find((r) => parseFloat(r.rating) === highestScore);
+
+  const recent = [...reviews]
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    .slice(0, 5);
 
   return (
     <div data-testid="home-page">
@@ -111,7 +117,7 @@ export default function Home() {
               <div className="font-display text-xl text-slate-900 group-hover:text-sky-800 transition leading-tight">
                 {goldStandard.title}
               </div>
-              <div className="text-sm text-slate-500 mt-1">Scored {goldStandard.score.toFixed(1)} / 10</div>
+              <div className="text-sm text-slate-500 mt-1">Scored {goldStandard.rating} / 10</div>
             </Link>
           )}
         </div>

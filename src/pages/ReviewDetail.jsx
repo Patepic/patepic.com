@@ -2,9 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { scoreToTier } from "../data/reviews";
 import { ArrowLeft, Check, Gamepad2, X as XIcon } from "lucide-react";
 import { fetchReview, fetchReviews } from "../lib/api";
+
+const ratingToTier = (rating) => {
+  const n = parseFloat(rating);
+  if (isNaN(n)) return "C";
+  if (n >= 9) return "S";
+  if (n >= 8) return "A";
+  if (n >= 7) return "B";
+  if (n >= 5) return "C";
+  if (n >= 3) return "D";
+  return "F";
+};
 
 const tierGradients = {
   S: "from-sky-500 to-blue-600 text-white",
@@ -30,7 +40,13 @@ export default function ReviewDetail() {
         setReview(r);
         try {
           const all = await fetchReviews();
-          setRelated(all.filter((x) => x.slug !== r.slug && x.genre === r.genre).slice(0, 3));
+          const genre = Array.isArray(r.genre) ? r.genre[0] : r.genre;
+          setRelated(
+            all.filter((x) => {
+              const xGenre = Array.isArray(x.genre) ? x.genre[0] : x.genre;
+              return x.slug !== r.slug && xGenre === genre;
+            }).slice(0, 3)
+          );
         } catch (e) { /* ignore */ }
       })
       .catch((e) => {
@@ -51,8 +67,11 @@ export default function ReviewDetail() {
     );
   }
 
-  const tier = scoreToTier(review.score);
-  const cover = review.cover_url || "https://images.pexels.com/photos/32977036/pexels-photo-32977036.jpeg";
+  const tier = ratingToTier(review.rating);
+  const genre = Array.isArray(review.genre) ? review.genre.join(", ") : review.genre;
+  const cover = review.cover_url
+    ? review.cover_url.startsWith("http") ? review.cover_url : `https://${review.cover_url}`
+    : "https://images.pexels.com/photos/32977036/pexels-photo-32977036.jpeg";
 
   return (
     <article data-testid={`review-detail-${review.slug}`}>
@@ -68,25 +87,35 @@ export default function ReviewDetail() {
           </Link>
 
           <div className="flex items-center gap-2 text-xs mb-4 flex-wrap">
-            <span className="px-2.5 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 inline-flex items-center gap-1.5">
-              <Gamepad2 className="w-3 h-3 text-sky-600" /> {review.platform}
-            </span>
-            <span className="px-2.5 py-1 rounded-full bg-white/90 border border-slate-200 text-sky-700 tracking-[0.15em] uppercase">{review.genre}</span>
-            <span className="text-slate-600 bg-white/70 px-2.5 py-1 rounded-full">{review.year} · {review.studio}</span>
+            {review.platform && (
+              <span className="px-2.5 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 inline-flex items-center gap-1.5">
+                <Gamepad2 className="w-3 h-3 text-sky-600" /> {review.platform}
+              </span>
+            )}
+            {genre && (
+              <span className="px-2.5 py-1 rounded-full bg-white/90 border border-slate-200 text-sky-700 tracking-[0.15em] uppercase">{genre}</span>
+            )}
+            {(review.releaseDate || review.date) && (
+              <span className="text-slate-600 bg-white/70 px-2.5 py-1 rounded-full">
+                {review.releaseDate || review.date}
+              </span>
+            )}
           </div>
 
           <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl tracking-tighter text-slate-900 leading-[0.95] max-w-4xl">
             {review.title}
           </h1>
-          <p className="mt-5 text-lg lg:text-xl text-slate-700 max-w-2xl font-display italic">
-            "{review.verdict}"
-          </p>
+          {review.summary && (
+            <p className="mt-5 text-lg lg:text-xl text-slate-700 max-w-2xl font-display italic">
+              "{review.summary}"
+            </p>
+          )}
         </div>
 
         <div className="absolute top-1/2 right-4 sm:right-8 lg:right-16 -translate-y-1/2 hidden md:block">
           <div data-testid="review-score-badge" className={`score-glow w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-gradient-to-br ${tierGradients[tier]} grid place-items-center`}>
             <div className="text-center leading-none">
-              <div className="font-display text-5xl lg:text-6xl font-bold">{review.score.toFixed(1)}</div>
+              <div className="font-display text-5xl lg:text-6xl font-bold">{review.rating}</div>
               <div className="text-[0.6rem] tracking-[0.3em] uppercase font-medium mt-2">Tier {tier}</div>
             </div>
           </div>
@@ -95,7 +124,7 @@ export default function ReviewDetail() {
 
       <div className="md:hidden max-w-7xl mx-auto px-4 -mt-6 relative z-10">
         <div className={`score-glow inline-flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-br ${tierGradients[tier]}`}>
-          <span className="font-display text-2xl font-bold">{review.score.toFixed(1)}</span>
+          <span className="font-display text-2xl font-bold">{review.rating}</span>
           <span className="text-xs tracking-[0.2em] uppercase font-medium">Tier {tier}</span>
         </div>
       </div>
@@ -139,19 +168,24 @@ export default function ReviewDetail() {
 
       {related.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
-          <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-4">More in {review.genre}</p>
+          <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-4">More in {genre}</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {related.map((r) => (
-              <Link to={`/reviews/${r.slug}`} key={r.slug} className="group rounded-2xl bg-white border border-slate-200 hover:border-sky-300 overflow-hidden transition hover:shadow-lg">
-                <div className="aspect-[16/9] overflow-hidden bg-slate-100">
-                  <img src={r.cover_url || cover} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
-                </div>
-                <div className="p-5">
-                  <div className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-1">{r.platform}</div>
-                  <div className="font-display text-lg text-slate-900 group-hover:text-sky-800">{r.title}</div>
-                </div>
-              </Link>
-            ))}
+            {related.map((r) => {
+              const relatedCover = r.cover_url
+                ? r.cover_url.startsWith("http") ? r.cover_url : `https://${r.cover_url}`
+                : cover;
+              return (
+                <Link to={`/reviews/${r.slug}`} key={r.slug} className="group rounded-2xl bg-white border border-slate-200 hover:border-sky-300 overflow-hidden transition hover:shadow-lg">
+                  <div className="aspect-[16/9] overflow-hidden bg-slate-100">
+                    <img src={relatedCover} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+                  </div>
+                  <div className="p-5">
+                    <div className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-1">{r.platform}</div>
+                    <div className="font-display text-lg text-slate-900 group-hover:text-sky-800">{r.title}</div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}
