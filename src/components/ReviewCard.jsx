@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { scoreToTier } from "../data/reviews";
 import { Gamepad2 } from "lucide-react";
 
 const tierBadge = {
@@ -11,10 +10,24 @@ const tierBadge = {
   F: "from-rose-500 to-rose-700 text-white",
 };
 
+const ratingToTier = (rating) => {
+  const n = parseFloat(rating);
+  if (isNaN(n)) return "C";
+  if (n >= 9) return "S";
+  if (n >= 8) return "A";
+  if (n >= 7) return "B";
+  if (n >= 5) return "C";
+  if (n >= 3) return "D";
+  return "F";
+};
+
 export const ReviewCard = ({ review, featured = false }) => {
-  const tier = scoreToTier(review.score);
+  const tier = ratingToTier(review.rating);
   const fallback = "https://images.pexels.com/photos/32977036/pexels-photo-32977036.jpeg";
-  const cover = review.cover_url || fallback;
+  const cover = review.cover_url
+    ? review.cover_url.startsWith("http") ? review.cover_url : `https://${review.cover_url}`
+    : fallback;
+  const genre = Array.isArray(review.genre) ? review.genre.join(", ") : review.genre;
 
   return (
     <Link
@@ -37,7 +50,7 @@ export const ReviewCard = ({ review, featured = false }) => {
           className={`absolute top-4 right-4 w-14 h-14 rounded-full grid place-items-center bg-gradient-to-br ${tierBadge[tier]} shadow-lg`}
         >
           <div className="text-center leading-none">
-            <div className="font-display font-bold text-lg">{review.score.toFixed(1)}</div>
+            <div className="font-display font-bold text-lg">{review.rating}</div>
           </div>
         </div>
 
@@ -49,9 +62,9 @@ export const ReviewCard = ({ review, featured = false }) => {
 
       <div className="p-5 flex flex-col gap-2 flex-1">
         <div className="flex items-center gap-2 text-xs">
-          <span className="tracking-[0.2em] uppercase text-sky-700">{review.genre}</span>
+          <span className="tracking-[0.2em] uppercase text-sky-700">{genre}</span>
           <span className="text-slate-300">·</span>
-          <span className="text-slate-400">{review.year}</span>
+          <span className="text-slate-400">{review.releaseDate || review.date}</span>
         </div>
         <h3
           className={`font-display tracking-tight text-slate-900 group-hover:text-sky-800 transition-colors ${
@@ -60,7 +73,7 @@ export const ReviewCard = ({ review, featured = false }) => {
         >
           {review.title}
         </h3>
-        <p className="text-sm text-slate-500 line-clamp-2 mt-auto">{review.verdict}</p>
+        <p className="text-sm text-slate-500 line-clamp-2 mt-auto">{review.summary}</p>
       </div>
     </Link>
   );
