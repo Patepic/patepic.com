@@ -31,7 +31,19 @@ export default function Reviews() {
   }, []);
 
   const PLATFORMS = useMemo(() => [...new Set(allReviews.map((r) => r.platform).filter(Boolean))].sort(), [allReviews]);
-  const GENRES = useMemo(() => [...new Set(allReviews.map((r) => r.genre).filter(Boolean))].sort(), [allReviews]);
+  const GENRES = useMemo(
+    () =>
+      [
+        ...new Set(
+          allReviews.flatMap((r) =>
+            Array.isArray(r.genre) ? r.genre : [r.genre]
+          )
+        ),
+      ]
+        .filter(Boolean)
+        .sort(),
+    [allReviews]
+  );
 
   const toggle = (list, setList, value) => {
     setList(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
@@ -40,19 +52,88 @@ export default function Reviews() {
   const filtered = useMemo(() => {
     let res = allReviews.filter((r) => {
       const q = query.trim().toLowerCase();
-      if (q && !r.title.toLowerCase().includes(q) && !r.studio.toLowerCase().includes(q) && !r.genre.toLowerCase().includes(q))
+
+      const title = (r.title || "").toLowerCase();
+      const platform = (r.platform || "").toLowerCase();
+
+      const genres = Array.isArray(r.genre)
+        ? r.genre
+        : r.genre
+          ? [r.genre]
+          : [];
+
+      const genreText = genres.join(" ").toLowerCase();
+
+      if (
+        q &&
+        !title.includes(q) &&
+        !platform.includes(q) &&
+        !genreText.includes(q)
+      ) {
         return false;
-      if (selectedPlatforms.length && !selectedPlatforms.includes(r.platform)) return false;
-      if (selectedGenres.length && !selectedGenres.includes(r.genre)) return false;
-      if (r.score < scoreRange[0] || r.score > scoreRange[1]) return false;
+      }
+
+      if (
+        selectedPlatforms.length &&
+        !selectedPlatforms.includes(r.platform)
+      ) {
+        return false;
+      }
+
+      if (
+        selectedGenres.length &&
+        !genres.some((g) => selectedGenres.includes(g))
+      ) {
+        return false;
+      }
+
+      const rating = Number(r.rating || 0);
+
+      if (
+        rating < scoreRange[0] ||
+        rating > scoreRange[1]
+      ) {
+        return false;
+      }
+
       return true;
     });
-    if (sort === "recent") res = res.sort((a, b) => b.year - a.year);
-    if (sort === "score-desc") res = res.sort((a, b) => b.score - a.score);
-    if (sort === "score-asc") res = res.sort((a, b) => a.score - b.score);
-    if (sort === "a-z") res = res.sort((a, b) => a.title.localeCompare(b.title));
+
+    if (sort === "recent") {
+      res = [...res].sort(
+        (a, b) =>
+          new Date(b.releaseDate || b.date || 0) -
+          new Date(a.releaseDate || a.date || 0)
+      );
+    }
+
+    if (sort === "score-desc") {
+      res = [...res].sort(
+        (a, b) => Number(b.rating || 0) - Number(a.rating || 0)
+      );
+    }
+
+    if (sort === "score-asc") {
+      res = [...res].sort(
+        (a, b) => Number(a.rating || 0) - Number(b.rating || 0)
+      );
+    }
+
+    if (sort === "a-z") {
+      res = [...res].sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+    }
+
     return res;
-  }, [allReviews, query, selectedPlatforms, selectedGenres, scoreRange, sort]);
+  }, [
+    allReviews,
+    query,
+    selectedPlatforms,
+    selectedGenres,
+    scoreRange,
+    sort,
+  ]);
 
   const clearAll = () => {
     setQuery("");
@@ -149,7 +230,9 @@ export default function Reviews() {
             {GENRES.map((g) => (
               <label key={g} className="flex items-center gap-2.5 text-sm cursor-pointer group">
                 <Checkbox
-                  data-testid={`filter-genre-${g.toLowerCase()}`}
+                  data-testid={`filter-genre-${String(g)
+                  .toLowerCase()
+                  .replace(/[^a-z0-9]+/g, "-")}`}
                   checked={selectedGenres.includes(g)}
                   onCheckedChange={() => toggle(selectedGenres, setSelectedGenres, g)}
                   className="border-slate-300 data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600 data-[state=checked]:text-white"
