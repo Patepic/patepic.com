@@ -57,7 +57,7 @@ export default function AdminLogin() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               data-testid="admin-email-input"
-              placeholder="patrickcoulter01@gmail.com"
+              placeholder=""
               className="mt-2 h-12 bg-white border-slate-200 focus-visible:ring-sky-400"
             />
           </div>
@@ -72,7 +72,7 @@ export default function AdminLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               data-testid="admin-password-input"
-              placeholder="••••••••"
+              placeholder=""
               className="mt-2 h-12 bg-white border-slate-200 focus-visible:ring-sky-400"
             />
           </div>
@@ -95,10 +95,6 @@ export default function AdminLogin() {
             )}
           </button>
         </form>
-
-        <p className="text-xs text-slate-400 text-center mt-5 inline-flex items-center gap-1.5 justify-center w-full">
-          <Lock className="w-3 h-3" /> Single-admin site. Change credentials in <code className="text-slate-600">backend/.env</code>.
-        </p>
       </div>
     </div>
   );

@@ -1,7 +1,33 @@
 import axios from "axios";
 
-const BACKEND = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
-export const API_BASE = `${BACKEND}/api`;
+const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
+
+const trimTrailingSlash = (value) => value.replace(/\/+$/, "");
+
+const isLocalBackend = (value) => {
+  if (!value) return false;
+  try {
+    return localHosts.has(new URL(value).hostname);
+  } catch {
+    return false;
+  }
+};
+
+const getBackendUrl = () => {
+  const runtimeUrl = window.__PATEPIC_CONFIG__?.BACKEND_URL?.trim();
+  if (runtimeUrl) return trimTrailingSlash(runtimeUrl);
+
+  const envUrl = import.meta.env.VITE_BACKEND_URL?.trim();
+  const isLocalPage = localHosts.has(window.location.hostname);
+  if (envUrl && (isLocalPage || !isLocalBackend(envUrl))) {
+    return trimTrailingSlash(envUrl);
+  }
+
+  return isLocalPage ? "http://localhost:8000" : "";
+};
+
+const BACKEND = getBackendUrl();
+export const API_BASE = BACKEND ? `${BACKEND}/api` : "/api";
 
 export const api = axios.create({ baseURL: API_BASE });
 
@@ -66,6 +92,9 @@ export const sendContact = async (payload) => {
 };
 
 export const errorMessage = (err) => {
+  if (err?.code === "ERR_NETWORK") {
+    return `Cannot reach the API at ${API_BASE}. Check the live backend URL and CORS settings.`;
+  }
   const detail = err?.response?.data?.detail;
   if (!detail) return err?.message || "Something went wrong";
   if (typeof detail === "string") return detail;

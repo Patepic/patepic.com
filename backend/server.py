@@ -68,6 +68,19 @@ db = mongo_client[os.environ["DB_NAME"]]
 app = FastAPI(title="Patepic API")
 api_router = APIRouter(prefix="/api")
 
+DEFAULT_CORS_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://patepic.com",
+    "https://www.patepic.com",
+]
+
+
+def get_cors_origins() -> list[str]:
+    configured = os.environ.get("CORS_ORIGINS", "")
+    origins = [origin.strip() for origin in configured.split(",") if origin.strip()]
+    return sorted(set(DEFAULT_CORS_ORIGINS + origins))
+
 
 # ── Models ───────────────────────────────────────────────────────────────────
 class ReviewIn(BaseModel):
@@ -338,7 +351,7 @@ app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
+    allow_origins=get_cors_origins(),
     allow_methods=["*"],
     allow_headers=["*"],
 )
