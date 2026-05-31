@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
+const PRODUCTION_BACKEND_URL = "https://api.patepic.com";
 
 const trimTrailingSlash = (value) => value.replace(/\/+$/, "");
 
@@ -23,11 +24,11 @@ const getBackendUrl = () => {
     return trimTrailingSlash(envUrl);
   }
 
-  return isLocalPage ? "http://localhost:8000" : "";
+  return isLocalPage ? "http://localhost:8000" : PRODUCTION_BACKEND_URL;
 };
 
 const BACKEND = getBackendUrl();
-export const API_BASE = BACKEND ? `${BACKEND}/api` : "/api";
+export const API_BASE = `${BACKEND}/api`;
 
 export const api = axios.create({ baseURL: API_BASE });
 
