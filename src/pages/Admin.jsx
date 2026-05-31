@@ -33,8 +33,8 @@ const blank = {
   summary: "",
   body: "",
   cover_url: "",
-  recommended: "",
-  contentType: "",
+  recommended: null,
+  contentType: null,
   pros: [""],
   cons: [""],
   releaseDate: "",
@@ -235,6 +235,8 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
     setUploadProgress(0);
     try {
       const res = await adminUploadImage(file, setUploadProgress);
+      console.log("Upload URL:", res.url);
+      console.log("Full response:", res);
       set("cover_url", res.url);
       toast.success("Image uploaded");
     } catch (err) {
@@ -253,6 +255,8 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
       ...form,
       pros: form.pros.map((s) => s.trim()).filter(Boolean),
       cons: form.cons.map((s) => s.trim()).filter(Boolean),
+      recommended: form.recommended || null,
+      contentType: form.contentType || null,
     };
     try {
       if (isEdit) {
@@ -332,7 +336,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
           <div>
             <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">Recommended</Label>
-            <Select value={form.recommended} onValueChange={(v) => set("recommended", v)}>
+            <Select value={form.recommended ?? ""} onValueChange={(v) => set("recommended", v)}>
               <SelectTrigger data-testid="admin-field-recommended" className="mt-2 h-10 bg-white border-slate-200">
                 <SelectValue placeholder="Select…" />
               </SelectTrigger>
@@ -345,7 +349,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
           <div>
             <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">Content Type</Label>
-            <Select value={form.contentType} onValueChange={(v) => set("contentType", v)}>
+            <Select value={form.contentType ?? ""} onValueChange={(v) => set("contentType", v)}>
               <SelectTrigger data-testid="admin-field-contentType" className="mt-2 h-10 bg-white border-slate-200">
                 <SelectValue placeholder="Select…" />
               </SelectTrigger>

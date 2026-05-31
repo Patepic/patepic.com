@@ -87,17 +87,18 @@ class ReviewIn(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     title: str = Field(..., min_length=1, max_length=200)
-    studio: str = Field("", max_length=200)
-    year: int = Field(..., ge=1970, le=2100)
-    platform: str = Field(..., min_length=1, max_length=60)
-    platforms: List[str] = Field(default_factory=list)
-    genre: str = Field(..., min_length=1, max_length=60)
-    score: float = Field(..., ge=0, le=10)
+    platform: str = Field("", max_length=60)
+    genre: List[str] = Field(default_factory=list)
+    rating: str = Field("", max_length=20)
+    date: str = Field("", max_length=50)
+    releaseDate: str = Field("", max_length=50)
+    summary: str = Field("", max_length=400)
+    body: str = Field("", max_length=20000)
     cover_url: str = Field("", max_length=1024)
-    verdict: str = Field("", max_length=400)
+    recommended: Optional[str] = None
+    contentType: Optional[str] = None
     pros: List[str] = Field(default_factory=list)
     cons: List[str] = Field(default_factory=list)
-    body: str = Field("", max_length=20000)
 
 
 class ReviewOut(ReviewIn):
@@ -111,18 +112,18 @@ class ReviewUpdate(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     title: Optional[str] = None
-    studio: Optional[str] = None
-    year: Optional[int] = None
     platform: Optional[str] = None
-    platforms: Optional[List[str]] = None
-    genre: Optional[str] = None
-    score: Optional[float] = None
+    genre: Optional[List[str]] = None
+    rating: Optional[str] = None
+    date: Optional[str] = None
+    releaseDate: Optional[str] = None
+    summary: Optional[str] = None
+    body: Optional[str] = None
     cover_url: Optional[str] = None
-    verdict: Optional[str] = None
+    recommended: Optional[str] = None
+    contentType: Optional[str] = None
     pros: Optional[List[str]] = None
     cons: Optional[List[str]] = None
-    body: Optional[str] = None
-
 
 class LoginIn(BaseModel):
     email: EmailStr
