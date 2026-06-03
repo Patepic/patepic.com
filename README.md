@@ -31,5 +31,6 @@ Honest game reviews covering everything from indie gems to AAA blockbusters. No 
 | Database | MongoDB |
 | Storage | Cloudflare R2 |
 | Hosting | Cloudflare Pages |
+| Backend Hosting | Render |
 
 ---
