@@ -1,7 +1,9 @@
+import avatarUrl from "../assets/model.png";
+
 export const creator = {
   name: "Patepic",
   tagline: "VTuber · Reviewer · Gremlin online",
-  avatarUrl: "../assets/model.png",
+  avatarUrl,
 
   twitch: {
     handle: "Patepic",

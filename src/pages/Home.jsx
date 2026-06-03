@@ -3,8 +3,7 @@ import { useReviews } from "../hooks/useReviews";
 import { creator } from "../data/creator";
 import { ReviewCard } from "../components/ReviewCard";
 import { ArrowUpRight, Snowflake, Star, Trophy, Twitch } from "lucide-react";
-
-const heroBg = "../assets/model.png";
+import heroBg from "../assets/model.png";
 
 export default function Home() {
   const { reviews } = useReviews();
