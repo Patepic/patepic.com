@@ -19,11 +19,9 @@ const getBackendUrl = () => {
   if (runtimeUrl) return trimTrailingSlash(runtimeUrl);
 
   const envUrl = import.meta.env.VITE_BACKEND_URL?.trim();
-  const isLocalPage = localHosts.has(window.location.hostname);
-  if (envUrl && (isLocalPage || !isLocalBackend(envUrl))) {
-    return trimTrailingSlash(envUrl);
-  }
+  if (envUrl) return trimTrailingSlash(envUrl);
 
+  const isLocalPage = localHosts.has(window.location.hostname);
   return isLocalPage ? "http://localhost:8000" : PRODUCTION_BACKEND_URL;
 };
 
@@ -81,7 +79,8 @@ export const adminUploadImage = async (file, onProgress) => {
   const { data } = await api.post("/admin/upload", fd, {
     headers: { "Content-Type": "multipart/form-data" },
     onUploadProgress: (e) => {
-      if (onProgress && e.total) onProgress(Math.round((e.loaded / e.total) * 100));
+      if (onProgress && e.total)
+        onProgress(Math.round((e.loaded / e.total) * 100));
     },
   });
   return data;
@@ -100,7 +99,9 @@ export const errorMessage = (err) => {
   if (!detail) return err?.message || "Something went wrong";
   if (typeof detail === "string") return detail;
   if (Array.isArray(detail)) {
-    return detail.map((d) => (d && typeof d.msg === "string" ? d.msg : JSON.stringify(d))).join(" ");
+    return detail
+      .map((d) => (d && typeof d.msg === "string" ? d.msg : JSON.stringify(d)))
+      .join(" ");
   }
   return String(detail);
 };

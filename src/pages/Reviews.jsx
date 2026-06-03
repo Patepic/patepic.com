@@ -26,27 +26,33 @@ export default function Reviews() {
 
   useEffect(() => {
     fetchReviews()
-      .then((d) => setAllReviews(Array.isArray(d) ? d : d?.items ?? []))
+      .then((d) => setAllReviews(Array.isArray(d) ? d : (d?.items ?? [])))
       .finally(() => setLoading(false));
   }, []);
 
-  const PLATFORMS = useMemo(() => [...new Set(allReviews.map((r) => r.platform).filter(Boolean))].sort(), [allReviews]);
+  const PLATFORMS = useMemo(
+    () =>
+      [...new Set(allReviews.map((r) => r.platform).filter(Boolean))].sort(),
+    [allReviews],
+  );
   const GENRES = useMemo(
     () =>
       [
         ...new Set(
           allReviews.flatMap((r) =>
-            Array.isArray(r.genre) ? r.genre : [r.genre]
-          )
+            Array.isArray(r.genre) ? r.genre : [r.genre],
+          ),
         ),
       ]
         .filter(Boolean)
         .sort(),
-    [allReviews]
+    [allReviews],
   );
 
   const toggle = (list, setList, value) => {
-    setList(list.includes(value) ? list.filter((v) => v !== value) : [...list, value]);
+    setList(
+      list.includes(value) ? list.filter((v) => v !== value) : [...list, value],
+    );
   };
 
   const filtered = useMemo(() => {
@@ -73,10 +79,7 @@ export default function Reviews() {
         return false;
       }
 
-      if (
-        selectedPlatforms.length &&
-        !selectedPlatforms.includes(r.platform)
-      ) {
+      if (selectedPlatforms.length && !selectedPlatforms.includes(r.platform)) {
         return false;
       }
 
@@ -89,10 +92,7 @@ export default function Reviews() {
 
       const rating = Number(r.rating || 0);
 
-      if (
-        rating < scoreRange[0] ||
-        rating > scoreRange[1]
-      ) {
+      if (rating < scoreRange[0] || rating > scoreRange[1]) {
         return false;
       }
 
@@ -101,39 +101,28 @@ export default function Reviews() {
 
     if (sort === "recent") {
       res = [...res].sort(
-        (a, b) =>
-          new Date(b.releaseDate || b.date || 0) -
-          new Date(a.releaseDate || a.date || 0)
+        (a, b) => new Date(b.date || 0) - new Date(a.date || 0),
       );
     }
 
     if (sort === "score-desc") {
       res = [...res].sort(
-        (a, b) => Number(b.rating || 0) - Number(a.rating || 0)
+        (a, b) => Number(b.rating || 0) - Number(a.rating || 0),
       );
     }
 
     if (sort === "score-asc") {
       res = [...res].sort(
-        (a, b) => Number(a.rating || 0) - Number(b.rating || 0)
+        (a, b) => Number(a.rating || 0) - Number(b.rating || 0),
       );
     }
 
     if (sort === "a-z") {
-      res = [...res].sort((a, b) =>
-        a.title.localeCompare(b.title)
-      );
+      res = [...res].sort((a, b) => a.title.localeCompare(b.title));
     }
 
     return res;
-  }, [
-    allReviews,
-    query,
-    selectedPlatforms,
-    selectedGenres,
-    scoreRange,
-    sort,
-  ]);
+  }, [allReviews, query, selectedPlatforms, selectedGenres, scoreRange, sort]);
 
   const clearAll = () => {
     setQuery("");
@@ -149,14 +138,20 @@ export default function Reviews() {
     (query ? 1 : 0);
 
   return (
-    <div data-testid="reviews-page" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+    <div
+      data-testid="reviews-page"
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20"
+    >
       <div className="mb-12">
-        <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-3">The catalogue</p>
+        <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-3">
+          The catalogue
+        </p>
         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-slate-900 tracking-tighter">
           Every review, one search.
         </h1>
         <p className="mt-4 text-slate-500 max-w-2xl">
-          Filter by platform, genre or score range. Sorted by recency unless you say otherwise.
+          Filter by platform, genre or score range. Sorted by recency unless you
+          say otherwise.
         </p>
       </div>
 
@@ -173,7 +168,10 @@ export default function Reviews() {
         </div>
 
         <Select value={sort} onValueChange={setSort}>
-          <SelectTrigger data-testid="reviews-sort-select" className="md:w-56 h-12 bg-white border-slate-200 text-slate-700">
+          <SelectTrigger
+            data-testid="reviews-sort-select"
+            className="md:w-56 h-12 bg-white border-slate-200 text-slate-700"
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="bg-white border-slate-200 text-slate-700">
@@ -206,58 +204,91 @@ export default function Reviews() {
           <div className="flex items-center justify-between">
             <h3 className="font-display text-lg text-slate-900">Filters</h3>
             {activeCount > 0 && (
-              <button onClick={clearAll} data-testid="reviews-clear-filters" className="text-xs text-sky-700 hover:text-sky-900 inline-flex items-center gap-1">
+              <button
+                onClick={clearAll}
+                data-testid="reviews-clear-filters"
+                className="text-xs text-sky-700 hover:text-sky-900 inline-flex items-center gap-1"
+              >
                 <X className="w-3 h-3" /> Clear
               </button>
             )}
           </div>
 
           <FilterGroup label="Platform">
-            {PLATFORMS.map((p) => (
-              <label key={p} className="flex items-center gap-2.5 text-sm cursor-pointer group">
-                <Checkbox
-                  data-testid={`filter-platform-${p.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
-                  checked={selectedPlatforms.includes(p)}
-                  onCheckedChange={() => toggle(selectedPlatforms, setSelectedPlatforms, p)}
-                  className="border-slate-300 data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600 data-[state=checked]:text-white"
-                />
-                <span className="text-slate-600 group-hover:text-slate-900">{p}</span>
-              </label>
-            ))}
+            <Select
+              value={selectedPlatforms[0] ?? "all"}
+              onValueChange={(v) => setSelectedPlatforms(v === "all" ? [] : [v])}
+            >
+              <SelectTrigger className="w-full bg-white border-slate-200 text-slate-700">
+                <SelectValue placeholder="All platforms" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-slate-200 text-slate-700">
+                <SelectItem value="all">All platforms</SelectItem>
+                {PLATFORMS.map((p) => (
+                  <SelectItem key={p} value={p}>{p}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </FilterGroup>
 
           <FilterGroup label="Genre">
-            {GENRES.map((g) => (
-              <label key={g} className="flex items-center gap-2.5 text-sm cursor-pointer group">
-                <Checkbox
-                  data-testid={`filter-genre-${String(g)
-                  .toLowerCase()
-                  .replace(/[^a-z0-9]+/g, "-")}`}
-                  checked={selectedGenres.includes(g)}
-                  onCheckedChange={() => toggle(selectedGenres, setSelectedGenres, g)}
-                  className="border-slate-300 data-[state=checked]:bg-sky-600 data-[state=checked]:border-sky-600 data-[state=checked]:text-white"
-                />
-                <span className="text-slate-600 group-hover:text-slate-900">{g}</span>
-              </label>
-            ))}
+            <Select
+              value={selectedGenres[0] ?? "all"}
+              onValueChange={(v) => setSelectedGenres(v === "all" ? [] : [v])}
+            >
+              <SelectTrigger className="w-full bg-white border-slate-200 text-slate-700">
+                <SelectValue placeholder="All genres" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-slate-200 text-slate-700">
+                <SelectItem value="all">All genres</SelectItem>
+                {GENRES.map((g) => (
+                  <SelectItem key={g} value={g}>{g}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </FilterGroup>
 
-          <FilterGroup label={`Score: ${scoreRange[0].toFixed(1)} – ${scoreRange[1].toFixed(1)}`}>
-            <Slider data-testid="filter-score-range" min={0} max={10} step={0.5} value={scoreRange} onValueChange={setScoreRange} className="mt-2" />
+          <FilterGroup
+            label={`Score: ${scoreRange[0]} – ${scoreRange[1]}`}
+          >
+            <Slider
+              data-testid="filter-score-range"
+              min={0}
+              max={10}
+              step={1}
+              value={scoreRange}
+              onValueChange={setScoreRange}
+              className="mt-2"
+            />
           </FilterGroup>
         </aside>
 
         <div className="md:col-span-9">
-          <div className="mb-5 text-sm text-slate-500" data-testid="reviews-result-count">
-            {loading ? "Loading…" : (
-              <>Showing <span className="text-slate-900 font-medium">{filtered.length}</span> of {allReviews.length} reviews</>
+          <div
+            className="mb-5 text-sm text-slate-500"
+            data-testid="reviews-result-count"
+          >
+            {loading ? (
+              "Loading…"
+            ) : (
+              <>
+                Showing{" "}
+                <span className="text-slate-900 font-medium">
+                  {filtered.length}
+                </span>{" "}
+                of {allReviews.length} reviews
+              </>
             )}
           </div>
 
           {!loading && filtered.length === 0 ? (
             <div className="border border-dashed border-slate-300 rounded-2xl p-16 text-center bg-white">
-              <p className="text-slate-700 font-display text-xl mb-2">No reviews match those filters.</p>
-              <p className="text-slate-400 text-sm">Try widening the score range or clearing filters.</p>
+              <p className="text-slate-700 font-display text-xl mb-2">
+                No reviews match those filters.
+              </p>
+              <p className="text-slate-400 text-sm">
+                Try widening the score range or clearing filters.
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -274,7 +305,9 @@ export default function Reviews() {
 
 const FilterGroup = ({ label, children }) => (
   <div>
-    <p className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-4">{label}</p>
+    <p className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-4">
+      {label}
+    </p>
     <div className="space-y-3">{children}</div>
   </div>
 );

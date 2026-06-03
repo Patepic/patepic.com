@@ -13,26 +13,54 @@ export const Footer = () => {
           <div className="flex items-center gap-2 mb-3">
             <Snowflake className="w-5 h-5 text-sky-600" />
             <span className="font-display text-xl text-slate-900">
-              {creator.name}<span className="text-sky-600">.</span>
+              {creator.name}
+              <span className="text-sky-600">.</span>
             </span>
           </div>
           <p className="text-sm text-slate-500 max-w-xs leading-relaxed">
-            {creator.tagline}. Long reviews on cold days. Live chaos most nights.
+            {creator.tagline}. Long reviews on cold days. Live chaos most
+            nights.
           </p>
         </div>
 
         <div>
-          <p className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-4">Explore</p>
+          <p className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-4">
+            Explore
+          </p>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/reviews" className="text-slate-600 hover:text-sky-700">All Reviews</Link></li>
-            <li><Link to="/tier-list" className="text-slate-600 hover:text-sky-700">Tier List</Link></li>
-            <li><Link to="/guidelines" className="text-slate-600 hover:text-sky-700">Scoring Guidelines</Link></li>
-            <li><Link to="/contact" className="text-slate-600 hover:text-sky-700">Pitch a Game</Link></li>
+            <li>
+              <Link to="/reviews" className="text-slate-600 hover:text-sky-700">
+                All Reviews
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/tier-list"
+                className="text-slate-600 hover:text-sky-700"
+              >
+                Tier List
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/guidelines"
+                className="text-slate-600 hover:text-sky-700"
+              >
+                Scoring Guidelines
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="text-slate-600 hover:text-sky-700">
+                Contact
+              </Link>
+            </li>
           </ul>
         </div>
 
         <div>
-          <p className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-4">Catch me streaming</p>
+          <p className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-4">
+            Catch me streaming
+          </p>
           <div className="flex flex-col gap-2">
             <a
               href={creator.twitch.url}
@@ -64,7 +92,10 @@ export const Footer = () => {
 
       <div className="border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between gap-3 text-xs text-slate-400">
-          <span>© {new Date().getFullYear()} {creator.name}. Played, written, and streamed in icy blues.</span>
+          <span>
+            © {new Date().getFullYear()} {creator.name}. Played, written, and
+            streamed from somewhere cold.
+          </span>
           <span>Reviews by day. VTuber by night.</span>
         </div>
       </div>

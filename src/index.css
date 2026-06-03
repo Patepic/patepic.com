@@ -6,10 +6,11 @@
   color-scheme: light;
 }
 
-html, body {
+html,
+body {
   background-color: #f4f8fc;
   color: #1e293b;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -41,31 +42,89 @@ body {
   mix-blend-mode: multiply;
 }
 
-.font-display { font-family: 'Fraunces', 'Times New Roman', serif; font-optical-sizing: auto; }
-.font-body { font-family: 'Inter', system-ui, sans-serif; }
+.font-display {
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.font-body {
+  font-family: "Inter", system-ui, sans-serif;
+}
 
 /* Score badge subtle pulse (light) */
 @keyframes shimmer-light {
-  0%, 100% { box-shadow: 0 8px 24px rgba(2, 132, 199, 0.18), inset 0 0 0 1px rgba(255,255,255,0.6); }
-  50%       { box-shadow: 0 12px 32px rgba(2, 132, 199, 0.28), inset 0 0 0 1px rgba(255,255,255,0.8); }
+  0%,
+  100% {
+    box-shadow:
+      0 8px 24px rgba(2, 132, 199, 0.18),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  }
+  50% {
+    box-shadow:
+      0 12px 32px rgba(2, 132, 199, 0.28),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+  }
 }
-.score-glow { animation: shimmer-light 4s ease-in-out infinite; }
+.score-glow {
+  animation: shimmer-light 4s ease-in-out infinite;
+}
 
 /* Custom scrollbar */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #eef4f9; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #eef4f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
 
 /* Prose tweaks (light) */
-.prose-frost h2 { font-family: 'Fraunces', serif; color: #0f172a; }
-.prose-frost h3 { font-family: 'Fraunces', serif; color: #1e293b; }
-.prose-frost p { color: #334155; line-height: 1.8; }
-.prose-frost a { color: #0284c7; text-decoration: underline; text-decoration-color: #bae6fd; text-underline-offset: 3px; }
-.prose-frost blockquote { border-left: 3px solid #7dd3fc; padding-left: 1rem; color: #475569; font-style: italic; }
-.prose-frost strong { color: #0f172a; }
-.prose-frost ul { list-style: disc; padding-left: 1.25rem; color: #334155; }
-.prose-frost code { background: #e0f2fe; padding: 0.15rem 0.4rem; border-radius: 4px; color: #075985; font-size: 0.9em; }
+.prose-frost h2 {
+  font-family: "Fraunces", serif;
+  color: #0f172a;
+}
+.prose-frost h3 {
+  font-family: "Fraunces", serif;
+  color: #1e293b;
+}
+.prose-frost p {
+  color: #334155;
+  line-height: 1.8;
+}
+.prose-frost a {
+  color: #0284c7;
+  text-decoration: underline;
+  text-decoration-color: #bae6fd;
+  text-underline-offset: 3px;
+}
+.prose-frost blockquote {
+  border-left: 3px solid #7dd3fc;
+  padding-left: 1rem;
+  color: #475569;
+  font-style: italic;
+}
+.prose-frost strong {
+  color: #0f172a;
+}
+.prose-frost ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  color: #334155;
+}
+.prose-frost code {
+  background: #e0f2fe;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  color: #075985;
+  font-size: 0.9em;
+}
 
 @layer base {
   :root {
@@ -93,6 +152,10 @@ body {
 }
 
 @layer base {
-  * { @apply border-border; }
-  body { @apply bg-background text-foreground; }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

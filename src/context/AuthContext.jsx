@@ -1,11 +1,19 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { login as apiLogin, fetchMe } from "../lib/api";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(undefined); // undefined = checking, null = logged out
-  const [token, setToken] = useState(() => localStorage.getItem("patepic_token") || null);
+  const [token, setToken] = useState(
+    () => localStorage.getItem("patepic_token") || null,
+  );
 
   useEffect(() => {
     if (!token) {

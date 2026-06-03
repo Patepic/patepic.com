@@ -91,7 +91,6 @@ class ReviewIn(BaseModel):
     genre: List[str] = Field(default_factory=list)
     rating: str = Field("", max_length=20)
     date: str = Field("", max_length=50)
-    releaseDate: str = Field("", max_length=50)
     summary: str = Field("", max_length=400)
     body: str = Field("", max_length=20000)
     cover_url: str = Field("", max_length=1024)
@@ -116,7 +115,6 @@ class ReviewUpdate(BaseModel):
     genre: Optional[List[str]] = None
     rating: Optional[str] = None
     date: Optional[str] = None
-    releaseDate: Optional[str] = None
     summary: Optional[str] = None
     body: Optional[str] = None
     cover_url: Optional[str] = None

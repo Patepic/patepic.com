@@ -33,14 +33,21 @@ export default function AdminLogin() {
   };
 
   return (
-    <div data-testid="admin-login-page" className="min-h-[80vh] grid place-items-center px-4 py-16">
+    <div
+      data-testid="admin-login-page"
+      className="min-h-[80vh] grid place-items-center px-4 py-16"
+    >
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
           <div className="inline-grid place-items-center w-12 h-12 rounded-full bg-white border border-sky-200 shadow-sm mb-4">
             <Snowflake className="w-5 h-5 text-sky-600" />
           </div>
-          <h1 className="font-display text-3xl text-slate-900 tracking-tight">Admin sign in</h1>
-          <p className="text-sm text-slate-500 mt-2">Only the writer gets in past this point.</p>
+          <h1 className="font-display text-3xl text-slate-900 tracking-tight">
+            Admin sign in
+          </h1>
+          <p className="text-sm text-slate-500 mt-2">
+            Only the writer gets in past this point.
+          </p>
         </div>
 
         <form
@@ -48,7 +55,12 @@ export default function AdminLogin() {
           className="rounded-3xl bg-white border border-slate-200 p-7 shadow-[0_30px_80px_-30px_rgba(2,132,199,0.25)]"
         >
           <div className="mb-5">
-            <Label htmlFor="email" className="text-xs tracking-[0.2em] uppercase text-sky-700">Email</Label>
+            <Label
+              htmlFor="email"
+              className="text-xs tracking-[0.2em] uppercase text-sky-700"
+            >
+              Email
+            </Label>
             <Input
               id="email"
               type="email"
@@ -57,13 +69,18 @@ export default function AdminLogin() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               data-testid="admin-email-input"
-              placeholder=""
+              placeholder="Email"
               className="mt-2 h-12 bg-white border-slate-200 focus-visible:ring-sky-400"
             />
           </div>
 
           <div className="mb-7">
-            <Label htmlFor="password" className="text-xs tracking-[0.2em] uppercase text-sky-700">Password</Label>
+            <Label
+              htmlFor="password"
+              className="text-xs tracking-[0.2em] uppercase text-sky-700"
+            >
+              Password
+            </Label>
             <Input
               id="password"
               type="password"
@@ -72,7 +89,7 @@ export default function AdminLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               data-testid="admin-password-input"
-              placeholder=""
+              placeholder="Password"
               className="mt-2 h-12 bg-white border-slate-200 focus-visible:ring-sky-400"
             />
           </div>

@@ -23,11 +23,16 @@ const ratingToTier = (rating) => {
 
 export const ReviewCard = ({ review, featured = false }) => {
   const tier = ratingToTier(review.rating);
-  const fallback = "https://images.pexels.com/photos/32977036/pexels-photo-32977036.jpeg";
+  const fallback =
+    "https://images.pexels.com/photos/32977036/pexels-photo-32977036.jpeg";
   const cover = review.cover_url
-    ? review.cover_url.startsWith("http") ? review.cover_url : `https://${review.cover_url}`
+    ? review.cover_url.startsWith("http")
+      ? review.cover_url
+      : `https://${review.cover_url}`
     : fallback;
-  const genre = Array.isArray(review.genre) ? review.genre.join(", ") : review.genre;
+  const genre = Array.isArray(review.genre)
+    ? review.genre.join(", ")
+    : review.genre;
 
   return (
     <Link
@@ -37,7 +42,9 @@ export const ReviewCard = ({ review, featured = false }) => {
         featured ? "md:col-span-2 md:row-span-2" : ""
       }`}
     >
-      <div className={`relative ${featured ? "aspect-[16/10]" : "aspect-[4/3]"} overflow-hidden bg-slate-100`}>
+      <div
+        className={`relative ${featured ? "aspect-[16/10]" : "aspect-[4/3]"} overflow-hidden bg-slate-100`}
+      >
         <img
           src={cover}
           alt={review.title}
@@ -50,7 +57,9 @@ export const ReviewCard = ({ review, featured = false }) => {
           className={`absolute top-4 right-4 w-14 h-14 rounded-full grid place-items-center bg-gradient-to-br ${tierBadge[tier]} shadow-lg`}
         >
           <div className="text-center leading-none">
-            <div className="font-display font-bold text-lg">{review.rating}</div>
+            <div className="font-display font-bold text-lg">
+              {review.rating}
+            </div>
           </div>
         </div>
 
@@ -62,9 +71,11 @@ export const ReviewCard = ({ review, featured = false }) => {
 
       <div className="p-5 flex flex-col gap-2 flex-1">
         <div className="flex items-center gap-2 text-xs">
-          <span className="tracking-[0.2em] uppercase text-sky-700">{genre}</span>
+          <span className="tracking-[0.2em] uppercase text-sky-700">
+            {genre}
+          </span>
           <span className="text-slate-300">·</span>
-          <span className="text-slate-400">{review.releaseDate || review.date}</span>
+          <span className="text-slate-400">{review.date}</span>
         </div>
         <h3
           className={`font-display tracking-tight text-slate-900 group-hover:text-sky-800 transition-colors ${
@@ -73,7 +84,9 @@ export const ReviewCard = ({ review, featured = false }) => {
         >
           {review.title}
         </h3>
-        <p className="text-sm text-slate-500 line-clamp-2 mt-auto">{review.summary}</p>
+        <p className="text-sm text-slate-500 line-clamp-2 mt-auto">
+          {review.summary}
+        </p>
       </div>
     </Link>
   );

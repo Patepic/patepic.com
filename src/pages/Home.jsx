@@ -4,28 +4,33 @@ import { creator } from "../data/creator";
 import { ReviewCard } from "../components/ReviewCard";
 import { ArrowUpRight, Snowflake, Star, Trophy, Twitch } from "lucide-react";
 
-const heroBg =
-  "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=1600&q=80";
+const heroBg = "src/assets/model.png";
 
 export default function Home() {
-  const { reviews, loading } = useReviews();
-
-  if (loading) return <PageLoader />;
+  const { reviews } = useReviews();
 
   const totalReviews = reviews.length;
 
   const averageScore = totalReviews
-    ? (reviews.reduce((s, r) => s + (parseFloat(r.rating) || 0), 0) / totalReviews).toFixed(1)
+    ? (
+        reviews.reduce((s, r) => s + (parseFloat(r.rating) || 0), 0) /
+        totalReviews
+      ).toFixed(1)
     : "—";
 
   const platformCounts = reviews.reduce((acc, r) => {
     if (r.platform) acc[r.platform] = (acc[r.platform] || 0) + 1;
     return acc;
   }, {});
-  const topPlatform = Object.entries(platformCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
+  const topPlatform =
+    Object.entries(platformCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
 
-  const highestScore = reviews.length ? Math.max(...reviews.map((r) => parseFloat(r.rating) || 0)) : 0;
-  const goldStandard = reviews.find((r) => parseFloat(r.rating) === highestScore);
+  const highestScore = reviews.length
+    ? Math.max(...reviews.map((r) => parseFloat(r.rating) || 0))
+    : 0;
+  const goldStandard = reviews.find(
+    (r) => parseFloat(r.rating) === highestScore,
+  );
 
   const recent = [...reviews]
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -38,13 +43,18 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.25em] uppercase text-sky-700 mb-8 shadow-sm">
-                <Snowflake className="w-3 h-3" /> Vol. 03 · Winter Issue
+                <Snowflake className="w-3 h-3" /> Issue 03 · Now Reviewing
               </div>
-              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl tracking-tighter text-slate-900 leading-[1.02]">
-                Cold takes on <em className="text-sky-700 not-italic font-display">hot games</em>.
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl tracking-tighter text-slate-900 leading-[1.02]">
+                Good games. Bad games.{" "}
+                <em className="text-sky-700 not-italic font-display block">
+                  All reviewed. All streamed.
+                </em>
               </h1>
               <p className="mt-6 text-lg text-slate-500 max-w-xl leading-relaxed">
-                Long-form reviews, honest scores, and a tier list that doesn't pretend everything is a masterpiece. Played fully. Written carefully.
+                Long-form reviews from someone who finishes every game before
+                saying a word about it. Catch the playthrough live, then read
+                the verdict after the credits roll.
               </p>
 
               <div className="mt-10 flex flex-wrap gap-3">
@@ -75,25 +85,23 @@ export default function Home() {
                       <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
                     </span>
                     <Twitch className="w-4 h-4" />
-                    <span className="text-sm">Live now · {creator.liveGame}</span>
+                    <span className="text-sm">
+                      Live now · {creator.liveGame}
+                    </span>
                   </a>
                 )}
               </div>
             </div>
 
             <div className="lg:col-span-5">
-              <div className="relative">
-                <div className="absolute -inset-3 rounded-3xl bg-gradient-to-br from-sky-200/60 via-blue-100/40 to-white blur-xl" />
-                <div className="relative rounded-3xl overflow-hidden border border-white shadow-[0_20px_60px_-20px_rgba(2,132,199,0.35)] aspect-[4/5]">
-                  <img src={heroBg} alt="Winter mountains" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5 text-white">
-                    <p className="text-[0.65rem] tracking-[0.25em] uppercase text-sky-200">This winter</p>
-                    <p className="font-display text-2xl leading-tight mt-1">{recent[0]?.title || "New reviews loading…"}</p>
-                  </div>
-                  <Snowflake className="absolute top-4 right-4 w-5 h-5 text-white/70" />
-                </div>
-              </div>
+              <img
+                src={heroBg}
+                alt=""
+                className="w-full h-full object-contain"
+                style={{
+                  filter: "drop-shadow(10px 10px 0 rgba(2,132,199,0.4))",
+                }}
+              />
             </div>
           </div>
         </div>
@@ -101,9 +109,26 @@ export default function Home() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
-          <StatCard className="md:col-span-4" label="Reviews shipped" value={String(totalReviews).padStart(2, "0")} icon={<Snowflake className="w-4 h-4" />} testId="stat-total-reviews" />
-          <StatCard className="md:col-span-3" label="Average score" value={averageScore} icon={<Star className="w-4 h-4" />} testId="stat-average-score" />
-          <StatCard className="md:col-span-2" label="Top platform" value={topPlatform} testId="stat-top-platform" />
+          <StatCard
+            className="md:col-span-4"
+            label="Reviews shipped"
+            value={String(totalReviews).padStart(2, "0")}
+            icon={<Snowflake className="w-4 h-4" />}
+            testId="stat-total-reviews"
+          />
+          <StatCard
+            className="md:col-span-3"
+            label="Average score"
+            value={averageScore}
+            icon={<Star className="w-4 h-4" />}
+            testId="stat-average-score"
+          />
+          <StatCard
+            className="md:col-span-2"
+            label="Top platform"
+            value={topPlatform}
+            testId="stat-top-platform"
+          />
           {goldStandard && (
             <Link
               to={`/reviews/${goldStandard.slug}`}
@@ -111,24 +136,33 @@ export default function Home() {
               className="md:col-span-3 relative overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-lg p-6 group transition"
             >
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs tracking-[0.2em] uppercase text-sky-700">Gold standard</span>
+                <span className="text-xs tracking-[0.2em] uppercase text-sky-700">
+                  Gold standard
+                </span>
                 <Trophy className="w-4 h-4 text-amber-500" />
               </div>
               <div className="font-display text-xl text-slate-900 group-hover:text-sky-800 transition leading-tight">
                 {goldStandard.title}
               </div>
-              <div className="text-sm text-slate-500 mt-1">Scored {goldStandard.rating} / 10</div>
+              <div className="text-sm text-slate-500 mt-1">
+                Scored {goldStandard.rating} / 10
+              </div>
             </Link>
           )}
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24" data-testid="recent-reviews">
+      <section
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24"
+        data-testid="recent-reviews"
+      >
         <div className="flex items-end justify-between mb-10 gap-4 flex-wrap">
           <div>
-            <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-3">Latest verdicts</p>
+            <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-3">
+              Latest reviews
+            </p>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-slate-900 tracking-tight">
-              Fresh off the ice.
+              The verdict is in.
             </h2>
           </div>
           <Link
@@ -136,7 +170,8 @@ export default function Home() {
             data-testid="view-all-reviews"
             className="inline-flex items-center gap-1.5 text-sm text-sky-700 hover:text-sky-900 group"
           >
-            View all <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition" />
+            View all{" "}
+            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition" />
           </Link>
         </div>
 
@@ -157,19 +192,28 @@ export default function Home() {
           <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-sky-200/40 blur-3xl" />
           <div className="absolute -bottom-32 -left-20 w-72 h-72 rounded-full bg-blue-100/50 blur-3xl" />
           <div className="relative max-w-2xl">
-            <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-4">The Patepic method</p>
+            <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-4">
+              The Patepic method
+            </p>
             <h2 className="font-display text-3xl lg:text-4xl text-slate-900 tracking-tight leading-tight">
-              No score until I roll the credits. No exceptions.
+              No score until the credits roll.
             </h2>
             <p className="mt-5 text-slate-600 leading-relaxed">
-              Every review is based on a finished playthrough — sometimes two. Read the methodology, see how the tiers map, and pitch your favourite obscure indie.
+              Every score comes from a finished playthrough. What you read is
+              what I actually think.
             </p>
             <div className="mt-8 flex gap-3 flex-wrap">
-              <Link to="/guidelines" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 hover:border-sky-300 text-slate-700 text-sm">
+              <Link
+                to="/guidelines"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 hover:border-sky-300 text-slate-700 text-sm"
+              >
                 Read the scoring guide
               </Link>
-              <Link to="/contact" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white hover:bg-slate-700 text-sm">
-                Pitch a game
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-white hover:bg-slate-700 text-sm"
+              >
+                Get in touch
               </Link>
             </div>
           </div>
@@ -180,20 +224,18 @@ export default function Home() {
 }
 
 const StatCard = ({ label, value, icon, className = "", testId }) => (
-  <div data-testid={testId} className={`bg-white border border-slate-200 rounded-2xl p-6 hover:border-sky-200 transition ${className}`}>
+  <div
+    data-testid={testId}
+    className={`bg-white border border-slate-200 rounded-2xl p-6 hover:border-sky-200 transition ${className}`}
+  >
     <div className="flex items-center justify-between mb-3">
-      <span className="text-xs tracking-[0.2em] uppercase text-sky-700">{label}</span>
+      <span className="text-xs tracking-[0.2em] uppercase text-sky-700">
+        {label}
+      </span>
       {icon && <span className="text-sky-600">{icon}</span>}
     </div>
-    <div className="font-display text-3xl lg:text-4xl text-slate-900 tracking-tight">{value}</div>
-  </div>
-);
-
-const PageLoader = () => (
-  <div className="min-h-[60vh] grid place-items-center text-slate-400 text-sm">
-    <div className="flex items-center gap-3">
-      <span className="w-4 h-4 border-2 border-sky-300 border-t-transparent rounded-full animate-spin" />
-      Loading reviews…
+    <div className="font-display text-3xl lg:text-4xl text-slate-900 tracking-tight">
+      {value}
     </div>
   </div>
 );

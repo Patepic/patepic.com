@@ -11,7 +11,9 @@ export function useReviews() {
     fetchReviews()
       .then((data) => {
         if (mounted) {
-          const list = Array.isArray(data) ? data : data?.items ?? data?.reviews ?? [];
+          const list = Array.isArray(data)
+            ? data
+            : (data?.items ?? data?.reviews ?? []);
           setReviews(list);
           setLoading(false);
         }
