@@ -4,7 +4,7 @@ import { creator } from "../data/creator";
 import { ReviewCard } from "../components/ReviewCard";
 import { ArrowUpRight, Snowflake, Star, Trophy, Twitch } from "lucide-react";
 
-const heroBg = "src/assets/model.png";
+const heroBg = "../assets/model.png";
 
 export default function Home() {
   const { reviews } = useReviews();
