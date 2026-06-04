@@ -2,11 +2,13 @@ import { Link } from "react-router-dom";
 import { useReviews } from "../hooks/useReviews";
 import { creator } from "../data/creator";
 import { ReviewCard } from "../components/ReviewCard";
-import { ArrowUpRight, Snowflake, Star, Trophy, Twitch } from "lucide-react";
+import { ArrowUpRight, Snowflake, Star, Gamepad2, Trophy, Twitch } from "lucide-react";
 import heroBg from "../assets/model.png";
 
 export default function Home() {
-  const { reviews } = useReviews();
+  const { reviews, loading, error } = useReviews();
+
+  if (error) return <HomeDataState title="Could not load reviews" />;
 
   const totalReviews = reviews.length;
 
@@ -109,30 +111,31 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
           <StatCard
-            className="md:col-span-4"
-            label="Reviews shipped"
+            className="md:col-span-2"
+            label="Reviews"
             value={String(totalReviews).padStart(2, "0")}
             icon={<Snowflake className="w-4 h-4" />}
             testId="stat-total-reviews"
           />
           <StatCard
-            className="md:col-span-3"
+            className="md:col-span-2"
             label="Average score"
             value={averageScore}
             icon={<Star className="w-4 h-4" />}
             testId="stat-average-score"
           />
           <StatCard
-            className="md:col-span-2"
+            className="md:col-span-3"
             label="Top platform"
             value={topPlatform}
+            icon={<Gamepad2 className="w-4 h-4" />}
             testId="stat-top-platform"
           />
           {goldStandard && (
             <Link
               to={`/reviews/${goldStandard.slug}`}
               data-testid="stat-gold-standard"
-              className="md:col-span-3 relative overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-lg p-6 group transition"
+              className="md:col-span-5 relative overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-lg p-5 group transition"
             >
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs tracking-[0.2em] uppercase text-sky-700">
@@ -174,7 +177,7 @@ export default function Home() {
           </Link>
         </div>
 
-        {recent[0] && (
+        {recent[0] ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="md:col-span-2 lg:col-span-2 lg:row-span-2">
               <ReviewCard review={recent[0]} featured />
@@ -183,6 +186,8 @@ export default function Home() {
               <ReviewCard key={r.slug} review={r} />
             ))}
           </div>
+        ) : (
+          <HomeDataState title="No reviews found yet" compact />
         )}
       </section>
 
@@ -225,16 +230,49 @@ export default function Home() {
 const StatCard = ({ label, value, icon, className = "", testId }) => (
   <div
     data-testid={testId}
-    className={`bg-white border border-slate-200 rounded-2xl p-6 hover:border-sky-200 transition ${className}`}
+    className={`bg-white border border-slate-200 rounded-2xl p-5 hover:border-sky-200 transition ${className}`}
   >
-    <div className="flex items-center justify-between mb-3">
-      <span className="text-xs tracking-[0.2em] uppercase text-sky-700">
+    <div className="flex items-start justify-between gap-3 mb-3">
+      <span className="max-w-[7.5rem] text-[0.68rem] leading-snug tracking-[0.16em] uppercase text-sky-700">
         {label}
       </span>
-      {icon && <span className="text-sky-600">{icon}</span>}
+      {icon && <span className="shrink-0 text-sky-600">{icon}</span>}
     </div>
-    <div className="font-display text-3xl lg:text-4xl text-slate-900 tracking-tight">
+    <div className="font-display text-2xl lg:text-3xl text-slate-900 tracking-tight break-words">
       {value}
+    </div>
+  </div>
+);
+
+const HomeLoader = () => (
+  <div
+    data-testid="home-loader"
+    className="min-h-[60vh] grid place-items-center text-slate-400 text-sm"
+  >
+    <div className="flex items-center gap-3">
+      <span className="w-4 h-4 border-2 border-sky-300 border-t-transparent rounded-full animate-spin" />
+      Loading…
+    </div>
+  </div>
+);
+
+const HomeDataState = ({ title, compact = false }) => (
+  <div
+    data-testid="home-data-state"
+    className={
+      compact
+        ? "rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center"
+        : "min-h-[70vh] grid place-items-center px-4"
+    }
+  >
+    <div className="max-w-md text-center">
+      <p className="text-xs tracking-[0.25em] uppercase text-sky-700">
+        Reviews unavailable
+      </p>
+      <h1 className="font-display mt-3 text-3xl text-slate-900">{title}</h1>
+      <p className="mt-3 text-sm text-slate-500">
+        Check the API connection and database, then refresh.
+      </p>
     </div>
   </div>
 );

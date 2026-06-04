@@ -5,24 +5,32 @@ import remarkGfm from "remark-gfm";
 import { ArrowLeft, Check, Gamepad2, X as XIcon } from "lucide-react";
 import { fetchReview, fetchReviews } from "../lib/api";
 
-const ratingToTier = (rating) => {
+const ratingToTier = (rating, recommended) => {
   const n = parseFloat(rating);
-  if (isNaN(n)) return "C";
-  if (n >= 9) return "S";
-  if (n >= 8) return "A";
-  if (n >= 7) return "B";
-  if (n >= 5) return "C";
-  if (n >= 3) return "D";
-  return "F";
+  if (n <= 3 || recommended === "no") return "F";
+  if (n <= 5) return "D";
+  if (n <= 7) return "C";
+  if (n === 8) return "B";
+  if (n === 9) return "A";
+  return "S";
 };
 
 const tierGradients = {
   S: "from-sky-500 to-blue-600 text-white",
   A: "from-blue-400 to-indigo-500 text-white",
   B: "from-emerald-400 to-emerald-600 text-white",
-  C: "from-amber-300 to-amber-500 text-slate-900",
+  C: "from-amber-400 to-amber-600 text-white",
   D: "from-orange-400 to-orange-600 text-white",
   F: "from-rose-500 to-rose-700 text-white",
+};
+
+const gradientStops = {
+  S: <><stop offset="0%" stopColor="#0ea5e9"/><stop offset="100%" stopColor="#2563eb"/></>,
+  A: <><stop offset="0%" stopColor="#60a5fa"/><stop offset="100%" stopColor="#6366f1"/></>,
+  B: <><stop offset="0%" stopColor="#34d399"/><stop offset="100%" stopColor="#059669"/></>,
+  C: <><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#d97706"/></>,
+  D: <><stop offset="0%" stopColor="#fb923c"/><stop offset="100%" stopColor="#ea580c"/></>,
+  F: <><stop offset="0%" stopColor="#f43f5e"/><stop offset="100%" stopColor="#be123c"/></>,
 };
 
 export default function ReviewDetail() {
@@ -83,64 +91,70 @@ export default function ReviewDetail() {
 
   return (
     <article data-testid={`review-detail-${review.slug}`}>
-      {/* Hero */}
       <section className="relative h-[60vh] min-h-[420px] overflow-hidden">
         <img
           src={cover}
           alt={review.title}
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-white/10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-transparent to-transparent" />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end pb-12">
           <Link
             to="/reviews"
             data-testid="back-to-reviews"
-            className="inline-flex items-center gap-1.5 text-sm text-slate-700 hover:text-sky-700 mb-6 w-fit bg-white/70 backdrop-blur-sm px-3 py-1.5 rounded-full"
+            className="inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white mb-6 w-fit bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20"
           >
             <ArrowLeft className="w-4 h-4" /> Back to reviews
           </Link>
 
           <div className="flex items-center gap-2 text-xs mb-4 flex-wrap">
             {review.platform && (
-              <span className="px-2.5 py-1 rounded-full bg-white/90 border border-slate-200 text-slate-700 inline-flex items-center gap-1.5">
-                <Gamepad2 className="w-3 h-3 text-sky-600" /> {review.platform}
-              </span>
+            <span className="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm border border-white/30 text-white inline-flex items-center gap-1.5">
+              <Gamepad2 className="w-3 h-3 text-sky-300" /> {review.platform}
+            </span>
             )}
-            {genre && (
-              <span className="px-2.5 py-1 rounded-full bg-white/90 border border-slate-200 text-sky-700 tracking-[0.15em] uppercase">
-                {genre}
-              </span>
-            )}
+            {(Array.isArray(review.genre) ? review.genre : review.genre ? [review.genre] : []).map((g) => (
+                <span key={g} className="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm border border-white/30 text-white tracking-[0.15em] uppercase whitespace-nowrap">
+                  {g}
+                </span>
+              ))}
             {review.date && (
-              <span className="text-slate-600 bg-white/70 px-2.5 py-1 rounded-full">
+              <span className="text-white/90 bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/30">
                 {review.date}
               </span>
             )}
           </div>
 
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl tracking-tighter text-slate-900 leading-[0.95] max-w-4xl">
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl tracking-tighter text-white leading-[0.95] max-w-4xl">
             {review.title}
           </h1>
           {review.summary && (
-            <p className="mt-5 text-lg lg:text-xl text-slate-700 max-w-2xl font-display italic">
+            <p className="mt-5 text-lg lg:text-xl text-white/75 max-w-2xl font-display italic">
               "{review.summary}"
             </p>
           )}
         </div>
 
         <div className="absolute top-1/2 right-4 sm:right-8 lg:right-16 -translate-y-1/2 hidden md:block">
-          <div
-            data-testid="review-score-badge"
-            className={`score-glow w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-gradient-to-br ${tierGradients[tier]} grid place-items-center`}
-          >
-            <div className="text-center leading-none">
-              <div className="font-display text-5xl lg:text-6xl font-bold">
-                {review.rating}
-              </div>
-              <div className="text-[0.6rem] tracking-[0.3em] uppercase font-medium mt-2">
-                Tier {tier}
+          <div data-testid="review-score-badge" className="relative w-32 h-32 lg:w-40 lg:h-40">
+            <svg viewBox="0 0 56 56" className="absolute inset-0 w-full h-full drop-shadow-xl">
+              <defs>
+                <linearGradient id="hex-grad-detail" x1="0%" y1="0%" x2="100%" y2="100%">
+                  {gradientStops[tier]}
+                </linearGradient>
+              </defs>
+              <polygon points="28,2 52,15 52,41 28,54 4,41 4,15" fill="url(#hex-grad-detail)" />
+            </svg>
+            <div className="absolute inset-0 grid place-items-center">
+              <div className="text-center leading-none">
+                <div className="font-display text-5xl lg:text-6xl font-bold text-white">
+                  {review.rating}
+                </div>
+                <div className="text-[0.6rem] tracking-[0.3em] uppercase font-medium mt-2 text-white">
+                  Tier {tier}
+                </div>
               </div>
             </div>
           </div>
@@ -148,15 +162,21 @@ export default function ReviewDetail() {
       </section>
 
       <div className="md:hidden max-w-7xl mx-auto px-4 -mt-6 relative z-10">
-        <div
-          className={`score-glow inline-flex items-center gap-3 px-5 py-3 rounded-full bg-gradient-to-br ${tierGradients[tier]}`}
-        >
-          <span className="font-display text-2xl font-bold">
-            {review.rating}
-          </span>
-          <span className="text-xs tracking-[0.2em] uppercase font-medium">
-            Tier {tier}
-          </span>
+        <div className="relative inline-block w-16 h-16">
+          <svg viewBox="0 0 56 56" className="absolute inset-0 w-full h-full drop-shadow-lg">
+            <defs>
+              <linearGradient id="hex-grad-mobile" x1="0%" y1="0%" x2="100%" y2="100%">
+                {gradientStops[tier]}
+              </linearGradient>
+            </defs>
+            <polygon points="28,2 52,15 52,41 28,54 4,41 4,15" fill="url(#hex-grad-mobile)" />
+          </svg>
+          <div className="absolute inset-0 grid place-items-center">
+            <div className="text-center leading-none">
+              <div className="font-display text-2xl font-bold text-white">{review.rating}</div>
+              <div className="text-[0.5rem] tracking-[0.2em] uppercase text-white mt-1">Tier {tier}</div>
+            </div>
+          </div>
         </div>
       </div>
 

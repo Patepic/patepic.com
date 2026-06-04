@@ -1,25 +1,42 @@
 import { Link } from "react-router-dom";
 import { Gamepad2 } from "lucide-react";
 
-const tierBadge = {
-  S: "from-sky-500 to-blue-600 text-white",
-  A: "from-blue-400 to-indigo-500 text-white",
-  B: "from-emerald-400 to-emerald-600 text-white",
-  C: "from-amber-300 to-amber-500 text-slate-900",
-  D: "from-orange-400 to-orange-600 text-white",
-  F: "from-rose-500 to-rose-700 text-white",
+const gradientStops = {
+  S: <><stop offset="0%" stopColor="#0ea5e9"/><stop offset="100%" stopColor="#2563eb"/></>,
+  A: <><stop offset="0%" stopColor="#60a5fa"/><stop offset="100%" stopColor="#6366f1"/></>,
+  B: <><stop offset="0%" stopColor="#34d399"/><stop offset="100%" stopColor="#059669"/></>,
+  C: <><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#d97706"/></>,
+  D: <><stop offset="0%" stopColor="#fb923c"/><stop offset="100%" stopColor="#ea580c"/></>,
+  F: <><stop offset="0%" stopColor="#f43f5e"/><stop offset="100%" stopColor="#be123c"/></>,
 };
 
-const ratingToTier = (rating) => {
+const ratingToTier = (rating, recommended) => {
   const n = parseFloat(rating);
-  if (isNaN(n)) return "C";
-  if (n >= 9) return "S";
-  if (n >= 8) return "A";
-  if (n >= 7) return "B";
-  if (n >= 5) return "C";
-  if (n >= 3) return "D";
-  return "F";
+  if (n <= 3 || recommended === "no") return "F";
+  if (n <= 5) return "D";
+  if (n <= 7) return "C";
+  if (n === 8) return "B";
+  if (n === 9) return "A";
+  return "S";
 };
+
+const HexScore = ({ rating, tier, size = 14 }) => (
+  <div className="relative shrink-0" style={{ width: size, height: size }}>
+    <svg viewBox="0 0 56 56" className="absolute inset-0 w-full h-full drop-shadow-md">
+      <defs>
+        <linearGradient id={`hex-grad-${tier}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          {gradientStops[tier]}
+        </linearGradient>
+      </defs>
+      <polygon points="28,2 52,15 52,41 28,54 4,41 4,15" fill={`url(#hex-grad-${tier})`} />
+    </svg>
+    <div className="absolute inset-0 grid place-items-center">
+      <span className="font-display font-bold text-white leading-none" style={{ fontSize: size * 0.32 }}>
+        {rating}
+      </span>
+    </div>
+  </div>
+);
 
 export const ReviewCard = ({ review, featured = false }) => {
   const tier = ratingToTier(review.rating);
@@ -30,63 +47,86 @@ export const ReviewCard = ({ review, featured = false }) => {
       ? review.cover_url
       : `https://${review.cover_url}`
     : fallback;
-  const genre = Array.isArray(review.genre)
-    ? review.genre.join(", ")
-    : review.genre;
+  const genres = Array.isArray(review.genre)
+    ? review.genre
+    : review.genre
+    ? review.genre.split(",").map((g) => g.trim())
+    : [];
+
+  if (featured) {
+    return (
+      <Link
+        to={`/reviews/${review.slug}`}
+        data-testid={`review-card-${review.slug}`}
+        className="group relative overflow-hidden rounded-xl bg-white hover:shadow-[0_12px_40px_-12px_rgba(2,132,199,0.25)] transition-all duration-300 flex flex-col md:col-span-2 md:row-span-2 border border-slate-200 hover:border-sky-300"
+      >
+        <div className="relative aspect-[16/10] overflow-hidden">
+          <img
+            src={cover}
+            alt={review.title}
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent" />
+          <div className="absolute bottom-3 left-3">
+            <HexScore rating={review.rating} tier={tier} size={56} />
+          </div>
+        </div>
+        <div className="p-5 flex flex-col gap-2 flex-1">
+          <h3 className="font-display text-2xl md:text-3xl text-slate-900 tracking-tight group-hover:text-sky-800 transition-colors">
+            {review.title}
+          </h3>
+          <p className="text-sm text-slate-500 line-clamp-2">{review.summary}</p>
+          <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 text-xs text-slate-500">
+            <span className="flex items-center gap-1.5">
+              <Gamepad2 className="w-3.5 h-3.5 text-sky-500" />
+              <span className="uppercase tracking-wide">{review.platform}</span>
+            </span>
+            {genres.map((g) => (
+              <span key={g} className="uppercase tracking-wide">{g}</span>
+            ))}
+            <span className="ml-auto">{review.date}</span>
+          </div>
+        </div>
+      </Link>
+    );
+  }
 
   return (
     <Link
       to={`/reviews/${review.slug}`}
       data-testid={`review-card-${review.slug}`}
-      className={`group relative overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-[0_12px_40px_-12px_rgba(2,132,199,0.25)] transition-all duration-500 flex flex-col ${
-        featured ? "md:col-span-2 md:row-span-2" : ""
-      }`}
+      className="group flex items-stretch transition-all duration-300 border-b border-slate-300 overflow-hidden p-3 pb-4 gap-3"
     >
-      <div
-        className={`relative ${featured ? "aspect-[16/10]" : "aspect-[4/3]"} overflow-hidden bg-slate-100`}
-      >
-        <img
-          src={cover}
-          alt={review.title}
-          loading="lazy"
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/45 via-slate-900/10 to-transparent" />
-
-        <div
-          className={`absolute top-4 right-4 w-14 h-14 rounded-full grid place-items-center bg-gradient-to-br ${tierBadge[tier]} shadow-lg`}
-        >
-          <div className="text-center leading-none">
-            <div className="font-display font-bold text-lg">
-              {review.rating}
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-sm border border-white text-xs text-slate-700">
-          <Gamepad2 className="w-3 h-3 text-sky-600" />
-          {review.platform}
+    <div className="relative w-64 shrink-0 overflow-hidden rounded-[5px]">
+      <img
+        src={cover}
+        alt={review.title}
+        loading="lazy"
+        className="w-full h-full object-cover transition-all duration-300"
+      />
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 rounded-[5px]" />
+        <div className="absolute bottom-2 left-2">
+          <HexScore rating={review.rating} tier={tier} size={40} />
         </div>
       </div>
 
-      <div className="p-5 flex flex-col gap-2 flex-1">
-        <div className="flex items-center gap-2 text-xs">
-          <span className="tracking-[0.2em] uppercase text-sky-700">
-            {genre}
-          </span>
-          <span className="text-slate-300">·</span>
-          <span className="text-slate-400">{review.date}</span>
-        </div>
-        <h3
-          className={`font-display tracking-tight text-slate-900 group-hover:text-sky-800 transition-colors ${
-            featured ? "text-2xl md:text-3xl" : "text-lg"
-          }`}
-        >
-          {review.title}
-        </h3>
-        <p className="text-sm text-slate-500 line-clamp-2 mt-auto">
-          {review.summary}
+      <div className="flex flex-col gap-1.5 min-w-0 flex-1 py-1">
+      <h3 className="font-display text-base text-slate-900 tracking-tight group-hover:text-sky-800 group-hover:underline transition-colors leading-snug">
+        {review.title}
+      </h3>
+        <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
+          {review.date} - {review.summary}
         </p>
+        <div className="flex items-center gap-3 mt-auto text-[0.65rem] text-slate-500 uppercase tracking-wide flex-wrap">
+          <span className="flex items-center gap-1">
+            <Gamepad2 className="w-3 h-3 text-sky-500" />
+            {review.platform}
+          </span>
+          {genres.map((g) => (
+            <span key={g}>{g}</span>
+          ))}
+        </div>
       </div>
     </Link>
   );

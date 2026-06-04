@@ -22,7 +22,7 @@ const tiers = [
   {
     tier: "C",
     label: "Above Average",
-    color: "from-amber-400 to-amber-600 text-white",
+    color: "",
     desc: "Moments of brilliance surrounded by too much filler. Fans of the genre might find enough here. Everyone else should look elsewhere first.",
   },
   {

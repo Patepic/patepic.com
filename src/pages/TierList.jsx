@@ -18,7 +18,7 @@ const tierMeta = {
     label: "Great",
   },
   C: {
-    color: "from-amber-400 to-amber-600 text-white",
+    color: "",
     glow: "",
     label: "Above Average",
   },
@@ -36,7 +36,7 @@ const tierMeta = {
 
 const ratingToTier = (rating, recommended) => {
   const n = parseFloat(rating);
-  if (n <= 3 || recommended === "No") return "F";
+  if (n <= 3 || recommended === "no") return "F";
   if (n <= 5) return "D";
   if (n <= 7) return "C";
   if (n === 8) return "B";

@@ -63,14 +63,18 @@ const blank = {
   contentType: null,
   pros: [""],
   cons: [""],
+  isFeatured: false,
 };
 
 export default function Admin() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [sort, setSort] = useState("none");
   const [editing, setEditing] = useState(null);
   const [deleting, setDeleting] = useState(null);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 10;
 
   const PLATFORMS = useMemo(
     () => [...new Set(reviews.map((r) => r.platform).filter(Boolean))].sort(),
@@ -97,9 +101,49 @@ export default function Admin() {
     load();
   }, []);
 
-  const filtered = reviews.filter((r) =>
-    !query ? true : r.title.toLowerCase().includes(query.toLowerCase()),
+const filtered = useMemo(() => {
+  const items = reviews.filter((r) =>
+    !query
+      ? true
+      : r.title.toLowerCase().includes(query.toLowerCase())
   );
+
+  if (sort === "title-asc") {
+    return [...items].sort((a, b) =>
+      a.title.localeCompare(b.title)
+    );
+  }
+
+  if (sort === "title-desc") {
+    return [...items].sort((a, b) =>
+      b.title.localeCompare(a.title)
+    );
+  }
+
+  if (sort === "rating-desc") {
+    return [...items].sort(
+      (a, b) =>
+        (parseFloat(b.rating) || 0) -
+        (parseFloat(a.rating) || 0)
+    );
+  }
+
+  if (sort === "rating-asc") {
+    return [...items].sort(
+      (a, b) =>
+        (parseFloat(a.rating) || 0) -
+        (parseFloat(b.rating) || 0)
+    );
+  }
+
+  return items;
+}, [reviews, query, sort]);
+
+const paginated = useMemo(() => {
+  const start = (page - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  return filtered.slice(start, end);
+}, [filtered, page]);
 
   const handleSaved = () => {
     setEditing(null);
@@ -170,14 +214,46 @@ export default function Admin() {
         <table className="w-full text-sm">
           <thead className="bg-slate-50 text-slate-500 text-xs tracking-[0.15em] uppercase">
             <tr>
-              <th className="text-left px-5 py-3 font-medium">Title</th>
+              <th className="text-left px-5 py-3 font-medium">
+                <button
+                  type="button"
+                  onClick={() =>
+                  setSort((s) => {
+                    if (s === "title-asc") return "title-desc";
+                    if (s === "title-desc") return "none";
+                    return "title-asc";
+                  })
+                }
+                  className="hover:text-slate-900"
+                >
+                  TITLE
+                  {sort === "title-asc" && " ↑"}
+                  {sort === "title-desc" && " ↓"}
+                </button>
+              </th>
               <th className="text-left px-5 py-3 font-medium hidden sm:table-cell">
                 Platform
               </th>
               <th className="text-left px-5 py-3 font-medium hidden md:table-cell">
                 Content Type
               </th>
-              <th className="text-left px-5 py-3 font-medium">Rating</th>
+              <th className="text-left px-5 py-3 font-medium">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setSort((s) => {
+                      if (s === "rating-desc") return "rating-asc";
+                      if (s === "rating-asc") return "none";
+                      return "rating-desc";
+                    })
+                  }
+                  className="hover:text-slate-900"
+                >
+                  RATING
+                  {sort === "rating-desc" && " ↓"}
+                  {sort === "rating-asc" && " ↑"}
+                </button>
+              </th>
               <th className="text-right px-5 py-3 font-medium">Actions</th>
             </tr>
           </thead>
@@ -195,7 +271,7 @@ export default function Admin() {
                 </td>
               </tr>
             ) : (
-              filtered.map((r) => (
+              paginated.map((r) => (
                 <tr
                   key={r.slug}
                   data-testid={`admin-row-${r.slug}`}
@@ -205,7 +281,7 @@ export default function Admin() {
                     <div className="flex items-center gap-3">
                       {r.cover_url ? (
                         <img
-                          src={r.cover_url}
+                          src={r.cover_url.startsWith("http") ? r.cover_url : `https://${r.cover_url}`}
                           alt=""
                           className="w-10 h-10 rounded-md object-cover bg-slate-100"
                         />
@@ -215,10 +291,15 @@ export default function Admin() {
                         </div>
                       )}
                       <div>
-                        <div className="font-display text-slate-900">
+                        <div className="font-display text-slate-900 flex items-center gap-2">
                           {r.title}
+                          {r.isFeatured && (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-100 text-amber-700 border border-amber-200">
+                              ★ Gold
+                            </span>
+                          )}
                         </div>
-                        <div className="text-xs text-slate-400">{r.genre}</div>
+                        <div className="text-xs text-slate-400">{Array.isArray(r.genre) ? r.genre.join(" · ") : r.genre}</div>
                       </div>
                     </div>
                   </td>
@@ -226,7 +307,12 @@ export default function Admin() {
                     {r.platform}
                   </td>
                   <td className="px-5 py-3 text-slate-600 hidden md:table-cell">
-                    {r.contentType}
+                    {{
+                      remake: "Remake",
+                      remaster: "Remaster",
+                      show: "Enhanced",
+                      dlc: "DLC",
+                    }[r.contentType] || "Original"}
                   </td>
                   <td className="px-5 py-3">
                     <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-sky-100 text-sky-800 border border-sky-200">
@@ -237,6 +323,7 @@ export default function Admin() {
                     <div className="flex items-center justify-end gap-1">
                       <Link
                         to={`/reviews/${r.slug}`}
+                        title="View review"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100 text-slate-500"
@@ -245,6 +332,7 @@ export default function Admin() {
                       </Link>
                       <button
                         onClick={() => setEditing(r)}
+                        title="Edit review"
                         data-testid={`admin-edit-${r.slug}`}
                         className="w-8 h-8 grid place-items-center rounded-full hover:bg-sky-100 text-sky-700"
                       >
@@ -252,6 +340,7 @@ export default function Admin() {
                       </button>
                       <button
                         onClick={() => setDeleting(r)}
+                        title="Delete review"
                         data-testid={`admin-delete-${r.slug}`}
                         className="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-100 text-rose-600"
                       >
@@ -264,6 +353,32 @@ export default function Admin() {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex items-center justify-between mt-4 px-2">
+        <button
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          disabled={page === 1}
+          className="px-4 h-9 rounded-full border border-slate-200 text-sm disabled:opacity-40"
+        >
+          Prev
+        </button>
+
+        <div className="text-sm text-slate-500">
+          Page {page} of {Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))}
+        </div>
+
+        <button
+          onClick={() =>
+            setPage((p) =>
+              p < Math.ceil(filtered.length / PAGE_SIZE) ? p + 1 : p
+            )
+          }
+          disabled={page >= Math.ceil(filtered.length / PAGE_SIZE)}
+          className="px-4 h-9 rounded-full border border-slate-200 text-sm disabled:opacity-40"
+        >
+          Next
+        </button>
       </div>
 
       <ReviewEditor
@@ -339,6 +454,18 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
   const removeListItem = (key, i) =>
     setForm((f) => ({ ...f, [key]: f[key].filter((_, idx) => idx !== i) }));
 
+  const canSubmit = isEdit || (
+    !!form.title.trim() &&
+    !!form.platform.trim() &&
+    form.genre.some((g) => g.trim()) &&
+    !!form.rating.trim() &&
+    !!form.date.trim() &&
+    !!form.summary.trim() &&
+    !!form.body.trim() &&
+    form.pros.some((p) => p.trim()) &&
+    form.cons.some((c) => c.trim())
+  );
+
   const handleUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -405,7 +532,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               <div className="w-28 h-28 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden grid place-items-center text-slate-400 flex-shrink-0">
                 {form.cover_url ? (
                   <img
-                    src={form.cover_url}
+                    src={form.cover_url.startsWith("http") ? form.cover_url : `https://${form.cover_url}`}
                     alt=""
                     className="w-full h-full object-cover"
                   />
@@ -450,6 +577,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             />
             <FieldText
               label="Platform"
+              required
               value={form.platform}
               onChange={(v) => set("platform", v)}
               testId="admin-field-platform"
@@ -458,6 +586,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
           <ListEditor
             label="Genre"
+            required
             items={form.genre}
             onChange={(i, v) => setListItem("genre", i, v)}
             onAdd={() => addListItem("genre")}
@@ -466,15 +595,17 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             testId="admin-genre"
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FieldText
               label="Rating"
+              required
               value={form.rating}
               onChange={(v) => set("rating", v)}
               testId="admin-field-rating"
             />
             <FieldText
               label="Date"
+              required
               value={form.date}
               onChange={(v) => set("date", v)}
               testId="admin-field-date"
@@ -521,14 +652,39 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                 <SelectItem value="remaster">Remaster</SelectItem>
                 <SelectItem value="show">Enhanced</SelectItem>
                 <SelectItem value="dlc">DLC</SelectItem>
-                <SelectItem value="none">None</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
+          {/* Gold Standard toggle */}
+          <div className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50">
+            <div>
+              <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
+                Gold Standard
+              </Label>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Pin this as the featured game on the homepage
+              </p>
+            </div>
+            <button
+              type="button"
+              data-testid="admin-field-isFeatured"
+              onClick={() => set("isFeatured", !form.isFeatured)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                form.isFeatured ? "bg-sky-600" : "bg-slate-200"
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                  form.isFeatured ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
+
           <div>
             <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
-              Summary
+              Summary *
             </Label>
             <Input
               value={form.summary}
@@ -541,6 +697,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
           <ListEditor
             label="Pros"
+            required
             items={form.pros}
             onChange={(i, v) => setListItem("pros", i, v)}
             onAdd={() => addListItem("pros")}
@@ -551,6 +708,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
           <ListEditor
             label="Cons"
+            required
             items={form.cons}
             onChange={(i, v) => setListItem("cons", i, v)}
             onAdd={() => addListItem("cons")}
@@ -561,18 +719,16 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
           <div>
             <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
-              Review Body (Markdown)
+              Review Body (Markdown) *
             </Label>
-
             <Textarea
               rows={16}
               value={form.body}
               onChange={(e) => set("body", e.target.value)}
               data-testid="admin-field-body"
-              placeholder={`Write your review here.`}
+              placeholder="Write your review here."
               className="mt-2 bg-white border-slate-200 resize-y text-sm font-mono"
             />
-
             <p className="mt-2 text-xs text-slate-500">
               Supports Markdown headings, lists, links, bold, italics,
               blockquotes, and code blocks.
@@ -590,8 +746,8 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             <button
               type="submit"
               data-testid="admin-save-review"
-              disabled={saving}
-              className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-slate-900 text-white hover:bg-slate-700 disabled:opacity-60 text-sm font-medium"
+              disabled={saving || !canSubmit}
+              className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-slate-900 text-white hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium"
             >
               {saving ? (
                 <>
@@ -635,12 +791,13 @@ const ListEditor = ({
   onAdd,
   onRemove,
   color,
+  required,
   testId,
 }) => (
   <div data-testid={testId}>
     <div className="flex items-center justify-between mb-2">
       <Label className={`text-xs tracking-[0.2em] uppercase text-${color}-700`}>
-        {label}
+        {label}{required ? " *" : ""}
       </Label>
       <button
         type="button"

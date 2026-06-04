@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { ReviewCard } from "../components/ReviewCard";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "../components/ui/input";
-import { Checkbox } from "../components/ui/checkbox";
 import { Slider } from "../components/ui/slider";
 import {
   Select,
@@ -22,13 +21,20 @@ export default function Reviews() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [scoreRange, setScoreRange] = useState([0, 10]);
   const [sort, setSort] = useState("recent");
+  const [verdict, setVerdict] = useState("all"); // "all" | "recommended" | "avoid"
   const [mobileFilters, setMobileFilters] = useState(false);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 12;
 
   useEffect(() => {
     fetchReviews()
       .then((d) => setAllReviews(Array.isArray(d) ? d : (d?.items ?? [])))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, selectedPlatforms, selectedGenres, scoreRange, sort, verdict]);
 
   const PLATFORMS = useMemo(
     () =>
@@ -96,6 +102,9 @@ export default function Reviews() {
         return false;
       }
 
+      if (verdict === "recommended" && r.recommended !== "yes") return false;
+      if (verdict === "avoid" && r.recommended !== "no") return false;
+
       return true;
     });
 
@@ -122,20 +131,26 @@ export default function Reviews() {
     }
 
     return res;
-  }, [allReviews, query, selectedPlatforms, selectedGenres, scoreRange, sort]);
+  }, [allReviews, query, selectedPlatforms, selectedGenres, scoreRange, sort, verdict]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const clearAll = () => {
     setQuery("");
     setSelectedPlatforms([]);
     setSelectedGenres([]);
     setScoreRange([0, 10]);
+    setVerdict("all");
+    setPage(1);
   };
 
   const activeCount =
     selectedPlatforms.length +
     selectedGenres.length +
     (scoreRange[0] !== 0 || scoreRange[1] !== 10 ? 1 : 0) +
-    (query ? 1 : 0);
+    (query ? 1 : 0) +
+    (verdict !== "all" ? 1 : 0);
 
   return (
     <div
@@ -214,6 +229,32 @@ export default function Reviews() {
             )}
           </div>
 
+          <FilterGroup label="Verdict">
+            <div className="flex gap-2 flex-wrap">
+              {[
+                { value: "all", label: "All" },
+                { value: "recommended", label: "✓ Recommended" },
+                { value: "avoid", label: "✕ Avoid" },
+              ].map(({ value, label }) => (
+                <button
+                  key={value}
+                  onClick={() => setVerdict(value)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                    verdict === value
+                      ? value === "recommended"
+                        ? "bg-green-50 border-green-400 text-green-700"
+                        : value === "avoid"
+                        ? "bg-red-50 border-red-400 text-red-700"
+                        : "bg-sky-50 border-sky-400 text-sky-700"
+                      : "bg-white border-slate-200 text-slate-500 hover:border-slate-300"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </FilterGroup>
+
           <FilterGroup label="Platform">
             <Select
               value={selectedPlatforms[0] ?? "all"}
@@ -248,9 +289,7 @@ export default function Reviews() {
             </Select>
           </FilterGroup>
 
-          <FilterGroup
-            label={`Score: ${scoreRange[0]} – ${scoreRange[1]}`}
-          >
+          <FilterGroup label={`Score: ${scoreRange[0]} – ${scoreRange[1]}`}>
             <Slider
               data-testid="filter-score-range"
               min={0}
@@ -274,9 +313,11 @@ export default function Reviews() {
               <>
                 Showing{" "}
                 <span className="text-slate-900 font-medium">
-                  {filtered.length}
+                  {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)}
                 </span>{" "}
-                of {allReviews.length} reviews
+                of{" "}
+                <span className="text-slate-900 font-medium">{filtered.length}</span>{" "}
+                reviews
               </>
             )}
           </div>
@@ -291,11 +332,62 @@ export default function Reviews() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map((r) => (
-                <ReviewCard key={r.slug} review={r} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1">
+                {paginated.map((r) => (
+                  <ReviewCard key={r.slug} review={r} />
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="mt-10 flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page === 1}
+                    className="h-9 px-4 rounded-lg border border-slate-200 bg-white text-sm text-slate-600 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    ← Prev
+                  </button>
+
+                  <div className="flex gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
+                      .reduce((acc, p, idx, arr) => {
+                        if (idx > 0 && p - arr[idx - 1] > 1) acc.push("…");
+                        acc.push(p);
+                        return acc;
+                      }, [])
+                      .map((p, i) =>
+                        p === "…" ? (
+                          <span key={`ellipsis-${i}`} className="h-9 w-9 flex items-center justify-center text-slate-400 text-sm">
+                            …
+                          </span>
+                        ) : (
+                          <button
+                            key={p}
+                            onClick={() => setPage(p)}
+                            className={`h-9 w-9 rounded-lg text-sm font-medium transition-colors ${
+                              page === p
+                                ? "bg-sky-600 text-white border border-sky-600"
+                                : "bg-white border border-slate-200 text-slate-600 hover:border-slate-300"
+                            }`}
+                          >
+                            {p}
+                          </button>
+                        )
+                      )}
+                  </div>
+
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={page === totalPages}
+                    className="h-9 px-4 rounded-lg border border-slate-200 bg-white text-sm text-slate-600 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Next →
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
