@@ -129,55 +129,57 @@ export default function About() {
           <div className="md:col-span-7 space-y-5 text-slate-600 leading-relaxed text-base lg:text-lg">
             <p>The cold came first.</p>
 
-            <p>No warning. Just frost everywhere.</p>
-
             <p>
-              One day the world broke, folding in on itself until entire cities
-              vanished between fractured realities. Roads led nowhere. Skies
-              split open. History became something people argued about around
-              dying campfires. When the collapse finally settled, all that
-              remained for {creator.name} was the cold, a name that still felt
-              like their own, and the determination to survive long enough to
-              figure out what came next.
+              No warning. No mercy. Just frost where there shouldn’t have been
+              any.
             </p>
 
             <p>
-              The broken worlds offered few opportunities and even fewer
-              mercies. Bounty hunting became the only path forward. Across
-              frozen wastelands, ruined settlements, and forgotten corners of
-              the fold, {creator.name} tracks fugitives, monsters, and things
-              that no longer fit neatly into either category. Every contract is
-              another journey through places abandoned by reason and reclaimed
-              by chaos.
-            </p>
-
-            <p>But survival is only part of the fight.</p>
-
-            <p>
-              The fold has a habit of deciding who people are supposed to
-              become. It turns fear into identity and necessity into destiny.
-              Every hunt forces {creator.name} to confront the person the
-              collapse tried to create, someone hardened by loss, shaped by
-              isolation, and defined by the cold they carry everywhere they go.
-              The battle is no longer just against targets. It is against
-              becoming a stranger to themselves.
+              One day the world broke, folding in on itself until cities stopped
+              agreeing with reality. Roads led into nothing. Skies split like
+              cracked glass. History became something argued over beside dying
+              fires. When the collapse finally settled, all that remained for{" "}
+              {creator.name} was the cold, a name that still felt familiar, and
+              the stubborn instinct to keep moving long enough to understand
+              what had happened.
             </p>
 
             <p>
-              Yet even in a fractured world, some things remain worth finishing.
+              The broken worlds didn’t offer opportunities. They offered
+              problems that bite back. Bounty hunting became the only line of
+              work that still made sense. Across frozen wastelands, ruined
+              settlements, and places that look like they were erased
+              mid-sentence, {creator.name} tracks fugitives, monsters, and
+              things that shouldn’t exist in any version of reality that
+              respects itself.
+            </p>
+
+            <p>Survival is only the starting point.</p>
+
+            <p>
+              The fold has a habit of reshaping people who spend too long inside
+              it. Fear turns into instinct. Instinct turns into identity. Every
+              contract forces {creator.name} to confront that slow
+              transformation, the version of themselves the collapse is trying
+              to finalize. Hardened. Isolated. Useful. The real fight isn’t the
+              target anymore. It’s resisting the moment you stop recognizing
+              your own reflection.
+            </p>
+
+            <p>Still, not everything is about survival.</p>
+
+            <p>
+              Between contracts and long stretches of silence, there are games
+              to finish and stories to see through. Every ending reached, every
+              credit rolled, every review written after the final scene. In a
+              world built on unfinished things, {creator.name} refuses to become
+              one of them.
             </p>
 
             <p>
-              Between contracts and long nights on the road, there are still
-              games to play and stories to see through to the end. Every
-              adventure completed, every credit rolled, every review written
-              after the final chapter. In a universe full of unfinished endings,{" "}
-              {creator.name} refuses to leave things half done.
-            </p>
-
-            <p>
-              The world may have collapsed. The fold may still be writing its
-              story. But {creator.name} has not reached the ending yet.
+              The world may have collapsed. The fold may still be rewriting what
+              comes next. But {creator.name} is still here, and still moving
+              forward.
             </p>
           </div>
 
