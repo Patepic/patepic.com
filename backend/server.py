@@ -175,10 +175,6 @@ async def health():
 
 @api_router.post("/contact")
 async def send_contact(req: ContactRequest):
-    if not RESEND_API_KEY or RESEND_API_KEY.startswith("re_placeholder"):
-        logger.info(f"[DEV MODE] Contact form from {req.email}: {req.subject}")
-        return {"status": "queued", "dev_mode": True}
-
     html = f"""
     <div style="font-family: Arial, sans-serif; max-width:600px; margin:0 auto; background:#f4f8fb; color:#1e293b; padding:24px; border-radius:12px;">
       <h2 style="color:#0284c7; margin-top:0;">New Patepic Contact Submission</h2>
