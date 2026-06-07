@@ -2,34 +2,32 @@ import { Link } from "react-router-dom";
 import { useReviews } from "../hooks/useReviews";
 
 const tierMeta = {
-  S: {
-    color: "from-sky-500 to-blue-600 text-white",
-    glow: "shadow-[0_20px_60px_-20px_rgba(2,132,199,0.45)]",
+  "★": {
+    color: "from-pink-400 to-rose-500 text-white",
+    label: "Favorite",
+  },
+  "S": {
+    color: "from-sky-400 to-blue-500 text-white",
     label: "Masterpiece",
   },
-  A: {
-    color: "from-blue-400 to-indigo-500 text-white",
-    glow: "",
+  "A": {
+    color: "from-blue-400 to-indigo-600 text-white",
     label: "Excellent",
   },
-  B: {
-    color: "from-emerald-400 to-emerald-600 text-white",
-    glow: "",
+  "B": {
+    color: "from-emerald-400 to-teal-600 text-white",
     label: "Great",
   },
-  C: {
-    color: "",
-    glow: "",
+  "C": {
+    color: "from-yellow-400 to-amber-600 text-white",
     label: "Above Average",
   },
-  D: {
-    color: "from-orange-400 to-orange-600 text-white",
-    glow: "",
+  "D": {
+    color: "from-orange-300 to-orange-500 text-white",
     label: "Below Average",
   },
-  F: {
-    color: "from-rose-500 to-rose-700 text-white",
-    glow: "",
+  "F": {
+    color: "from-red-500 to-rose-700 text-white",
     label: "Avoid",
   },
 };
@@ -58,7 +56,7 @@ export default function TierList() {
     );
   }
 
-  const grouped = ["S", "A", "B", "C", "D", "F"].reduce((acc, t) => {
+  const grouped = ["★", "S", "A", "B", "C", "D", "F"].reduce((acc, t) => {
     acc[t] = reviews
       .filter((r) => ratingToTier(r.rating, r.recommended) === t)
       .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
@@ -81,16 +79,14 @@ export default function TierList() {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-6">
-        {["S", "A", "B", "C", "D", "F"].map((t) => {
+        {["★", "S", "A", "B", "C", "D", "F"].map((t) => {
           const meta = tierMeta[t];
           const list = grouped[t];
           return (
             <div
               key={t}
               data-testid={`tier-row-${t}`}
-              className={`grid grid-cols-1 md:grid-cols-[140px_1fr] gap-0 md:gap-6 rounded-3xl border border-slate-200 bg-white overflow-hidden ${
-                t === "S" ? meta.glow : ""
-              }`}
+              className={`grid grid-cols-1 md:grid-cols-[140px_1fr] gap-0 md:gap-6 rounded-3xl border border-slate-200 bg-white overflow-hidden`}
             >
               <div
                 className={`bg-gradient-to-br ${meta.color} p-6 md:p-8 flex flex-col items-center justify-center text-center`}
@@ -109,8 +105,7 @@ export default function TierList() {
               <div className="p-5 md:p-6">
                 {list.length === 0 ? (
                   <div className="h-full grid place-items-center text-slate-400 italic text-sm py-8">
-                    Nothing here yet. (And honestly, that's the goal for the
-                    lower tiers.)
+                    Nothing here yet.
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-3">

@@ -435,6 +435,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
       setForm({
         ...blank,
         ...review,
+        isFeatured: !!review.isFeatured,
         pros: review.pros?.length ? review.pros : [""],
         cons: review.cons?.length ? review.cons : [""],
       });
@@ -489,12 +490,14 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
     setSaving(true);
     const payload = {
       ...form,
+      isFeatured: form.isFeatured, 
       pros: form.pros.map((s) => s.trim()).filter(Boolean),
       cons: form.cons.map((s) => s.trim()).filter(Boolean),
       recommended: form.recommended || null,
       contentType: form.contentType || null,
     };
     try {
+      console.log("SAVING", payload);
       if (isEdit) {
         await adminUpdateReview(review.slug, payload);
         toast.success("Review updated");
@@ -656,7 +659,6 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             </Select>
           </div>
 
-          {/* Gold Standard toggle */}
           <div className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50">
             <div>
               <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">

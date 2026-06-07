@@ -112,6 +112,12 @@ export default function Reviews() {
       res = [...res].sort(
         (a, b) => new Date(b.date || 0) - new Date(a.date || 0),
       );
+
+    }
+    if (sort === "oldest") {
+      res = [...res].sort(
+        (a, b) => new Date(a.date || 0) - new Date(b.date || 0),
+      );
     }
 
     if (sort === "score-desc") {
@@ -190,7 +196,8 @@ export default function Reviews() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="bg-white border-slate-200 text-slate-700">
-            <SelectItem value="recent">Most recent</SelectItem>
+            <SelectItem value="recent">Newest first</SelectItem>
+            <SelectItem value="oldest">Oldest first</SelectItem>
             <SelectItem value="score-desc">Highest score</SelectItem>
             <SelectItem value="score-asc">Lowest score</SelectItem>
             <SelectItem value="a-z">A → Z</SelectItem>

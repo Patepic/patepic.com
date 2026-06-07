@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { Gamepad2 } from "lucide-react";
 
 const gradientStops = {
-  S: <><stop offset="0%" stopColor="#0ea5e9"/><stop offset="100%" stopColor="#2563eb"/></>,
-  A: <><stop offset="0%" stopColor="#60a5fa"/><stop offset="100%" stopColor="#6366f1"/></>,
-  B: <><stop offset="0%" stopColor="#34d399"/><stop offset="100%" stopColor="#059669"/></>,
-  C: <><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#d97706"/></>,
-  D: <><stop offset="0%" stopColor="#fb923c"/><stop offset="100%" stopColor="#ea580c"/></>,
-  F: <><stop offset="0%" stopColor="#f43f5e"/><stop offset="100%" stopColor="#be123c"/></>,
+  "Favortie": <><stop offset="0%" stopColor="#f472b6"/><stop offset="100%" stopColor="#f43f5e"/></>,
+  "S":  <><stop offset="0%" stopColor="#38bdf8"/><stop offset="100%" stopColor="#3b82f6"/></>,
+  "A":  <><stop offset="0%" stopColor="#60a5fa"/><stop offset="100%" stopColor="#4338ca"/></>,
+  "B":  <><stop offset="0%" stopColor="#34d399"/><stop offset="100%" stopColor="#0d9488"/></>,
+  "C":  <><stop offset="0%" stopColor="#facc15"/><stop offset="100%" stopColor="#d97706"/></>,
+  "D":  <><stop offset="0%" stopColor="#fdba74"/><stop offset="100%" stopColor="#f97316"/></>,
+  "F":  <><stop offset="0%" stopColor="#ef4444"/><stop offset="100%" stopColor="#f43f5e"/></>,
 };
 
 const ratingToTier = (rating, recommended) => {
@@ -98,31 +99,35 @@ export const ReviewCard = ({ review, featured = false }) => {
       data-testid={`review-card-${review.slug}`}
       className="group flex items-stretch transition-all duration-300 border-b border-slate-300 overflow-hidden p-3 pb-4 gap-3"
     >
-    <div className="relative w-64 shrink-0 overflow-hidden rounded-[5px]">
-      <img
-        src={cover}
-        alt={review.title}
-        loading="lazy"
-        className="w-full h-full object-cover transition-all duration-300"
-      />
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 rounded-[5px]" />
-        <div className="absolute bottom-2 left-2">
+      <div className="relative w-24 sm:w-32 md:w-64 shrink-0 overflow-hidden rounded-[5px]">
+        <img
+          src={cover}
+          alt={review.title}
+          loading="lazy"
+          className="w-full h-full object-cover transition-all duration-300"
+        />
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 rounded-[5px]" />
+
+        <div className="absolute bottom-1 left-1 sm:bottom-2 sm:left-2">
           <HexScore rating={review.rating} tier={tier} size={40} />
         </div>
       </div>
 
       <div className="flex flex-col gap-1.5 min-w-0 flex-1 py-1">
-      <h3 className="font-display text-base text-slate-900 tracking-tight group-hover:text-sky-800 group-hover:underline transition-colors leading-snug">
-        {review.title}
-      </h3>
-        <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
+        <h3 className="font-display text-sm sm:text-base text-slate-900 tracking-tight group-hover:text-sky-800 group-hover:underline transition-colors leading-snug">
+          {review.title}
+        </h3>
+
+        <p className="text-[11px] sm:text-xs text-slate-500 line-clamp-2 sm:line-clamp-3 leading-relaxed">
           {review.date} - {review.summary}
         </p>
-        <div className="flex items-center gap-3 mt-auto text-[0.65rem] text-slate-500 uppercase tracking-wide flex-wrap">
+
+        <div className="flex items-center gap-2 sm:gap-3 mt-auto text-[0.6rem] sm:text-[0.65rem] text-slate-500 uppercase tracking-wide flex-wrap">
           <span className="flex items-center gap-1">
             <Gamepad2 className="w-3 h-3 text-sky-500" />
             {review.platform}
           </span>
+
           {genres.map((g) => (
             <span key={g}>{g}</span>
           ))}

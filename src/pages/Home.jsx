@@ -29,9 +29,11 @@ export default function Home() {
   const highestScore = reviews.length
     ? Math.max(...reviews.map((r) => parseFloat(r.rating) || 0))
     : 0;
-  const goldStandard = reviews.find(
-    (r) => parseFloat(r.rating) === highestScore,
-  );
+  const goldStandard =
+  reviews.find((r) => r.isFeatured) ||
+  reviews
+    .filter((r) => !Number.isNaN(parseFloat(r.rating)))
+    .find((r) => parseFloat(r.rating) === highestScore);
 
   const recent = [...reviews]
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -46,7 +48,7 @@ export default function Home() {
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.25em] uppercase text-sky-700 mb-8 shadow-sm">
                 <Snowflake className="w-3 h-3" /> Issue 03 · Now Reviewing
               </div>
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl tracking-tighter text-slate-900 leading-[1.02]">
+              <h1 className="font-display text-2xl sm:text-3xl lg:text-5xl tracking-tighter text-slate-900 leading-[1.02]">
                 Good games. Bad games.{" "}
                 <em className="text-sky-700 not-italic font-display block">
                   All reviewed. All streamed.
@@ -177,18 +179,25 @@ export default function Home() {
           </Link>
         </div>
 
-        {recent[0] ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="md:col-span-2 lg:col-span-2 lg:row-span-2">
-              <ReviewCard review={recent[0]} featured />
-            </div>
+      {recent[0] ? (
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+          
+          <div className="lg:col-span-2">
+            <ReviewCard review={recent[0]} featured />
+          </div>
+
+          <div className="lg:col-span-2 flex flex-col gap-3">
             {recent.slice(1, 5).map((r) => (
-              <ReviewCard key={r.slug} review={r} />
+              <div key={r.slug} className="rounded-xl overflow-hidden">
+                <ReviewCard review={r} />
+              </div>
             ))}
           </div>
-        ) : (
-          <HomeDataState title="No reviews found yet" compact />
-        )}
+
+        </div>
+      ) : (
+        <HomeDataState title="No reviews found yet" compact />
+      )}
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">

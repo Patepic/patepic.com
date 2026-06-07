@@ -7,30 +7,53 @@ import { fetchReview, fetchReviews } from "../lib/api";
 
 const ratingToTier = (rating, recommended) => {
   const n = parseFloat(rating);
-  if (n <= 3 || recommended === "no") return "F";
-  if (n <= 5) return "D";
-  if (n <= 7) return "C";
+  if (recommended === "no" || n <= 3) return "F";
+  if (n <= 4) return "D";
+  if (n <= 6) return "C";
   if (n === 8) return "B";
   if (n === 9) return "A";
-  return "S";
+  if (n === 10) return "S";
+  return "★";
 };
 
-const tierGradients = {
-  S: "from-sky-500 to-blue-600 text-white",
-  A: "from-blue-400 to-indigo-500 text-white",
-  B: "from-emerald-400 to-emerald-600 text-white",
-  C: "from-amber-400 to-amber-600 text-white",
-  D: "from-orange-400 to-orange-600 text-white",
-  F: "from-rose-500 to-rose-700 text-white",
+const tierMeta = {
+  "★": { label: "Favorite",      stops: ["#f472b6", "#f43f5e"] },
+  "S": { label: "Masterpiece",   stops: ["#38bdf8", "#3b82f6"] },
+  "A": { label: "Excellent",     stops: ["#60a5fa", "#4338ca"] },
+  "B": { label: "Great",         stops: ["#34d399", "#0d9488"] },
+  "C": { label: "Above Average", stops: ["#facc15", "#d97706"] },
+  "D": { label: "Below Average", stops: ["#fdba74", "#f97316"] },
+  "F": { label: "Avoid",         stops: ["#ef4444", "#f43f5e"] },
 };
 
-const gradientStops = {
-  S: <><stop offset="0%" stopColor="#0ea5e9"/><stop offset="100%" stopColor="#2563eb"/></>,
-  A: <><stop offset="0%" stopColor="#60a5fa"/><stop offset="100%" stopColor="#6366f1"/></>,
-  B: <><stop offset="0%" stopColor="#34d399"/><stop offset="100%" stopColor="#059669"/></>,
-  C: <><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#d97706"/></>,
-  D: <><stop offset="0%" stopColor="#fb923c"/><stop offset="100%" stopColor="#ea580c"/></>,
-  F: <><stop offset="0%" stopColor="#f43f5e"/><stop offset="100%" stopColor="#be123c"/></>,
+const HexScore = ({ rating, tier, size = 80 }) => {
+  const meta = tierMeta[tier] ?? tierMeta["F"];
+  const safeId = `hex-grad-${tier}-${size}`;
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg viewBox="0 0 56 56" className="absolute inset-0 w-full h-full">
+        <defs>
+          <linearGradient id={safeId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={meta.stops[0]} />
+            <stop offset="100%" stopColor={meta.stops[1]} />
+          </linearGradient>
+        </defs>
+        <polygon points="28,2 52,15 52,41 28,54 4,41 4,15" fill={`url(#${safeId})`} />
+      </svg>
+      <div className="absolute inset-0 grid place-items-center">
+        <div className="text-center leading-none">
+          <div className="font-display font-bold text-white" style={{ fontSize: size * 0.32 }}>
+            {rating}
+          </div>
+          {size >= 120 && (
+            <div className="text-white/80 uppercase tracking-widest font-semibold mt-1" style={{ fontSize: size * 0.09 }}>
+              {tier === "★" ? "Favorite" : meta.label}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default function ReviewDetail() {
@@ -46,24 +69,15 @@ export default function ReviewDetail() {
     fetchReview(slug)
       .then(async (r) => {
         setReview(r);
-        try {
-          const all = await fetchReviews();
-          const genre = Array.isArray(r.genre) ? r.genre[0] : r.genre;
-          setRelated(
-            all
-              .filter((x) => {
-                const xGenre = Array.isArray(x.genre) ? x.genre[0] : x.genre;
-                return x.slug !== r.slug && xGenre === genre;
-              })
-              .slice(0, 3),
-          );
-        } catch (e) {
-          /* ignore */
-        }
+        const all = await fetchReviews();
+        const genre = Array.isArray(r.genre) ? r.genre[0] : r.genre;
+        setRelated(
+          all
+            .filter((x) => x.slug !== r.slug && (Array.isArray(x.genre) ? x.genre[0] : x.genre) === genre)
+            .slice(0, 3)
+        );
       })
-      .catch((e) => {
-        if (e?.response?.status === 404) setNotFound(true);
-      })
+      .catch((e) => { if (e?.response?.status === 404) setNotFound(true); })
       .finally(() => setLoading(false));
   }, [slug]);
 
@@ -79,188 +93,174 @@ export default function ReviewDetail() {
     );
   }
 
-  const tier = ratingToTier(review.rating);
-  const genre = Array.isArray(review.genre)
-    ? review.genre.join(", ")
-    : review.genre;
-  const cover = review.cover_url
-    ? review.cover_url.startsWith("http")
-      ? review.cover_url
-      : `https://${review.cover_url}`
-    : "https://images.pexels.com/photos/32977036/pexels-photo-32977036.jpeg";
+  const tier = ratingToTier(review.rating, review.recommended);
+  const cover = review.cover_url?.startsWith("http")
+    ? review.cover_url
+    : `https://${review.cover_url}`;
+  const genres = Array.isArray(review.genre) ? review.genre : review.genre ? [review.genre] : [];
 
   return (
-    <article data-testid={`review-detail-${review.slug}`}>
-      <section className="relative h-[60vh] min-h-[420px] overflow-hidden">
-        <img
-          src={cover}
-          alt={review.title}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+    <article>
+      <section className="relative overflow-hidden">
+        <div className="w-full max-w-7xl mx-auto px-6 py-6 md:py-16 flex flex-col md:flex-row gap-8">
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          {/* MOBILE IMAGE FIRST */}
+          <div className="md:hidden w-full">
+            <div className="relative aspect-video rounded-md overflow-hidden shadow-[5px_5px_rgba(15,23,42,0.35)]">
+              <img
+                src={cover}
+                alt={review.title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+          </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end pb-12">
-          <Link
-            to="/reviews"
-            data-testid="back-to-reviews"
-            className="inline-flex items-center gap-1.5 text-sm text-white/80 hover:text-white mb-6 w-fit bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/20"
-          >
-            <ArrowLeft className="w-4 h-4" /> Back to reviews
-          </Link>
+          {/* LEFT CONTENT */}
+          <div className="w-full md:w-1/2 flex flex-col justify-start">
 
-          <div className="flex items-center gap-2 text-xs mb-4 flex-wrap">
-            {review.platform && (
-            <span className="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm border border-white/30 text-white inline-flex items-center gap-1.5">
-              <Gamepad2 className="w-3 h-3 text-sky-300" /> {review.platform}
-            </span>
-            )}
-            {(Array.isArray(review.genre) ? review.genre : review.genre ? [review.genre] : []).map((g) => (
-                <span key={g} className="px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm border border-white/30 text-white tracking-[0.15em] uppercase whitespace-nowrap">
+            <Link
+              to="/reviews"
+              className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 text-sm mb-4 w-fit"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back to reviews
+            </Link>
+
+            <div className="flex flex-wrap items-center gap-2 mb-4">
+              {review.platform && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 text-xs uppercase tracking-widest">
+                  <Gamepad2 className="w-3 h-3 text-sky-500" /> {review.platform}
+                </span>
+              )}
+
+              {genres.map((g) => (
+                <span
+                  key={g}
+                  className="px-3 py-1 rounded-md bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 text-xs uppercase tracking-widest whitespace-nowrap"
+                >
                   {g}
                 </span>
               ))}
-            {review.date && (
-              <span className="text-white/90 bg-black/40 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/30">
-                {review.date}
-              </span>
+
+              {review.date && (
+                <span className="px-3 py-1 rounded-md bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-500 text-xs tracking-widest">
+                  {review.date}
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3">
+              <h1 className="flex-1 min-w-0 font-display text-2xl sm:text-3xl lg:text-5xl tracking-tight text-slate-900 leading-tight uppercase">
+                {review.title}
+              </h1>
+
+              <div className="md:hidden shrink-0">
+                <HexScore rating={review.rating} tier={tier} size={56} />
+              </div>
+
+              <div className="hidden md:block shrink-0">
+                <HexScore rating={review.rating} tier={tier} size={120} />
+              </div>
+            </div>
+
+            {review.summary && (
+              <p className="mt-5 text-slate-600 text-base md:text-lg max-w-2xl italic">
+                "{review.summary}"
+              </p>
             )}
           </div>
 
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl tracking-tighter text-white leading-[0.95] max-w-4xl">
-            {review.title}
-          </h1>
-          {review.summary && (
-            <p className="mt-5 text-lg lg:text-xl text-white/75 max-w-2xl font-display italic">
-              "{review.summary}"
-            </p>
-          )}
-        </div>
-
-        <div className="absolute top-1/2 right-4 sm:right-8 lg:right-16 -translate-y-1/2 hidden md:block">
-          <div data-testid="review-score-badge" className="relative w-32 h-32 lg:w-40 lg:h-40">
-            <svg viewBox="0 0 56 56" className="absolute inset-0 w-full h-full drop-shadow-xl">
-              <defs>
-                <linearGradient id="hex-grad-detail" x1="0%" y1="0%" x2="100%" y2="100%">
-                  {gradientStops[tier]}
-                </linearGradient>
-              </defs>
-              <polygon points="28,2 52,15 52,41 28,54 4,41 4,15" fill="url(#hex-grad-detail)" />
-            </svg>
-            <div className="absolute inset-0 grid place-items-center">
-              <div className="text-center leading-none">
-                <div className="font-display text-5xl lg:text-6xl font-bold text-white">
-                  {review.rating}
-                </div>
-                <div className="text-[0.6rem] tracking-[0.3em] uppercase font-medium mt-2 text-white">
-                  Tier {tier}
-                </div>
-              </div>
+          <div className="hidden md:block w-1/2">
+            <div className="relative aspect-video rounded-md overflow-hidden shadow-[5px_5px_rgba(15,23,42,0.35)]">
+              <img
+                src={cover}
+                alt={review.title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
             </div>
           </div>
+
         </div>
       </section>
 
-      <div className="md:hidden max-w-7xl mx-auto px-4 -mt-6 relative z-10">
-        <div className="relative inline-block w-16 h-16">
-          <svg viewBox="0 0 56 56" className="absolute inset-0 w-full h-full drop-shadow-lg">
-            <defs>
-              <linearGradient id="hex-grad-mobile" x1="0%" y1="0%" x2="100%" y2="100%">
-                {gradientStops[tier]}
-              </linearGradient>
-            </defs>
-            <polygon points="28,2 52,15 52,41 28,54 4,41 4,15" fill="url(#hex-grad-mobile)" />
-          </svg>
-          <div className="absolute inset-0 grid place-items-center">
-            <div className="text-center leading-none">
-              <div className="font-display text-2xl font-bold text-white">{review.rating}</div>
-              <div className="text-[0.5rem] tracking-[0.2em] uppercase text-white mt-1">Tier {tier}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {review.pros?.length || review.cons?.length ? (
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {review.pros?.length ? (
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-6">
-              <p className="text-xs tracking-[0.25em] uppercase text-emerald-700 mb-4">
-                Pros
+      {(review.pros?.length > 0 || review.cons?.length > 0) && (
+        <section className="max-w-5xl mx-auto px-6 mt-12 grid md:grid-cols-2 gap-6">
+          {review.pros?.length > 0 && (
+            <div className="rounded-2xl border border-emerald-300 bg-emerald-50 p-6">
+              <p className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-emerald-800 mb-5 font-semibold">
+                <Check className="w-4 h-4" /> Pros
               </p>
               <ul className="space-y-3">
                 {review.pros.map((p, i) => (
-                  <li key={i} className="flex gap-3 text-slate-700">
-                    <Check className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-                    <span>{p}</span>
+                  <li key={i} className="flex gap-3 text-slate-800 text-sm leading-relaxed">
+                    <Check className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+                    {p}
                   </li>
                 ))}
               </ul>
             </div>
-          ) : null}
-          {review.cons?.length ? (
-            <div className="rounded-2xl border border-rose-200 bg-rose-50/70 p-6">
-              <p className="text-xs tracking-[0.25em] uppercase text-rose-700 mb-4">
-                Cons
+          )}
+          {review.cons?.length > 0 && (
+            <div className="rounded-2xl border border-rose-300 bg-rose-50 p-6">
+              <p className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-rose-800 mb-5 font-semibold">
+                <XIcon className="w-4 h-4" /> Cons
               </p>
               <ul className="space-y-3">
                 {review.cons.map((c, i) => (
-                  <li key={i} className="flex gap-3 text-slate-700">
-                    <XIcon className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
-                    <span>{c}</span>
+                  <li key={i} className="flex gap-3 text-slate-800 text-sm leading-relaxed">
+                    <XIcon className="w-4 h-4 text-rose-700 shrink-0 mt-0.5" />
+                    {c}
                   </li>
                 ))}
               </ul>
             </div>
-          ) : null}
+          )}
         </section>
-      ) : null}
+      )}
 
-      {review.body ? (
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-          <div className="prose prose-slate prose-lg max-w-none prose-headings:font-display prose-headings:tracking-tight prose-a:text-sky-700 [&>p]:mb-6">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {review.body}
-            </ReactMarkdown>
+      {review.body && (
+        <section className="max-w-5xl mx-auto px-6 mt-14 pb-20">
+          <div className="prose prose-slate prose-lg max-w-none prose-headings:font-display prose-headings:tracking-tight prose-a:text-sky-700 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-base">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{review.body}</ReactMarkdown>
           </div>
         </section>
-      ) : null}
+      )}
 
       {related.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
-          <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-4">
-            More in {genre}
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {related.map((r) => {
-              const relatedCover = r.cover_url
-                ? r.cover_url.startsWith("http")
-                  ? r.cover_url
-                  : `https://${r.cover_url}`
-                : cover;
-              return (
-                <Link
-                  to={`/reviews/${r.slug}`}
-                  key={r.slug}
-                  className="group rounded-2xl bg-white border border-slate-200 hover:border-sky-300 overflow-hidden transition hover:shadow-lg"
-                >
-                  <div className="aspect-[16/9] overflow-hidden bg-slate-100">
-                    <img
-                      src={relatedCover}
-                      alt={r.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
-                    />
-                  </div>
-                  <div className="p-5">
-                    <div className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-1">
-                      {r.platform}
+        <section className="border-t border-slate-100">
+          <div className="max-w-5xl mx-auto px-6 py-16">
+            <p className="text-xs uppercase tracking-[0.25em] text-sky-700 font-semibold mb-8">
+              More in {genres[0]}
+            </p>
+            <div className="grid md:grid-cols-3 gap-6">
+              {related.map((r) => {
+                const relatedCover = r.cover_url?.startsWith("http") ? r.cover_url : `https://${r.cover_url}`;
+                const relatedTier = ratingToTier(r.rating, r.recommended);
+                return (
+                  <Link
+                    key={r.slug}
+                    to={`/reviews/${r.slug}`}
+                    className="group rounded-2xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-lg transition overflow-hidden"
+                  >
+                    <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
+                      <img
+                        src={relatedCover}
+                        alt={r.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                      />
+                      <div className="absolute bottom-2 left-2">
+                        <HexScore rating={r.rating} tier={relatedTier} size={52} />
+                      </div>
                     </div>
-                    <div className="font-display text-lg text-slate-900 group-hover:text-sky-800">
-                      {r.title}
+                    <div className="p-4">
+                      <div className="text-[0.65rem] uppercase tracking-widest text-slate-400 mb-1">{r.platform}</div>
+                      <div className="font-display text-base text-slate-900 group-hover:text-sky-700 transition leading-snug font-bold uppercase">
+                        {r.title}
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              );
-            })}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </section>
       )}

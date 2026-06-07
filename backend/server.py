@@ -1,24 +1,3 @@
-"""Patepic — game review blog backend.
-
-Endpoints
-=========
-Public
-- GET    /api/                 health ping
-- GET    /api/health           detailed status (resend / r2 / db)
-- POST   /api/contact          send contact form via Resend
-- GET    /api/reviews          list reviews (supports ?q&platform&genre&sort)
-- GET    /api/reviews/{slug}   single review
-
-Auth (admin only)
-- POST   /api/auth/login       email/password → JWT bearer token
-- GET    /api/auth/me          current admin (requires Authorization)
-
-Admin (Authorization: Bearer <token>)
-- POST   /api/admin/upload     upload image to Cloudflare R2 (multipart)
-- POST   /api/admin/reviews            create review
-- PUT    /api/admin/reviews/{slug}     update review
-- DELETE /api/admin/reviews/{slug}     delete review
-"""
 from dotenv import load_dotenv
 from pathlib import Path
 ROOT_DIR = Path(__file__).parent
@@ -98,7 +77,7 @@ class ReviewIn(BaseModel):
     contentType: Optional[str] = None
     pros: List[str] = Field(default_factory=list)
     cons: List[str] = Field(default_factory=list)
-
+    isFeatured: bool = False          
 
 class ReviewOut(ReviewIn):
     id: str
@@ -122,6 +101,7 @@ class ReviewUpdate(BaseModel):
     contentType: Optional[str] = None
     pros: Optional[List[str]] = None
     cons: Optional[List[str]] = None
+    isFeatured: Optional[bool] = None   
 
 class LoginIn(BaseModel):
     email: EmailStr
@@ -316,33 +296,38 @@ async def create_review(payload: ReviewIn, admin=Depends(require_admin)):
 
 @api_router.put("/admin/reviews/{slug}")
 async def update_review(slug: str, payload: ReviewUpdate, admin=Depends(require_admin)):
+    print("PAYLOAD:", payload)
+    print("IS FEATURED:", payload.isFeatured)
+
     existing = await db.reviews.find_one({"slug": slug})
     if not existing:
         raise HTTPException(status_code=404, detail="Review not found")
 
-    updates = {k: v for k, v in payload.model_dump(exclude_unset=True).items() if v is not None}
+    updates = payload.model_dump(exclude_unset=True)
+    print("UPDATES:", updates)
+
     new_slug = slug
+
     if "title" in updates and updates["title"] != existing.get("title"):
-        new_slug = await unique_slug(slugify(updates["title"]), exclude_slug=slug)
+        new_slug = await unique_slug(
+            slugify(updates["title"]),
+            exclude_slug=slug
+        )
+
     updates["slug"] = new_slug
     updates["updated_at"] = now_iso()
 
-    await db.reviews.update_one({"slug": slug}, {"$set": updates})
+    result = await db.reviews.update_one(
+        {"slug": slug},
+        {"$set": updates}
+    )
+
+    print("MODIFIED:", result.modified_count)
+
     doc = await db.reviews.find_one({"slug": new_slug}, {"_id": 0})
+    print("AFTER UPDATE:", doc)
+
     return doc
-
-
-@api_router.delete("/admin/reviews/{slug}")
-async def delete_review(slug: str, admin=Depends(require_admin)):
-    existing = await db.reviews.find_one({"slug": slug})
-    if not existing:
-        raise HTTPException(status_code=404, detail="Review not found")
-    # Best-effort delete the cover from R2 too
-    cover = existing.get("cover_url", "")
-    if cover:
-        await asyncio.to_thread(delete_image_by_url, cover)
-    await db.reviews.delete_one({"slug": slug})
-    return {"deleted": True, "slug": slug}
 
 
 # ── Mount + CORS ────────────────────────────────────────────────────────────

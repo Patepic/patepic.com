@@ -2,39 +2,45 @@ import { Snowflake } from "lucide-react";
 
 const tiers = [
   {
+    tier: "★",
+    label: "Favorite",
+    color: "from-pink-400 to-rose-500 text-white",
+    desc: "Personal favorite. Not always the best, but the one that stuck with me the most.",
+  },
+  {
     tier: "S",
     label: "Masterpiece",
-    color: "from-sky-500 to-blue-600 text-white",
-    desc: "Dropped everything to finish it. Would tell a stranger to buy it. The score reflects quality; this tier means I'd genuinely miss out if you skipped it.",
+    color: "from-sky-400 to-blue-500 text-white",
+    desc: "Dropped everything to finish it. It may have a few flaws, but none that mattered.",
   },
   {
     tier: "A",
     label: "Excellent",
-    color: "from-blue-400 to-indigo-500 text-white",
-    desc: "Stayed with me after the credits. Minor issues, nothing that undercuts the experience. Worth your time and money at full price.",
+    color: "from-blue-400 to-indigo-600 text-white",
+    desc: "Stayed with me after the credits. Minor issues, nothing that undercuts the experience.",
   },
   {
     tier: "B",
     label: "Great",
-    color: "from-emerald-400 to-emerald-600 text-white",
-    desc: "Delivered on what it promised. Not essential, but consistently good. Wait for a discount and you won't feel shortchanged.",
+    color: "from-emerald-400 to-teal-600 text-white",
+    desc: "Delivered on what it promised. Not essential, but consistently good. Solid from start to finish, even if it doesn't push boundaries.",
   },
   {
     tier: "C",
     label: "Above Average",
-    color: "",
+    color: "from-yellow-400 to-amber-600 text-white",
     desc: "Moments of brilliance surrounded by too much filler. Fans of the genre might find enough here. Everyone else should look elsewhere first.",
   },
   {
     tier: "D",
     label: "Below Average",
-    color: "from-orange-400 to-orange-600 text-white",
+    color: "from-orange-300 to-orange-500 text-white",
     desc: "The vision was there. Almost nothing else was. Hard to justify recommending even to genre fans.",
   },
   {
     tier: "F",
     label: "Avoid",
-    color: "from-rose-500 to-rose-700 text-white",
+    color: "from-red-500 to-rose-700 text-white",
     desc: "Either scored 3 or below, or it's a game I can't recommend regardless of the score. Finished it so the score is honest. That's the only reason I made it to the end.",
   },
 ];
@@ -42,7 +48,7 @@ const tiers = [
 const principles = [
   {
     title: "I finish the game",
-    body: "Every review is based on a credits rolling playthrough. For open ended games I commit to a defined number of hours and disclose it upfront.",
+    body: "Every review is based on a credits-rolling playthrough. I finish almost everything I play. Less than 1% of games don't get completed, and I'll still review those if I've gone far enough to give a fair take. For open-ended games, I commit to a defined number of hours before reviewing.",
   },
   {
     title: "Scores are a range not a ranking",
@@ -54,11 +60,11 @@ const principles = [
   },
   {
     title: "Ignore the crowd",
-    body: "I do not adjust scores to match othres. If I disliked a beloved game I will tell you exactly why and you can disagree with me.",
+    body: "I do not adjust scores to match others. If I disliked a beloved game I will tell you exactly why and you can disagree with me.",
   },
   {
     title: "Genre over hype",
-    body: "A great walking sim and a great looter shooter are not competing for the same score. I judge against the best in that genre not against each other.",
+    body: "A great RPG and a great FPS are not competing for the same score. I judge against the best in that genre not against each other.",
   },
 ];
 
