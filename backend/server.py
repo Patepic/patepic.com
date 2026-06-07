@@ -197,7 +197,7 @@ async def send_contact(req: ContactRequest):
         "from": SENDER_EMAIL,
         "to": [CONTACT_RECIPIENT_EMAIL],
         "reply_to": req.email,
-        "subject": f"[Patepic] {req.subject}",
+        "subject": f"{req.subject}",
         "html": html,
         "text": f"Name: {req.name}\nEmail: {req.email}\nSubject: {req.subject}\n\n{req.message}",
     }
