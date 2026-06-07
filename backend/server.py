@@ -8,6 +8,7 @@ import re
 import asyncio
 import logging
 import uuid
+import email.utils
 from datetime import datetime, timezone
 from typing import List, Optional
 
@@ -32,12 +33,21 @@ logging.basicConfig(
 )
 logger = logging.getLogger("patepic")
 
-RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
-SENDER_EMAIL = os.environ.get("SENDER_EMAIL", "onboarding@resend.dev")
-CONTACT_RECIPIENT_EMAIL = os.environ.get("CONTACT_RECIPIENT_EMAIL", "")
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "").lower().strip()
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
 
+
+def normalize_email_address(value: str, fallback: str) -> str:
+    value = (value or "").strip()
+    name, addr = email.utils.parseaddr(value)
+    return addr or fallback
+
+SENDER_EMAIL = normalize_email_address(os.environ.get("SENDER_EMAIL", "contact@patepic.com"), "contact@patepic.com")
+CONTACT_RECIPIENT_EMAIL = normalize_email_address(os.environ.get("CONTACT_RECIPIENT_EMAIL", "contact@patepic.com"), "contact@patepic.com").lower()
+
+if not RESEND_API_KEY or RESEND_API_KEY.startswith("re_placeholder"):
+    logger.warning("RESEND_API_KEY is missing or placeholder; contact email will be disabled.")
 resend.api_key = RESEND_API_KEY
 
 mongo_url = os.environ["MONGO_URL"]
@@ -181,19 +191,31 @@ async def send_contact(req: ContactRequest):
       <p style="white-space:pre-wrap; line-height:1.6;">{req.message}</p>
     </div>
     """
+    if not SENDER_EMAIL:
+        raise HTTPException(status_code=500, detail="Sender email is not configured.")
+    if not CONTACT_RECIPIENT_EMAIL:
+        raise HTTPException(status_code=500, detail="Contact recipient email is not configured.")
+
+    logger.info("Sending contact email from %s to %s", SENDER_EMAIL, CONTACT_RECIPIENT_EMAIL)
     params = {
         "from": SENDER_EMAIL,
         "to": [CONTACT_RECIPIENT_EMAIL],
         "reply_to": req.email,
         "subject": f"[Patepic] {req.subject}",
         "html": html,
+        "text": f"Name: {req.name}\nEmail: {req.email}\nSubject: {req.subject}\n\n{req.message}",
     }
     try:
-        result = await asyncio.to_thread(resend.Emails.send, params)
+        result = await resend.Emails.send_async(params)
         return {"status": "success", "email_id": result.get("id")}
     except Exception as e:
         logger.error(f"Resend send failed: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to send email: {e}")
+
+
+@app.post("/contact")
+async def send_contact_root(req: ContactRequest):
+    return await send_contact(req)
 
 
 # ── Public: reviews ─────────────────────────────────────────────────────────

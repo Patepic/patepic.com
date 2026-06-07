@@ -122,7 +122,7 @@ export default function Contact() {
             <ContactRow
               icon={<Mail className="w-4 h-4" />}
               label="Direct"
-              value="patrickcoulter01@gmail.com"
+              value="contact@patepic.com"
             />
           </div>
         </div>
