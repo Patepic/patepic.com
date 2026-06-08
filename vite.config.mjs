@@ -12,5 +12,14 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src')
     }
+  },
+  environments: {
+    worker: {
+      resolve: {
+        alias: {
+          '@': path.resolve(__dirname, './src')
+        }
+      }
+    }
   }
 })
