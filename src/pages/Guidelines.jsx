@@ -8,8 +8,14 @@ const tiers = [
     desc: "Personal favorite. Not always the best, but the one that stuck with me the most.",
   },
   {
-    tier: "S",
+    tier: "S+",
     label: "Masterpiece",
+    color: "from-violet-400 to-purple-600 text-white",
+    desc: "Everything I expected and more. A flawless experience that I can't stop thinking about. A new favorite.",
+  },
+  {
+    tier: "S",
+    label: "Elite",
     color: "from-sky-400 to-blue-500 text-white",
     desc: "Dropped everything to finish it. It may have a few flaws, but none that mattered.",
   },

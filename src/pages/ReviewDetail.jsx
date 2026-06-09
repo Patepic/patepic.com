@@ -5,30 +5,35 @@ import remarkGfm from "remark-gfm";
 import { ArrowLeft, Check, Gamepad2, X as XIcon } from "lucide-react";
 import { fetchReview, fetchReviews } from "../lib/api";
 
-const ratingToTier = (rating, recommended) => {
+const ratingToTier = (rating, recommended, cons, isFeatured) => {
+  if (isFeatured) return "★";
   const n = parseFloat(rating);
   if (recommended === "no" || n <= 3) return "F";
   if (n <= 4) return "D";
   if (n <= 6) return "C";
   if (n === 8) return "B";
   if (n === 9) return "A";
-  if (n === 10) return "S";
-  return "★";
+  if (n === 10) {
+    if (Array.isArray(cons) && cons.includes("Hard to point to any real flaws")) return "S+";
+    return "S";
+  }
+  return "S";
 };
 
 const tierMeta = {
-  "★": { label: "Favorite",      stops: ["#f472b6", "#f43f5e"] },
-  "S": { label: "Masterpiece",   stops: ["#38bdf8", "#3b82f6"] },
-  "A": { label: "Excellent",     stops: ["#60a5fa", "#4338ca"] },
-  "B": { label: "Great",         stops: ["#34d399", "#0d9488"] },
-  "C": { label: "Above Average", stops: ["#facc15", "#d97706"] },
-  "D": { label: "Below Average", stops: ["#fdba74", "#f97316"] },
-  "F": { label: "Avoid",         stops: ["#ef4444", "#f43f5e"] },
+  "★":  { label: "Favorite",      stops: ["#f472b6", "#f43f5e"] },
+  "S+": { label: "Masterpiece",   stops: ["#a78bfa", "#7c3aed"] },
+  "S":  { label: "Elite",         stops: ["#38bdf8", "#3b82f6"] },
+  "A":  { label: "Excellent",     stops: ["#60a5fa", "#4338ca"] },
+  "B":  { label: "Great",         stops: ["#34d399", "#0d9488"] },
+  "C":  { label: "Above Average", stops: ["#facc15", "#d97706"] },
+  "D":  { label: "Below Average", stops: ["#fdba74", "#f97316"] },
+  "F":  { label: "Avoid",         stops: ["#ef4444", "#f43f5e"] },
 };
 
 const HexScore = ({ rating, tier, size = 80 }) => {
   const meta = tierMeta[tier] ?? tierMeta["F"];
-  const safeId = `hex-grad-${tier}-${size}`;
+  const safeId = `hex-grad-${tier.replace("+", "plus")}-${size}`;
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg viewBox="0 0 56 56" className="absolute inset-0 w-full h-full">
@@ -93,7 +98,7 @@ export default function ReviewDetail() {
     );
   }
 
-  const tier = ratingToTier(review.rating, review.recommended);
+  const tier = ratingToTier(review.rating, review.recommended, review.cons, review.isFeatured);
   const cover = review.cover_url?.startsWith("http")
     ? review.cover_url
     : `https://${review.cover_url}`;
@@ -234,7 +239,7 @@ export default function ReviewDetail() {
             <div className="grid md:grid-cols-3 gap-6">
               {related.map((r) => {
                 const relatedCover = r.cover_url?.startsWith("http") ? r.cover_url : `https://${r.cover_url}`;
-                const relatedTier = ratingToTier(r.rating, r.recommended);
+                const relatedTier = ratingToTier(r.rating, r.recommended, r.cons, r.isFeatured);
                 return (
                   <Link
                     key={r.slug}

@@ -6,9 +6,13 @@ const tierMeta = {
     color: "from-pink-400 to-rose-500 text-white",
     label: "Favorite",
   },
+  "S+": {
+    color: "from-violet-400 to-purple-600 text-white",
+    label: "Masterpiece",
+  },
   "S": {
     color: "from-sky-400 to-blue-500 text-white",
-    label: "Masterpiece",
+    label: "Elite",
   },
   "A": {
     color: "from-blue-400 to-indigo-600 text-white",
@@ -32,13 +36,15 @@ const tierMeta = {
   },
 };
 
-const ratingToTier = (rating, recommended) => {
+const ratingToTier = (rating, recommended, cons, isFeatured) => {
+  if (isFeatured) return "★";
   const n = parseFloat(rating);
   if (n <= 3 || recommended === "no") return "F";
   if (n <= 5) return "D";
   if (n <= 7) return "C";
   if (n === 8) return "B";
   if (n === 9) return "A";
+  if (Array.isArray(cons) && cons.includes("Hard to point to any real flaws")) return "S+";
   return "S";
 };
 
@@ -56,9 +62,9 @@ export default function TierList() {
     );
   }
 
-  const grouped = ["★", "S", "A", "B", "C", "D", "F"].reduce((acc, t) => {
+  const grouped = ["★", "S+", "S", "A", "B", "C", "D", "F"].reduce((acc, t) => {
     acc[t] = reviews
-      .filter((r) => ratingToTier(r.rating, r.recommended) === t)
+      .filter((r) => ratingToTier(r.rating, r.recommended, r.cons, r.isFeatured) === t)
       .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
     return acc;
   }, {});
@@ -79,7 +85,7 @@ export default function TierList() {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-6">
-        {["★", "S", "A", "B", "C", "D", "F"].map((t) => {
+        {["★", "S+", "S", "A", "B", "C", "D", "F"].map((t) => {
           const meta = tierMeta[t];
           const list = grouped[t];
           return (
