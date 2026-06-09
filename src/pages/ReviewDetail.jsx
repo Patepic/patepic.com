@@ -23,7 +23,7 @@ const ratingToTier = (rating, recommended, cons, isFeatured) => {
 const tierMeta = {
   "★":  { label: "Favorite",      stops: ["#f472b6", "#f43f5e"] },
   "S+": { label: "Masterpiece",   stops: ["#a78bfa", "#7c3aed"] },
-  "S":  { label: "Elite",         stops: ["#38bdf8", "#3b82f6"] },
+  "S":  { label: "Excellent",     stops: ["#38bdf8", "#3b82f6"] },
   "A":  { label: "Excellent",     stops: ["#60a5fa", "#4338ca"] },
   "B":  { label: "Great",         stops: ["#34d399", "#0d9488"] },
   "C":  { label: "Above Average", stops: ["#facc15", "#d97706"] },
@@ -75,10 +75,15 @@ export default function ReviewDetail() {
       .then(async (r) => {
         setReview(r);
         const all = await fetchReviews();
-        const genre = Array.isArray(r.genre) ? r.genre[0] : r.genre;
+        const genre = Array.isArray(r.genre) ? r.genre : r.genre ? [r.genre] : [];
         setRelated(
           all
-            .filter((x) => x.slug !== r.slug && (Array.isArray(x.genre) ? x.genre[0] : x.genre) === genre)
+            .filter((x) => {
+              if (x.slug === r.slug) return false;
+              const xGenres = Array.isArray(x.genre) ? x.genre : x.genre ? [x.genre] : [];
+              return genre.some((g) => xGenres.includes(g));
+            })
+            .sort(() => Math.random() - 0.5)
             .slice(0, 3)
         );
       })
@@ -234,7 +239,7 @@ export default function ReviewDetail() {
         <section className="border-t border-slate-100">
           <div className="max-w-5xl mx-auto px-6 py-16">
             <p className="text-xs uppercase tracking-[0.25em] text-sky-700 font-semibold mb-8">
-              More in {genres[0]}
+              More in {genres.join(" & ")}
             </p>
             <div className="grid md:grid-cols-3 gap-6">
               {related.map((r) => {
