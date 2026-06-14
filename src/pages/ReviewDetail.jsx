@@ -21,44 +21,14 @@ const ratingToTier = (rating, recommended, cons, isFeatured) => {
 };
 
 const tierMeta = {
-  "★":  { label: "Favorite",      stops: ["#f472b6", "#f43f5e"] },
-  "S+": { label: "Masterpiece",   stops: ["#a78bfa", "#7c3aed"] },
-  "S":  { label: "Excellent",     stops: ["#38bdf8", "#3b82f6"] },
-  "A":  { label: "Excellent",     stops: ["#60a5fa", "#4338ca"] },
-  "B":  { label: "Great",         stops: ["#34d399", "#0d9488"] },
-  "C":  { label: "Above Average", stops: ["#facc15", "#d97706"] },
-  "D":  { label: "Below Average", stops: ["#fdba74", "#f97316"] },
-  "F":  { label: "Avoid",         stops: ["#ef4444", "#f43f5e"] },
-};
-
-const HexScore = ({ rating, tier, size = 80 }) => {
-  const meta = tierMeta[tier] ?? tierMeta["F"];
-  const safeId = `hex-grad-${tier.replace("+", "plus")}-${size}`;
-  return (
-    <div className="relative shrink-0" style={{ width: size, height: size }}>
-      <svg viewBox="0 0 56 56" className="absolute inset-0 w-full h-full">
-        <defs>
-          <linearGradient id={safeId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={meta.stops[0]} />
-            <stop offset="100%" stopColor={meta.stops[1]} />
-          </linearGradient>
-        </defs>
-        <polygon points="28,2 52,15 52,41 28,54 4,41 4,15" fill={`url(#${safeId})`} />
-      </svg>
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="text-center leading-none">
-          <div className="font-display font-bold text-white" style={{ fontSize: size * 0.32 }}>
-            {rating}
-          </div>
-          {size >= 120 && (
-            <div className="text-white/80 uppercase tracking-widest font-semibold mt-1" style={{ fontSize: size * 0.09 }}>
-              {tier === "★" ? "Favorite" : meta.label}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+  "★":  { label: "Favorite" },
+  "S+": { label: "Masterpiece" },
+  "S":  { label: "Excellent" },
+  "A":  { label: "Excellent" },
+  "B":  { label: "Great" },
+  "C":  { label: "Above Average" },
+  "D":  { label: "Below Average" },
+  "F":  { label: "Avoid" },
 };
 
 export default function ReviewDetail() {
@@ -114,24 +84,14 @@ export default function ReviewDetail() {
       <section className="relative overflow-hidden">
         <div className="w-full max-w-7xl mx-auto px-6 py-6 md:py-16 flex flex-col md:flex-row gap-8">
 
-          {/* MOBILE IMAGE FIRST */}
           <div className="md:hidden w-full">
             <div className="relative aspect-video rounded-md overflow-hidden shadow-[5px_5px_rgba(15,23,42,0.35)]">
-              <img
-                src={cover}
-                alt={review.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              <img src={cover} alt={review.title} className="absolute inset-0 w-full h-full object-cover" />
             </div>
           </div>
 
-          {/* LEFT CONTENT */}
           <div className="w-full md:w-1/2 flex flex-col justify-start">
-
-            <Link
-              to="/reviews"
-              className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 text-sm mb-4 w-fit"
-            >
+            <Link to="/reviews" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 text-sm mb-4 w-fit">
               <ArrowLeft className="w-4 h-4" /> Back to reviews
             </Link>
 
@@ -141,16 +101,11 @@ export default function ReviewDetail() {
                   <Gamepad2 className="w-3 h-3 text-sky-500" /> {review.platform}
                 </span>
               )}
-
               {genres.map((g) => (
-                <span
-                  key={g}
-                  className="px-3 py-1 rounded-md bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 text-xs uppercase tracking-widest whitespace-nowrap"
-                >
+                <span key={g} className="px-3 py-1 rounded-md bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 text-xs uppercase tracking-widest whitespace-nowrap">
                   {g}
                 </span>
               ))}
-
               {review.date && (
                 <span className="px-3 py-1 rounded-md bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-500 text-xs tracking-widest">
                   {review.date}
@@ -158,19 +113,9 @@ export default function ReviewDetail() {
               )}
             </div>
 
-            <div className="flex items-center gap-3">
-              <h1 className="flex-1 min-w-0 font-display text-2xl sm:text-3xl lg:text-5xl tracking-tight text-slate-900 leading-tight uppercase">
-                {review.title}
-              </h1>
-
-              <div className="md:hidden shrink-0">
-                <HexScore rating={review.rating} tier={tier} size={56} />
-              </div>
-
-              <div className="hidden md:block shrink-0">
-                <HexScore rating={review.rating} tier={tier} size={120} />
-              </div>
-            </div>
+            <h1 className="font-display text-2xl sm:text-3xl lg:text-5xl tracking-tight text-slate-900 leading-tight uppercase">
+              {review.title}
+            </h1>
 
             {review.summary && (
               <p className="mt-5 text-slate-600 text-base md:text-lg max-w-2xl italic">
@@ -181,16 +126,20 @@ export default function ReviewDetail() {
 
           <div className="hidden md:block w-1/2">
             <div className="relative aspect-video rounded-md overflow-hidden shadow-[5px_5px_rgba(15,23,42,0.35)]">
-              <img
-                src={cover}
-                alt={review.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              <img src={cover} alt={review.title} className="absolute inset-0 w-full h-full object-cover" />
             </div>
           </div>
 
         </div>
       </section>
+
+      {review.body && (
+        <section className="max-w-5xl mx-auto px-6 mt-14">
+          <div className="prose prose-slate prose-lg max-w-none prose-headings:font-display prose-headings:tracking-tight prose-a:text-sky-700 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-base prose-h1:mt-10">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{review.body}</ReactMarkdown>
+          </div>
+        </section>
+      )}
 
       {(review.pros?.length > 0 || review.cons?.length > 0) && (
         <section className="max-w-5xl mx-auto px-6 mt-12 grid md:grid-cols-2 gap-6">
@@ -202,8 +151,7 @@ export default function ReviewDetail() {
               <ul className="space-y-3">
                 {review.pros.map((p, i) => (
                   <li key={i} className="flex gap-3 text-slate-800 text-sm leading-relaxed">
-                    <Check className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
-                    {p}
+                    <Check className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" /> {p}
                   </li>
                 ))}
               </ul>
@@ -217,8 +165,7 @@ export default function ReviewDetail() {
               <ul className="space-y-3">
                 {review.cons.map((c, i) => (
                   <li key={i} className="flex gap-3 text-slate-800 text-sm leading-relaxed">
-                    <XIcon className="w-4 h-4 text-rose-700 shrink-0 mt-0.5" />
-                    {c}
+                    <XIcon className="w-4 h-4 text-rose-700 shrink-0 mt-0.5" /> {c}
                   </li>
                 ))}
               </ul>
@@ -227,16 +174,19 @@ export default function ReviewDetail() {
         </section>
       )}
 
-      {review.body && (
-        <section className="max-w-5xl mx-auto px-6 mt-14 pb-20">
-          <div className="prose prose-slate prose-lg max-w-none prose-headings:font-display prose-headings:tracking-tight prose-a:text-sky-700 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-base">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{review.body}</ReactMarkdown>
+      <div className="max-w-5xl mx-auto px-6 mt-14 flex items-center gap-6">
+        <div className="flex-1 h-px bg-slate-200" />
+        <div className="text-center">
+          <div className="font-display text-6xl font-bold text-slate-900 leading-none">{review.rating}</div>
+          <div className="text-xs uppercase tracking-[0.25em] text-slate-400 mt-2">
+            {tier === "★" ? "Favorite" : tierMeta[tier]?.label}
           </div>
-        </section>
-      )}
+        </div>
+        <div className="flex-1 h-px bg-slate-200" />
+      </div>
 
       {related.length > 0 && (
-        <section className="border-t border-slate-100">
+        <section className="border-t border-slate-100 mt-14">
           <div className="max-w-5xl mx-auto px-6 py-16">
             <p className="text-xs uppercase tracking-[0.25em] text-sky-700 font-semibold mb-8">
               More in {genres.join(" & ")}
@@ -244,7 +194,6 @@ export default function ReviewDetail() {
             <div className="grid md:grid-cols-3 gap-6">
               {related.map((r) => {
                 const relatedCover = r.cover_url?.startsWith("http") ? r.cover_url : `https://${r.cover_url}`;
-                const relatedTier = ratingToTier(r.rating, r.recommended, r.cons, r.isFeatured);
                 return (
                   <Link
                     key={r.slug}
@@ -252,20 +201,14 @@ export default function ReviewDetail() {
                     className="group rounded-2xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-lg transition overflow-hidden"
                   >
                     <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
-                      <img
-                        src={relatedCover}
-                        alt={r.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                      />
-                      <div className="absolute bottom-2 left-2">
-                        <HexScore rating={r.rating} tier={relatedTier} size={52} />
-                      </div>
+                      <img src={relatedCover} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                     </div>
                     <div className="p-4">
                       <div className="text-[0.65rem] uppercase tracking-widest text-slate-400 mb-1">{r.platform}</div>
                       <div className="font-display text-base text-slate-900 group-hover:text-sky-700 transition leading-snug font-bold uppercase">
                         {r.title}
                       </div>
+                      <div className="inline-flex items-center px-2.5 py-0.5 bg-slate-900 rounded-full text-xs text-white mt-1">{r.rating}</div>
                     </div>
                   </Link>
                 );

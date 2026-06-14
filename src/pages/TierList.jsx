@@ -122,19 +122,19 @@ export default function TierList() {
                           : `https://${r.cover_url}`
                         : "https://images.pexels.com/photos/32977036/pexels-photo-32977036.jpeg";
                       return (
-                        <Link
-                          to={`/reviews/${r.slug}`}
-                          key={r.slug}
-                          data-testid={`tier-item-${r.slug}`}
-                          className="group flex items-center gap-3 bg-slate-50 border border-slate-200 hover:border-sky-300 hover:bg-white rounded-xl p-2 pr-4 transition"
-                        >
-                          <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-slate-100">
-                            <img
-                              src={cover}
-                              alt={r.title}
-                              className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                            />
-                          </div>
+                          <Link
+                            to={`/reviews/${r.slug}`}
+                            key={r.slug}
+                            data-testid={`tier-item-${r.slug}`}
+                            className="group flex items-center gap-3 bg-slate-50 border border-slate-200 hover:border-sky-300 hover:bg-white rounded-xl p-2 w-full sm:w-[calc(50%-6px)] lg:w-[calc(25%-9px)]"
+                          >
+                            <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-slate-100">
+                              <img
+                                src={cover}
+                                alt={r.title}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
                           <div>
                             <div className="font-display text-sm text-slate-900 group-hover:text-sky-800 leading-tight">
                               {r.title}
