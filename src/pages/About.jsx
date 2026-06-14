@@ -72,7 +72,7 @@ export default function About() {
                 <img
                   src={creator.avatarUrl}
                   alt={`${creator.name} VTuber avatar`}
-                  className="w-full h-full object-contain mt-[-7vh]"
+                  className="w-3/5 mx-auto object-contain"
                   style={{
                     filter: "drop-shadow(10px 10px 0 rgba(2,132,199,0.4))",
                   }}

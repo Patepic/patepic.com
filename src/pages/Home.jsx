@@ -100,7 +100,7 @@ export default function Home() {
               <img
                 src={heroBg}
                 alt=""
-                className="w-full h-full object-contain"
+                className="w-1/2 mx-auto object-contain"
                 style={{
                   filter: "drop-shadow(10px 10px 0 rgba(2,132,199,0.4))",
                 }}
