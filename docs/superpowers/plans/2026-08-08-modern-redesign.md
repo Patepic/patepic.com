@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- No new colors. Only these hex values may appear: `#2e7058` (pixel-forest), `#7fbcbf` (pixel-teal), `#a8e6cf` (pixel-mint), `#f7a1c4` (pixel-pink), `#ffdde6` (pixel-blush), `#181411`/`#121212` (pixel-black — reconcile to `#181411`, see Task 1), `#f7f4ef`/`#fff5f8` (pixel-white — reconcile to `#f7f4ef`, see Task 1).
+- No new colors. Only these hex values may appear: `#2e7058` (pixel-forest), `#7fbcbf` (pixel-teal), `#a8e6cf` (pixel-mint), `#f7a1c4` (pixel-pink), `#ffdde6` (pixel-blush), `#181411`/`#121212` (pixel-black — reconcile to `#181411`, see Task 1), `#f7f4ef`/`#fff5f8` (pixel-white — reconcile to `#f7f4ef`, see Task 1), `#c1272d` (pre-existing destructive/error-state red, already hardcoded in `tailwind.config.js` `colors.destructive` before this redesign — not a named `pixel-*` token but kept as-is, confirmed with the user during Task 1 review).
 - Typeface: Inter everywhere (headings, body, UI, scores). No second display font.
 - Radius scale: `6px` (sm/DEFAULT/md), `10px` (lg/xl/2xl — the "card" radius), `16px` (3xl — large panels/hero art), `9999px` (full — true pills/avatars only).
 - Borders: 1px hairline, low-opacity black tint (`border-pixel-black/10`) as the default; no 2–4px solid-black borders anywhere.
