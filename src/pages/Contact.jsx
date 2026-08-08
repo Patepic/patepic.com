@@ -89,20 +89,20 @@ export default function Contact() {
               <div>
                 <Label htmlFor="name" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-pixel-black">Name <span className="text-pixel-black">*</span></Label>
                 <Input id="name" value={form.name} onChange={(e) => update("name", e.target.value)} placeholder="Your name"
-                  className="mt-2 h-12 rounded-full bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40" />
+                  className="mt-2 h-12 bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40" />
                 {errors.name && <p className="text-sm font-bold text-pixel-black mt-1.5">{errors.name}</p>}
               </div>
               <div>
                 <Label htmlFor="email" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-pixel-black">Email <span className="text-pixel-black">*</span></Label>
                 <Input id="email" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="you@example.com"
-                  className="mt-2 h-12 rounded-full bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40" />
+                  className="mt-2 h-12 bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40" />
                 {errors.email && <p className="text-sm font-bold text-pixel-black mt-1.5">{errors.email}</p>}
               </div>
             </div>
             <div className="mt-5">
               <Label htmlFor="subject" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-pixel-black">Subject <span className="text-pixel-black">*</span></Label>
               <Input id="subject" value={form.subject} onChange={(e) => update("subject", e.target.value)} placeholder="Business / partnerships / feedback"
-                className="mt-2 h-12 rounded-full bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40" />
+                className="mt-2 h-12 bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40" />
               {errors.subject && <p className="text-sm font-bold text-pixel-black mt-1.5">{errors.subject}</p>}
             </div>
             <div className="mt-5">
@@ -113,7 +113,7 @@ export default function Contact() {
                 </span>
               </div>
               <Textarea id="message" rows={7} value={form.message} onChange={(e) => update("message", e.target.value)} placeholder="Say what's on your mind…"
-                className="rounded-xl bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40 resize-none" />
+                className="bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40 resize-none" />
               {errors.message && <p className="text-sm font-bold text-pixel-black mt-1.5">{errors.message}</p>}
             </div>
             <button type="submit" disabled={loading || !allFilled}
