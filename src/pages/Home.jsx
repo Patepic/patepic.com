@@ -25,8 +25,16 @@ export default function Home() {
       <section className="relative overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 lg:pt-32 lg:pb-24">
           <div className="max-w-2xl animate-reveal">
-            <Kicker tone="text-pixel-black">Hello, I&apos;m</Kicker>
-            <h1 className="display-hero -mt-1 text-3xl sm:text-4xl lg:text-6xl text-pixel-black">
+            <div className="flex items-center gap-4">
+              <StickerBadge icon={Feather} className="w-14 h-14 lg:w-16 lg:h-16" />
+              <div>
+                <Kicker tone="text-pixel-black">Hello, I&apos;m</Kicker>
+                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-pixel-black/60">
+                  Owl Sorcerer of Time
+                </p>
+              </div>
+            </div>
+            <h1 className="display-hero mt-4 text-3xl sm:text-4xl lg:text-6xl text-pixel-black">
               {creator.name}<span className="text-pixel-pink">.</span>
             </h1>
             <p className="display-heading mt-5 text-xl sm:text-2xl lg:text-3xl text-pixel-black">
@@ -49,19 +57,6 @@ export default function Home() {
                 </a>
               )}
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Centred wordmark band ── */}
-      <section className="relative pt-10 pb-16 lg:pt-14 lg:pb-20 text-center overflow-hidden">
-        <div className="relative inline-flex flex-col items-center">
-          <StickerBadge icon={Feather} className="w-20 h-20 lg:w-24 lg:h-24" />
-          <div className="display-hero mt-5 text-4xl sm:text-5xl lg:text-6xl text-pixel-black tracking-tight">
-            {creator.name}<span className="text-pixel-pink">.</span>
-          </div>
-          <div className="mt-3 text-[0.8rem] font-bold uppercase tracking-[0.06em] text-pixel-black">
-            Owl Sorcerer of Time
           </div>
         </div>
       </section>
