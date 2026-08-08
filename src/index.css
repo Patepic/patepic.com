@@ -34,16 +34,16 @@ body {
   --pixel-black: #181411;
   --pixel-white: #f7f4ef;
   --ink: #181411;
-  --ink-muted: #4a4038;
+  --ink-muted: rgba(24, 20, 17, 0.65);
 
   /* shadcn-primitive semantic tokens — HSL triplets (no hsl() wrapper),
      converted from the hex palette above so bg-background/text-foreground/
      bg-card/bg-popover resolve instead of being undefined. */
   --background: 38 30% 95%;       /* pixel-white page canvas */
   --foreground: 24 18% 8%;        /* pixel-black ink */
-  --card: 0 0% 100%;              /* pure white card surface */
+  --card: 38 30% 95%;             /* pixel-white card surface, matches background */
   --card-foreground: 24 18% 8%;
-  --popover: 0 0% 100%;
+  --popover: 38 30% 95%;          /* pixel-white popover surface, matches background */
   --popover-foreground: 24 18% 8%;
 }
 
@@ -120,18 +120,20 @@ body {
   text-transform: uppercase;
 }
 
-/* Small chip heading with a blocky shadow (the "Who is…" label) — kept from pixel-art style. */
+/* Small chip heading (the "Who is…" label) — modernized to match the
+   rest of the file's language: Inter, hairline border, soft shadow. */
 .label-chip {
   display: inline-block;
-  font-family: "Press Start 2P", monospace;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
   font-size: 0.75rem;
   letter-spacing: 0.03em;
   line-height: 1.4;
   color: var(--pixel-white);
   background: var(--pixel-forest);
-  border: 3px solid var(--pixel-black);
+  border: 1px solid rgba(24, 20, 17, 0.08);
   padding: 0.6rem 1rem;
-  box-shadow: 4px 4px 0 0 var(--pixel-pink);
+  box-shadow: 0 1px 2px 0 rgba(24, 20, 17, 0.04);
 }
 
 /* Inline emphasis inside body copy — weight only, no highlight fill
