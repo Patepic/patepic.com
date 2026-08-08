@@ -78,7 +78,7 @@ export default function Guidelines() {
   return (
     <div data-testid="guidelines-page">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.25em] uppercase text-sky-700 mb-6 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.06em] uppercase text-sky-700 mb-6 shadow-sm">
           <Snowflake className="w-3 h-3" /> Methodology
         </div>
         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tighter text-slate-900 max-w-3xl leading-[1.05]">
@@ -121,7 +121,7 @@ export default function Guidelines() {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
-        <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-4">
+        <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
           House rules
         </p>
         <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-slate-900 tracking-tight max-w-2xl">
@@ -155,7 +155,7 @@ export default function Guidelines() {
             "The score gets you in the door. The review tells you if you should
             stay."
           </p>
-          <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mt-4">
+          <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mt-4">
             — the only rule that matters
           </p>
         </div>

@@ -24,7 +24,7 @@ export const Footer = () => {
         </div>
 
         <div>
-          <p className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-4">
+          <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
             Explore
           </p>
           <ul className="space-y-2 text-sm">
@@ -58,7 +58,7 @@ export const Footer = () => {
         </div>
 
         <div>
-          <p className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-4">
+          <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
             Catch me streaming
           </p>
           <div className="flex flex-col gap-2">

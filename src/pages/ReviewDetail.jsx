@@ -145,7 +145,7 @@ export default function ReviewDetail() {
         <section className="max-w-5xl mx-auto px-6 mt-12 grid md:grid-cols-2 gap-6">
           {review.pros?.length > 0 && (
             <div className="rounded-2xl border border-emerald-300 bg-emerald-50 p-6">
-              <p className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-emerald-800 mb-5 font-semibold">
+              <p className="flex items-center gap-2 text-xs uppercase tracking-[0.06em] text-emerald-800 mb-5 font-semibold">
                 <Check className="w-4 h-4" /> Pros
               </p>
               <ul className="space-y-3">
@@ -159,7 +159,7 @@ export default function ReviewDetail() {
           )}
           {review.cons?.length > 0 && (
             <div className="rounded-2xl border border-rose-300 bg-rose-50 p-6">
-              <p className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-rose-800 mb-5 font-semibold">
+              <p className="flex items-center gap-2 text-xs uppercase tracking-[0.06em] text-rose-800 mb-5 font-semibold">
                 <XIcon className="w-4 h-4" /> Cons
               </p>
               <ul className="space-y-3">
@@ -178,7 +178,7 @@ export default function ReviewDetail() {
         <div className="flex-1 h-px bg-slate-200" />
         <div className="text-center">
           <div className="font-display text-6xl font-bold text-slate-900 leading-none">{review.rating}</div>
-          <div className="text-xs uppercase tracking-[0.25em] text-slate-400 mt-2">
+          <div className="text-xs uppercase tracking-[0.06em] text-slate-400 mt-2">
             {tier === "★" ? "Favorite" : tierMeta[tier]?.label}
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function ReviewDetail() {
       {related.length > 0 && (
         <section className="border-t border-slate-100 mt-14">
           <div className="max-w-5xl mx-auto px-6 py-16">
-            <p className="text-xs uppercase tracking-[0.25em] text-sky-700 font-semibold mb-8">
+            <p className="text-xs uppercase tracking-[0.06em] text-sky-700 font-semibold mb-8">
               More in {genres.join(" & ")}
             </p>
             <div className="grid md:grid-cols-3 gap-6">

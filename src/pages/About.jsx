@@ -22,7 +22,7 @@ export default function About() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-24 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           <div className="lg:col-span-7 order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.25em] uppercase text-sky-700 mb-6 shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.06em] uppercase text-sky-700 mb-6 shadow-sm">
               <Sparkles className="w-3 h-3" /> The creator
             </div>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tighter text-slate-900 leading-[1.02]">
@@ -91,7 +91,7 @@ export default function About() {
               {live?.isLive && (
                 <div className="mt-4 rounded-2xl bg-white border border-slate-200 px-4 py-3 flex items-center justify-between">
                   <div>
-                    <div className="text-[0.65rem] tracking-[0.25em] uppercase text-sky-700">
+                    <div className="text-[0.65rem] tracking-[0.06em] uppercase text-sky-700">
                       Now playing
                     </div>
                     <div className="font-display text-sm text-slate-900">
@@ -99,7 +99,7 @@ export default function About() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-[0.65rem] tracking-[0.25em] uppercase text-sky-700">
+                    <div className="text-[0.65rem] tracking-[0.06em] uppercase text-sky-700">
                       Debut
                     </div>
                     <div className="font-display text-sm text-slate-900">
@@ -117,7 +117,7 @@ export default function About() {
         className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-24"
         data-testid="vtuber-lore"
       >
-        <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-4">
+        <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
           The lore
         </p>
 
@@ -212,7 +212,7 @@ export default function About() {
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 mb-8"
         data-testid="where-to-watch"
       >
-        <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-4">
+        <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
           Where to watch
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -231,7 +231,7 @@ export default function About() {
                     <Twitch className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-[0.65rem] tracking-[0.25em] uppercase text-purple-700">
+                    <div className="text-[0.65rem] tracking-[0.06em] uppercase text-purple-700">
                       Live streams
                     </div>
                     <div className="font-display text-xl text-slate-900">
@@ -245,7 +245,7 @@ export default function About() {
                 </p>
               </div>
               {live?.isLive && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-100 border border-rose-300 text-[0.65rem] tracking-[0.2em] uppercase text-rose-700">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-100 border border-rose-300 text-[0.65rem] tracking-[0.06em] uppercase text-rose-700">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />{" "}
                   Live
                 </span>
@@ -267,7 +267,7 @@ export default function About() {
                   <Youtube className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-[0.65rem] tracking-[0.25em] uppercase text-rose-700">
+                  <div className="text-[0.65rem] tracking-[0.06em] uppercase text-rose-700">
                     VODs & video essays
                   </div>
                   <div className="font-display text-xl text-slate-900">
@@ -291,7 +291,7 @@ const StatTile = ({ icon, label, value }) => (
   <div className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-sky-200 transition">
     <div className="flex items-center gap-2 text-sky-700 mb-3">
       {icon}
-      <span className="text-[0.65rem] tracking-[0.2em] uppercase">{label}</span>
+      <span className="text-[0.65rem] tracking-[0.06em] uppercase">{label}</span>
     </div>
     <div className="font-display text-2xl lg:text-3xl text-slate-900 tracking-tight">
       {value}
@@ -305,7 +305,7 @@ const LoreRow = ({ icon, label, value }) => (
       {icon}
     </div>
     <div>
-      <div className="text-[0.65rem] tracking-[0.25em] uppercase text-sky-700 mb-0.5">
+      <div className="text-[0.65rem] tracking-[0.06em] uppercase text-sky-700 mb-0.5">
         {label}
       </div>
       <div className="font-display text-sm text-slate-900">{value}</div>

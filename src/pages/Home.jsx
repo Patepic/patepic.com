@@ -45,7 +45,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:pt-24 lg:pb-32">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.25em] uppercase text-sky-700 mb-8 shadow-sm">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.06em] uppercase text-sky-700 mb-8 shadow-sm">
                 <Snowflake className="w-3 h-3" /> Issue 03 · Now Reviewing
               </div>
               <h1 className="font-display text-2xl sm:text-3xl lg:text-5xl tracking-tighter text-slate-900 leading-[1.02]">
@@ -140,7 +140,7 @@ export default function Home() {
               className="md:col-span-5 relative overflow-hidden rounded-2xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-lg p-5 group transition"
             >
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs tracking-[0.2em] uppercase text-sky-700">
+                <span className="text-xs tracking-[0.06em] uppercase text-sky-700">
                   Gold standard
                 </span>
                 <Trophy className="w-4 h-4 text-amber-500" />
@@ -162,7 +162,7 @@ export default function Home() {
       >
         <div className="flex items-end justify-between mb-10 gap-4 flex-wrap">
           <div>
-            <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-3">
+            <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-3">
               Latest reviews
             </p>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-slate-900 tracking-tight">
@@ -205,7 +205,7 @@ export default function Home() {
           <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-sky-200/40 blur-3xl" />
           <div className="absolute -bottom-32 -left-20 w-72 h-72 rounded-full bg-blue-100/50 blur-3xl" />
           <div className="relative max-w-2xl">
-            <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-4">
+            <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
               The Patepic method
             </p>
             <h2 className="font-display text-3xl lg:text-4xl text-slate-900 tracking-tight leading-tight">
@@ -275,7 +275,7 @@ const HomeDataState = ({ title, compact = false }) => (
     }
   >
     <div className="max-w-md text-center">
-      <p className="text-xs tracking-[0.25em] uppercase text-sky-700">
+      <p className="text-xs tracking-[0.06em] uppercase text-sky-700">
         Reviews unavailable
       </p>
       <h1 className="font-display mt-3 text-3xl text-slate-900">{title}</h1>

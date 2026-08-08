@@ -201,7 +201,7 @@ const LiveBadge = ({ live }) => {
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
           <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
         </span>
-        <span className="text-[0.65rem] tracking-[0.25em] uppercase font-medium text-rose-700">
+        <span className="text-[0.65rem] tracking-[0.06em] uppercase font-medium text-rose-700">
           Live
         </span>
       </a>

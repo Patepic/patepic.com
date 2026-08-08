@@ -57,7 +57,7 @@ export default function AdminLogin() {
           <div className="mb-5">
             <Label
               htmlFor="email"
-              className="text-xs tracking-[0.2em] uppercase text-sky-700"
+              className="text-xs tracking-[0.06em] uppercase text-sky-700"
             >
               Email
             </Label>
@@ -77,7 +77,7 @@ export default function AdminLogin() {
           <div className="mb-7">
             <Label
               htmlFor="password"
-              className="text-xs tracking-[0.2em] uppercase text-sky-700"
+              className="text-xs tracking-[0.06em] uppercase text-sky-700"
             >
               Password
             </Label>

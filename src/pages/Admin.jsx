@@ -169,7 +169,7 @@ const paginated = useMemo(() => {
     >
       <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
         <div>
-          <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-2">
+          <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-2">
             Control room
           </p>
           <h1 className="font-display text-3xl sm:text-4xl text-slate-900 tracking-tight">
@@ -212,7 +212,7 @@ const paginated = useMemo(() => {
 
       <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-slate-500 text-xs tracking-[0.15em] uppercase">
+          <thead className="bg-slate-50 text-slate-500 text-xs tracking-[0.06em] uppercase">
             <tr>
               <th className="text-left px-5 py-3 font-medium">
                 <button
@@ -528,7 +528,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
         <form onSubmit={submit} className="space-y-5 mt-2">
           <div>
-            <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
+            <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
               Image
             </Label>
             <div className="mt-2 flex gap-4 items-start">
@@ -616,7 +616,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           </div>
 
           <div>
-            <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
+            <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
               Recommended
             </Label>
             <Select
@@ -637,7 +637,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           </div>
 
           <div>
-            <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
+            <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
               Content Type
             </Label>
             <Select
@@ -661,7 +661,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
           <div className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50">
             <div>
-              <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
+              <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
                 Gold Standard
               </Label>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -685,7 +685,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           </div>
 
           <div>
-            <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
+            <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
               Summary *
             </Label>
             <Input
@@ -720,7 +720,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           />
 
           <div>
-            <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
+            <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
               Review Body (Markdown) *
             </Label>
             <Textarea
@@ -772,7 +772,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
 const FieldText = ({ label, value, onChange, required, testId }) => (
   <div>
-    <Label className="text-xs tracking-[0.2em] uppercase text-sky-700">
+    <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
       {label}
       {required ? " *" : ""}
     </Label>
@@ -798,7 +798,7 @@ const ListEditor = ({
 }) => (
   <div data-testid={testId}>
     <div className="flex items-center justify-between mb-2">
-      <Label className={`text-xs tracking-[0.2em] uppercase text-${color}-700`}>
+      <Label className={`text-xs tracking-[0.06em] uppercase text-${color}-700`}>
         {label}{required ? " *" : ""}
       </Label>
       <button

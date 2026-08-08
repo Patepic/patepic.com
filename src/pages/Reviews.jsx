@@ -164,7 +164,7 @@ export default function Reviews() {
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20"
     >
       <div className="mb-12">
-        <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-3">
+        <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-3">
           The catalogue
         </p>
         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-slate-900 tracking-tighter">
@@ -404,7 +404,7 @@ export default function Reviews() {
 
 const FilterGroup = ({ label, children }) => (
   <div>
-    <p className="text-xs tracking-[0.2em] uppercase text-sky-700 mb-4">
+    <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
       {label}
     </p>
     <div className="space-y-3">{children}</div>

@@ -104,7 +104,7 @@ export default function Contact() {
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         <div className="lg:col-span-5">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.25em] uppercase text-sky-700 mb-6 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.06em] uppercase text-sky-700 mb-6 shadow-sm">
             <Snowflake className="w-3 h-3" /> Inbox open
           </div>
           <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl text-slate-900 tracking-tighter leading-[1.05]">
@@ -136,7 +136,7 @@ export default function Contact() {
             <div>
               <Label
                 htmlFor="name"
-                className="text-xs tracking-[0.2em] uppercase text-sky-700"
+                className="text-xs tracking-[0.06em] uppercase text-sky-700"
               >
                 Name <span className="text-rose-500">*</span>
               </Label>
@@ -155,7 +155,7 @@ export default function Contact() {
             <div>
               <Label
                 htmlFor="email"
-                className="text-xs tracking-[0.2em] uppercase text-sky-700"
+                className="text-xs tracking-[0.06em] uppercase text-sky-700"
               >
                 Email <span className="text-rose-500">*</span>
               </Label>
@@ -195,7 +195,7 @@ export default function Contact() {
           <div className="mt-5">
             <Label
               htmlFor="subject"
-              className="text-xs tracking-[0.2em] uppercase text-sky-700"
+              className="text-xs tracking-[0.06em] uppercase text-sky-700"
             >
               Subject <span className="text-rose-500">*</span>
             </Label>
@@ -216,7 +216,7 @@ export default function Contact() {
             <div className="flex items-center justify-between mb-2">
               <Label
                 htmlFor="message"
-                className="text-xs tracking-[0.2em] uppercase text-sky-700"
+                className="text-xs tracking-[0.06em] uppercase text-sky-700"
               >
                 Message <span className="text-rose-500">*</span>
               </Label>
@@ -288,7 +288,7 @@ const ContactRow = ({ icon, label, value }) => (
       {icon}
     </div>
     <div>
-      <div className="text-[0.65rem] tracking-[0.25em] uppercase text-sky-700 mb-0.5">
+      <div className="text-[0.65rem] tracking-[0.06em] uppercase text-sky-700 mb-0.5">
         {label}
       </div>
       <div className="text-slate-900 font-display">{value}</div>

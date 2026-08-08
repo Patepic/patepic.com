@@ -72,7 +72,7 @@ export default function TierList() {
   return (
     <div data-testid="tier-list-page">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-        <p className="text-xs tracking-[0.25em] uppercase text-sky-700 mb-4">
+        <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
           Where everything landed
         </p>
         <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl tracking-tighter text-slate-900 max-w-3xl leading-[1.02]">
@@ -100,7 +100,7 @@ export default function TierList() {
                 <div className="font-display text-6xl md:text-7xl font-bold leading-none">
                   {t}
                 </div>
-                <div className="text-[0.65rem] tracking-[0.25em] uppercase font-medium mt-2 opacity-90">
+                <div className="text-[0.65rem] tracking-[0.06em] uppercase font-medium mt-2 opacity-90">
                   {meta.label}
                 </div>
                 <div className="text-xs mt-2 opacity-70">
