@@ -39,7 +39,7 @@ export default function YearInGaming2026() {
     return (
       <div className="min-h-[70vh] grid place-items-center px-4">
         <div className="max-w-md text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pixel-mint border border-pixel-black text-sm tracking-[0.06em] uppercase text-pixel-black mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pixel-mint border border-pixel-black/10 text-sm tracking-[0.06em] uppercase text-pixel-black mb-6">
             <Snowflake className="w-3 h-3" /> Year in Gaming
           </div>
           <h1 className="font-display mt-3 text-4xl text-pixel-black tracking-tight">

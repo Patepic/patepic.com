@@ -3,8 +3,6 @@ import { Trophy, Star, Target, Gamepad2, BookOpen } from "lucide-react";
 export function HeroSection({ data }) {
   return (
     <section className="relative overflow-hidden bg-pixel-forest">
-      <div className="absolute inset-0 bg-gradient-to-br from-pixel-forest via-pixel-forest to-pixel-forest" />
-
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pixel-mint/20 border border-pixel-teal/30 text-sm tracking-[0.06em] uppercase text-pixel-white mb-8">
@@ -63,7 +61,7 @@ function HeroStatCard({ icon, label, value, subtitle, className = "" }) {
       className={`bg-pixel-white/10 border border-pixel-white/15 rounded-lg p-4 hover:bg-pixel-white/15 transition-colors duration-200 group ${className}`}
     >
       <div className="flex items-start justify-between gap-2 mb-2">
-        <span className="text-[0.75rem] leading-snug tracking-[0.16em] uppercase text-pixel-blush/60 whitespace-nowrap">
+        <span className="text-[0.75rem] leading-snug tracking-[0.06em] uppercase text-pixel-blush/60 whitespace-nowrap">
           {label}
         </span>
         <span className="shrink-0 text-pixel-blush/60 group-hover:text-pixel-mint transition-colors">

@@ -131,10 +131,10 @@ export function StatisticsSection({ data }) {
 function StatCard({ icon, label, value, subtitle, slug, accent = "amber" }) {
   const accentMap = {
     // Accent keys are kept for call-site compatibility; every value is warm.
-    amber: { border: "border-pixel-black hover:border-pixel-black", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
-    emerald: { border: "border-pixel-black hover:border-pixel-black", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
+    amber: { border: "border-pixel-black/10 hover:border-pixel-black/20", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
+    emerald: { border: "border-pixel-black/10 hover:border-pixel-black/20", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
     rose: { border: "border-pixel-pink ", bg: "bg-pixel-pink", text: "text-pixel-black", icon: "text-pixel-black" },
-    blue: { border: "border-pixel-black hover:border-pixel-black", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
+    blue: { border: "border-pixel-black/10 hover:border-pixel-black/20", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
     purple: { border: "border-pixel-pink ", bg: "bg-pixel-pink/40", text: "text-pixel-black", icon: "text-pixel-black" },
     stone: { border: "border-pixel-teal ", bg: "bg-pixel-blush", text: "text-pixel-black", icon: "text-pixel-black" },
   };
@@ -146,7 +146,7 @@ function StatCard({ icon, label, value, subtitle, slug, accent = "amber" }) {
       className={`bg-pixel-blush border ${colors.border} rounded-2xl p-5 transition-all duration-300 hover:shadow-md group h-full`}
     >
       <div className="flex items-start justify-between gap-3 mb-3">
-        <span className="text-[0.75rem] leading-snug tracking-[0.16em] uppercase text-pixel-black">
+        <span className="text-[0.75rem] leading-snug tracking-[0.06em] uppercase text-pixel-black">
           {label}
         </span>
         <span className={`shrink-0 ${colors.icon} group-hover:scale-110 transition-transform`}>

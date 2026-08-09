@@ -85,8 +85,8 @@ export function MonthlyTimeline({ monthlyGames }) {
           if (games.length === 0) return null;
 
           const monthLabel =
-            monthData?.label && typeof monthData.label === "string"
-              ? monthData.label
+            monthData?.monthName && typeof monthData.monthName === "string"
+              ? monthData.monthName
               : parseMonth(monthKey).name;
 
           return (

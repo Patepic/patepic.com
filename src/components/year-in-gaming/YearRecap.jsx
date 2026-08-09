@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import {
   Gamepad2,
-  Star,
   Trophy,
   ArrowUpRight,
   Sparkles,
@@ -42,7 +41,7 @@ export function YearRecap({ data }) {
         <div className="lg:col-span-8">
           <Link
             to={`/reviews/${goty?.slug}`}
-            className="group relative flex flex-col h-full overflow-hidden rounded-3xl bg-pixel-blush border border-pixel-teal transition-all duration-500 hover:shadow-[0_24px_70px_-24px_rgba(20,60,50,0.35)]"
+            className="group relative flex flex-col h-full overflow-hidden rounded-3xl bg-pixel-blush border border-pixel-teal transition-all duration-500 hover:shadow-pixel-lg"
           >
             <div className="relative aspect-[16/9] sm:aspect-[21/9] overflow-hidden">
               <img
@@ -150,7 +149,7 @@ function RecapHighlightCard({
       className={`group h-full bg-pixel-blush border border-pixel-teal rounded-2xl p-4 transition-all duration-300 hover:border-pixel-pink hover:shadow-md ${className}`}
     >
       <div className="flex items-start justify-between gap-2 mb-3">
-        <span className="text-[0.7rem] leading-snug tracking-[0.16em] uppercase text-pixel-black/60">
+        <span className="text-[0.7rem] leading-snug tracking-[0.06em] uppercase text-pixel-black/60">
           {label}
         </span>
         <span className={`shrink-0 w-7 h-7 rounded-full grid place-items-center ${badgeClass}`}>

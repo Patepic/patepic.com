@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Star, Gamepad2, ChevronRight, Layers } from "lucide-react";
+import { Star, Gamepad2, Layers } from "lucide-react";
 
 const fallback =
   "https://images.pexels.com/photos/32977036/pexels-photo-32977036.jpeg";
@@ -49,7 +49,7 @@ export function SeriesMarathon({ seriesMarathons }) {
 
             {/* Horizontal scrollable card gallery */}
             <div className="relative">
-              <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-stone-300 scrollbar-track-transparent -mx-4 px-4">
+              <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory -mx-4 px-4">
                 {games.map((game) => {
                   const cover = game.cover_url
                     ? game.cover_url.startsWith("http")
@@ -109,7 +109,7 @@ export function SeriesMarathon({ seriesMarathons }) {
                 })}
               </div>
               {/* Scroll hint */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-full bg-gradient-to-l from-pixel-mint to-transparent pointer-events-none lg:block hidden" />
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-full bg-gradient-to-l from-pixel-white to-transparent pointer-events-none lg:block hidden" />
             </div>
           </div>
         ))}
