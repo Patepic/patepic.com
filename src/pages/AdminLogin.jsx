@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Lock, Snowflake, LogIn } from "lucide-react";
+import { Lock, LogIn } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { useAuth } from "../context/AuthContext";
@@ -33,82 +33,37 @@ export default function AdminLogin() {
   };
 
   return (
-    <div
-      data-testid="admin-login-page"
-      className="min-h-[80vh] grid place-items-center px-4 py-16"
-    >
+    <div data-testid="admin-login-page" className="min-h-[80vh] grid place-items-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <div className="inline-grid place-items-center w-12 h-12 rounded-full bg-white border border-sky-200 shadow-sm mb-4">
-            <Snowflake className="w-5 h-5 text-sky-600" />
+          <div className="inline-grid place-items-center w-12 h-12 rounded-full bg-pixel-forest mb-4">
+            <Lock className="w-5 h-5 text-pixel-pink" />
           </div>
-          <h1 className="font-display text-3xl text-slate-900 tracking-tight">
-            Admin sign in
-          </h1>
-          <p className="text-sm text-slate-500 mt-2">
-            Only the writer gets in past this point.
-          </p>
+          <h1 className="display-heading text-4xl text-pixel-black">Admin sign in</h1>
+          <p className="text-sm text-pixel-black/70 mt-2">Only the writer gets in past this point.</p>
         </div>
 
-        <form
-          onSubmit={submit}
-          className="rounded-3xl bg-white border border-slate-200 p-7 shadow-[0_30px_80px_-30px_rgba(2,132,199,0.25)]"
-        >
-          <div className="mb-5">
-            <Label
-              htmlFor="email"
-              className="text-xs tracking-[0.06em] uppercase text-sky-700"
-            >
-              Email
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              required
-              autoComplete="username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              data-testid="admin-email-input"
-              placeholder="Email"
-              className="mt-2 h-12 bg-white border-slate-200 focus-visible:ring-sky-400"
-            />
+        <form onSubmit={submit} className="panel-framed rounded-2xl p-7">
+          <div className="relative mb-5">
+            <Label htmlFor="email" className="text-[0.8rem] tracking-[0.06em] uppercase font-bold text-pixel-black">Email</Label>
+            <Input id="email" type="email" required autoComplete="username" value={email}
+              onChange={(e) => setEmail(e.target.value)} data-testid="admin-email-input" placeholder="Email"
+              className="mt-2 h-12 bg-pixel-blush border-pixel-teal text-pixel-black" />
           </div>
 
-          <div className="mb-7">
-            <Label
-              htmlFor="password"
-              className="text-xs tracking-[0.06em] uppercase text-sky-700"
-            >
-              Password
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              data-testid="admin-password-input"
-              placeholder="Password"
-              className="mt-2 h-12 bg-white border-slate-200 focus-visible:ring-sky-400"
-            />
+          <div className="relative mb-7">
+            <Label htmlFor="password" className="text-[0.8rem] tracking-[0.06em] uppercase font-bold text-pixel-black">Password</Label>
+            <Input id="password" type="password" required autoComplete="current-password" value={password}
+              onChange={(e) => setPassword(e.target.value)} data-testid="admin-password-input" placeholder="Password"
+              className="mt-2 h-12 bg-pixel-blush border-pixel-teal text-pixel-black" />
           </div>
 
-          <button
-            type="submit"
-            disabled={submitting}
-            data-testid="admin-login-submit"
-            className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-slate-900 text-white font-medium hover:bg-slate-700 disabled:opacity-60 transition"
-          >
+          <button type="submit" disabled={submitting} data-testid="admin-login-submit"
+            className="relative w-full pill pill-ember h-12 px-8 text-sm disabled:opacity-60">
             {submitting ? (
-              <>
-                <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                Signing in…
-              </>
+              <><span className="w-4 h-4 border-2 border-pixel-blush/40 border-t-pixel-blush animate-spin" /> Signing in…</>
             ) : (
-              <>
-                <LogIn className="w-4 h-4" /> Sign in
-              </>
+              <><LogIn className="w-4 h-4" /> Sign in</>
             )}
           </button>
         </form>
