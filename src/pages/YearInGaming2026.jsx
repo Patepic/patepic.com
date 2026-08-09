@@ -69,9 +69,7 @@ export default function YearInGaming2026() {
 
       {/* Footer CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-pixel-mint via-pixel-blush to-pixel-mint border border-pixel-teal p-10 lg:p-16 text-center shadow-[0_20px_60px_-20px_rgba(217,119,6,0.15)]">
-          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-pixel-mint/40 blur-3xl" />
-          <div className="absolute -bottom-32 -left-20 w-72 h-72 rounded-full bg-pixel-mint/50 blur-3xl" />
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-pixel-mint via-pixel-blush to-pixel-mint border border-pixel-teal p-10 lg:p-16 text-center shadow-pixel">
           <div className="relative max-w-2xl mx-auto">
             <h2 className="font-display text-3xl lg:text-4xl text-pixel-black tracking-tight">
               Thanks for reading
