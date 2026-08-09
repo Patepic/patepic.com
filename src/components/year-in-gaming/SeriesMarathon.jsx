@@ -8,7 +8,7 @@ export function SeriesMarathon({ seriesMarathons }) {
   if (!seriesMarathons || seriesMarathons.length === 0) return null;
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Divider */}
       <div className="flex items-center gap-6 mb-12">
         <div className="flex-1 h-px bg-pixel-mint" />

@@ -82,7 +82,7 @@ export const Navbar = () => {
             </a>
           )}
           {user && (
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-3">
               <Link to="/admin" className="pill pill-gold h-8 px-4 rounded-lg text-[0.7rem] uppercase tracking-[0.06em]">Admin</Link>
               <button onClick={logout} aria-label="Log out"
                 className="w-8 h-8 grid place-items-center rounded-lg border border-pixel-black/10 text-pixel-black hover:bg-pixel-blush/60 transition-colors">
@@ -109,7 +109,7 @@ export const Navbar = () => {
             ))}
           </div>
           {user && (
-            <div className="flex flex-col gap-2 mt-6 pt-6 border-t border-pixel-black/10">
+            <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-pixel-black/10">
               <Link to="/admin" onClick={() => setOpen(false)} className="pill pill-gold h-11 px-6 rounded-lg text-sm">Admin</Link>
               <button onClick={() => { logout(); setOpen(false); }} className="pill pill-outline h-11 px-6 rounded-lg text-sm">Log out</button>
             </div>

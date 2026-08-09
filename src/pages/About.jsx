@@ -1,314 +1,146 @@
 import { Link } from "react-router-dom";
-import {
-  Squirrel,
-  Headphones,
-  Snowflake,
-  Twitch,
-  Youtube,
-  Sparkles,
-  Image as ImageIcon,
-  Heart,
-  Clock,
-  Gamepad2,
-} from "lucide-react";
+import { Twitch, Youtube, ArrowUpRight } from "lucide-react";
 import { creator } from "../data/creator";
-import { useTwitch } from "../context/TwitchContext";
+import { TwitchProvider } from "../context/TwitchContext";
+import { SocialRow, SectionTitle } from "../components/ui/decor";
 
-export default function About() {
-  const live = useTwitch();
-
+function AboutContent() {
   return (
-    <div data-testid="about-page">
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-24 pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          <div className="lg:col-span-7 order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-sky-200 text-xs tracking-[0.06em] uppercase text-sky-700 mb-6 shadow-sm">
-              <Sparkles className="w-3 h-3" /> The creator
-            </div>
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tighter text-slate-900 leading-[1.02]">
-              I'm <em className="not-italic text-sky-700">{creator.name}</em>.
-              <br />
-              Reviewer by day,
-              <br />
-              VTuber by night.
-            </h1>
-            <p className="mt-6 text-slate-500 leading-relaxed text-base lg:text-lg max-w-xl">
-              {creator.tagline}. I write long-form reviews here, then go yell
-              about the same games on stream. One feeds the other.
-            </p>
+    <div>
+      {/* ── "Who is Patepic?" — the full bio (the homepage only teases this) ── */}
+      <section className="relative bg-pixel-blush py-20 md:py-28 overflow-hidden">
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="label-chip text-lg sm:text-xl">Who is {creator.name}?</h1>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href={creator.twitch.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="about-cta-twitch"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-purple-600 text-white hover:bg-purple-500 text-sm font-medium shadow-[0_10px_24px_-10px_rgba(126,34,206,0.45)] transition"
-              >
-                <Twitch className="w-4 h-4" /> Follow on Twitch
-              </a>
-              <a
-                href={creator.youtube.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-testid="about-cta-youtube"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-rose-500 text-white hover:bg-rose-400 text-sm font-medium transition"
-              >
-                <Youtube className="w-4 h-4" /> Subscribe
-              </a>
-              <Link
-                to="/contact"
-                data-testid="about-cta-contact"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 hover:border-sky-300 hover:text-sky-800 text-slate-700 text-sm bg-white"
-              >
-                Get in touch
-              </Link>
-            </div>
+          <div className="mt-8 space-y-5 text-sm sm:text-[0.95rem] leading-[1.75] text-pixel-black/85 text-left">
+            <p>
+              {creator.name} is a <span className="hl">game reviewer, streamer and VTuber</span> — an owl sorcerer of
+              time with strong opinions about difficulty spikes. Reviewer by day, VTuber by night, and the two feed
+              each other: what gets played on stream gets written up here.
+            </p>
+            <p>
+              Every review is built on a <span className="hl">credits-rolling playthrough</span>. Nothing gets scored
+              early, nothing gets adjusted to match the crowd. If a beloved game did not land, the review says exactly
+              why — and if a quiet one did, it gets the same word count.
+            </p>
+            <p>
+              The written reviews are the main event: <span className="hl">long-form pieces</span> with pros, cons and
+              a score. The <span className="hl">tier list</span> is where they all settle, and the
+              <span className="hl"> scoring guidelines</span> explain why a 5 can still land in F.
+            </p>
+            <p>
+              Off the clock: coffee, baseball, hockey, RPGs, and small coding projects between streams.
+            </p>
           </div>
 
-          <div className="lg:col-span-4 order-1 lg:order-2">
-            <div className="relative" data-testid="vtuber-avatar-slot">
-              {creator.avatarUrl ? (
-                <img
-                  src={creator.avatarUrl}
-                  alt={`${creator.name} VTuber avatar`}
-                  className="w-3/5 mx-auto object-contain"
-                  style={{
-                    filter: "drop-shadow(10px 10px 0 rgba(2,132,199,0.4))",
-                  }}
-                />
-              ) : (
-                <div className="absolute inset-0 grid place-items-center text-center p-8">
-                  <div className="absolute inset-8 rounded-3xl border border-dashed border-sky-300" />
-                  <div className="relative flex flex-col items-center gap-3">
-                    <div className="w-16 h-16 rounded-full bg-sky-100 border border-sky-200 grid place-items-center">
-                      <ImageIcon className="w-6 h-6 text-sky-700" />
-                    </div>
-                  </div>
-                </div>
-              )}
+          <div className="flex flex-wrap gap-3 justify-center pt-6">
+            <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer" className="pill pill-ember h-11 px-6 text-sm">
+              <Twitch className="w-4 h-4" /> Follow on Twitch
+            </a>
+            <a href={creator.youtube.url} target="_blank" rel="noopener noreferrer" className="pill pill-gold h-11 px-6 text-sm">
+              <Youtube className="w-4 h-4" /> Subscribe
+            </a>
+            <Link to="/contact" className="pill pill-outline h-11 px-6 text-sm">Get in touch</Link>
+          </div>
 
-              {live?.isLive && (
-                <div className="mt-4 rounded-2xl bg-white border border-slate-200 px-4 py-3 flex items-center justify-between">
-                  <div>
-                    <div className="text-[0.65rem] tracking-[0.06em] uppercase text-sky-700">
-                      Now playing
-                    </div>
-                    <div className="font-display text-sm text-slate-900">
-                      {live.game || creator.liveGame}
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[0.65rem] tracking-[0.06em] uppercase text-sky-700">
-                      Debut
-                    </div>
-                    <div className="font-display text-sm text-slate-900">
-                      {creator.stats.debutYear}
-                    </div>
-                  </div>
-                </div>
-              )}
+          <div className="mt-14">
+            <p className="text-sm font-bold uppercase tracking-[0.06em] text-pixel-black mb-4">Follow me on socials!</p>
+            <div className="flex justify-center"><SocialRow /></div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Profile ── */}
+      <section className="relative bg-pixel-blush py-16 md:py-24">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="magazine-rule mb-6"><span>The profile</span></div>
+          <SectionTitle>The frostborn owl, by the numbers.</SectionTitle>
+
+          <div className="mt-10 panel-framed rounded-2xl p-6 sm:p-9 lg:p-12">
+            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-x-14">
+              <ProfileColumn rows={[
+                { label: "Birthday", value: "October 24" },
+                { label: "Height", value: "168 cm" },
+                { label: "Oshi Mark", value: "⌚🦉" },
+                { label: "Debut", value: "TBH" },
+                { label: "Species", value: "Owl Sorcerer of Time" },
+                { label: "Origin", value: "The Time Roulette" },
+                { label: "Fanbase", value: "Timekeepers" },
+              ]} />
+              <ProfileColumn rows={[
+                { label: "Hobbies", value: [{ title: "Gaming", desc: "RPGs and Adventure titles are the go-to." }, { title: "Coding", desc: "Tinkers with small projects and tools between streams." }, { title: "Sports", desc: "Loves watching baseball and hockey." }, { title: "Writing game reviews", desc: "Breaks down games they've played after the credits roll." }] },
+                { label: "Likes", value: "Coffee, Baseball, Hockey, RPGs, Fried/comfort food" },
+                { label: "Dislikes", value: "Slow internet, Cold weather, Brutal difficulty spikes" },
+              ]} />
             </div>
           </div>
         </div>
       </section>
 
-      <section
-        className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-24"
-        data-testid="vtuber-lore"
-      >
-        <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
-          The lore
-        </p>
-
-        <h2 className="font-display text-3xl sm:text-4xl lg:text-4xl text-slate-900 tracking-tight max-w-3xl leading-tight">
-          A frostborn squirrel bounty hunter with a bounty nobody can pay.
-        </h2>
-
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-12 gap-6">
-          <div className="md:col-span-7 space-y-5 text-slate-600 leading-relaxed text-base lg:text-lg">
-            <p>The cold came first.</p>
-
-            <p>
-              No warning. No mercy. Just frost where there shouldn’t have been
-              any.
-            </p>
-
-            <p>
-              One day the world broke, folding in on itself until cities stopped
-              agreeing with reality. Roads led into nothing. Skies split like
-              cracked glass. History became something argued over beside dying
-              fires. When the collapse finally settled, all that remained for{" "}
-              {creator.name} was the cold, a name that still felt familiar, and
-              the stubborn instinct to keep moving long enough to understand
-              what had happened.
-            </p>
-
-            <p>
-              The broken worlds didn’t offer opportunities. They offered
-              problems that bite back. Bounty hunting became the only line of
-              work that still made sense. Across frozen wastelands, ruined
-              settlements, and places that look like they were erased
-              mid-sentence, {creator.name} tracks fugitives, monsters, and
-              things that shouldn’t exist in any version of reality that
-              respects itself.
-            </p>
-
-            <p>Survival is only the starting point.</p>
-
-            <p>
-              The fold has a habit of reshaping people who spend too long inside
-              it. Fear turns into instinct. Instinct turns into identity. Every
-              contract forces {creator.name} to confront that slow
-              transformation, the version of themselves the collapse is trying
-              to finalize. Hardened. Isolated. Useful. The real fight isn’t the
-              target anymore. It’s resisting the moment you stop recognizing
-              your own reflection.
-            </p>
-
-            <p>Still, not everything is about survival.</p>
-
-            <p>
-              Between contracts and long stretches of silence, there are games
-              to finish and stories to see through. Every ending reached, every
-              credit rolled, every review written after the final scene. In a
-              world built on unfinished things, {creator.name} refuses to become
-              one of them.
-            </p>
-
-            <p>
-              The world may have collapsed. The fold may still be rewriting what
-              comes next. But {creator.name} is still here, and still moving
-              forward.
-            </p>
+      {/* ── Where to watch ── */}
+      <section className="relative bg-pixel-blush pb-16 md:pb-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="magazine-rule mb-8"><span>Where to watch</span></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <WatchCard
+              href={creator.twitch.url}
+              eyebrow="Live streams"
+              title={`Twitch · ${creator.twitch.handle}`}
+              body="Main stage. Long sessions, full playthroughs."
+              Icon={Twitch}
+            />
+            <WatchCard
+              href={creator.youtube.url}
+              eyebrow="VODs & video essays"
+              title={`YouTube · ${creator.youtube.handle}`}
+              body="Edited recaps, written-review companion videos."
+              Icon={Youtube}
+            />
           </div>
-
-          <aside className="md:col-span-5 space-y-3">
-            <LoreRow
-              icon={<Snowflake className="w-4 h-4" />}
-              label="Origin"
-              value="Survived the collapse. Reborn a squirrel."
-            />
-            <LoreRow
-              icon={<Sparkles className="w-4 h-4" />}
-              label="Class"
-              value="Frostborn bounty hunter / VTuber"
-            />
-            <LoreRow
-              icon={<Squirrel className="w-4 h-4" />}
-              label="Fuel"
-              value="Whatever they find in the hoard"
-            />
-            <LoreRow
-              icon={<Headphones className="w-4 h-4" />}
-              label="Stream soundtrack"
-              value="Lofi + Gaming Favorites"
-            />
-          </aside>
-        </div>
-      </section>
-
-      <section
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 mb-8"
-        data-testid="where-to-watch"
-      >
-        <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
-          Where to watch
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <a
-            href={creator.twitch.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="watch-twitch"
-            className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-purple-50 p-7 hover:border-purple-300 hover:shadow-lg transition"
-          >
-            <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-purple-200/40 blur-3xl group-hover:bg-purple-200/60 transition" />
-            <div className="relative flex items-start justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-purple-600 grid place-items-center text-white">
-                    <Twitch className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="text-[0.65rem] tracking-[0.06em] uppercase text-purple-700">
-                      Live streams
-                    </div>
-                    <div className="font-display text-xl text-slate-900">
-                      Twitch · {creator.twitch.handle}
-                    </div>
-                  </div>
-                </div>
-                <p className="text-sm text-slate-500 leading-relaxed max-w-sm">
-                  Main stage. Long sessions, full playthroughs, occasionally
-                  questionable life choices.
-                </p>
-              </div>
-              {live?.isLive && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-100 border border-rose-300 text-[0.65rem] tracking-[0.06em] uppercase text-rose-700">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />{" "}
-                  Live
-                </span>
-              )}
-            </div>
-          </a>
-
-          <a
-            href={creator.youtube.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="watch-youtube"
-            className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-rose-50 p-7 hover:border-rose-300 hover:shadow-lg transition"
-          >
-            <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-rose-200/40 blur-3xl group-hover:bg-rose-200/60 transition" />
-            <div className="relative">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-rose-500 grid place-items-center text-white">
-                  <Youtube className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-[0.65rem] tracking-[0.06em] uppercase text-rose-700">
-                    VODs & video essays
-                  </div>
-                  <div className="font-display text-xl text-slate-900">
-                    YouTube · {creator.youtube.handle}
-                  </div>
-                </div>
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed max-w-sm">
-                Edited recaps, written-review companion videos, and the
-                occasional rant nobody asked for.
-              </p>
-            </div>
-          </a>
         </div>
       </section>
     </div>
   );
 }
 
-const StatTile = ({ icon, label, value }) => (
-  <div className="bg-white border border-slate-200 rounded-2xl p-5 hover:border-sky-200 transition">
-    <div className="flex items-center gap-2 text-sky-700 mb-3">
-      {icon}
-      <span className="text-[0.65rem] tracking-[0.06em] uppercase">{label}</span>
-    </div>
-    <div className="font-display text-2xl lg:text-3xl text-slate-900 tracking-tight">
-      {value}
-    </div>
-  </div>
-);
-
-const LoreRow = ({ icon, label, value }) => (
-  <div className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4">
-    <div className="w-9 h-9 rounded-lg bg-sky-50 border border-sky-200 grid place-items-center text-sky-700 flex-shrink-0">
-      {icon}
-    </div>
-    <div>
-      <div className="text-[0.65rem] tracking-[0.06em] uppercase text-sky-700 mb-0.5">
-        {label}
+function WatchCard({ href, eyebrow, title, body, Icon }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer"
+      className="group bg-pixel-mint border border-pixel-black/10 shadow-pixel-sm hover:shadow-pixel transition-shadow p-7">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-12 h-12 grid place-items-center bg-pixel-forest text-pixel-pink">
+          <Icon className="w-5 h-5" />
+        </div>
+        <div>
+          <div className="text-[0.75rem] font-bold tracking-[0.06em] uppercase text-pixel-black">{eyebrow}</div>
+          <div className="display-hero text-xl text-pixel-black">{title}</div>
+        </div>
+        <ArrowUpRight className="w-4 h-4 ml-auto text-pixel-black group-hover:text-pixel-pink transition-colors" />
       </div>
-      <div className="font-display text-sm text-slate-900">{value}</div>
+      <p className="text-sm leading-relaxed text-pixel-black/70">{body}</p>
+    </a>
+  );
+}
+
+function ProfileRow({ label, value }) {
+  return (
+    <div className="flex items-baseline py-4 border-b border-pixel-teal">
+      <span className="w-2/5 pr-4 text-sm font-extrabold text-pixel-black">{label}</span>
+      <span className="w-3/5 pl-4 text-sm text-pixel-black/80 leading-relaxed">
+        {Array.isArray(value) ? (
+          <ul className="space-y-2">
+            {value.map((item) => <li key={item.title} className="ml-4 list-disc"><span className="font-extrabold text-pixel-black">{item.title}</span> - {item.desc}</li>)}
+          </ul>
+        ) : value}
+      </span>
     </div>
-  </div>
-);
+  );
+}
+
+function ProfileColumn({ rows }) {
+  return <div>{rows.map((row) => <ProfileRow key={row.label} {...row} />)}</div>;
+}
+
+export default function About() {
+  return <TwitchProvider><AboutContent /></TwitchProvider>;
+}

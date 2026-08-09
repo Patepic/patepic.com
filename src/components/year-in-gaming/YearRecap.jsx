@@ -26,7 +26,7 @@ export function YearRecap({ data }) {
   const uniqueGenres = data.genreEntries?.length || 0;
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       <div className="mb-14">
         <Kicker>The highlight reel</Kicker>
         <h2 className="display-heading mt-3 text-3xl sm:text-4xl lg:text-5xl text-pixel-black tracking-tight">

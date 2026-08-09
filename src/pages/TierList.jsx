@@ -1,158 +1,113 @@
 import { Link } from "react-router-dom";
 import { useReviews } from "../hooks/useReviews";
+import { SkeletonTierCards } from "../components/ui/skeleton";
+import { PillHeading, Kicker } from "../components/ui/decor";
 
 const tierMeta = {
-  "★": {
-    color: "from-pink-400 to-rose-500 text-white",
-    label: "Favorite",
-  },
-  "S+": {
-    color: "from-violet-400 to-purple-600 text-white",
-    label: "Masterpiece",
-  },
-  "S": {
-    color: "from-sky-400 to-blue-500 text-white",
-    label: "Elite",
-  },
-  "A": {
-    color: "from-blue-400 to-indigo-600 text-white",
-    label: "Excellent",
-  },
-  "B": {
-    color: "from-emerald-400 to-teal-600 text-white",
-    label: "Great",
-  },
-  "C": {
-    color: "from-yellow-400 to-amber-600 text-white",
-    label: "Above Average",
-  },
-  "D": {
-    color: "from-orange-300 to-orange-500 text-white",
-    label: "Below Average",
-  },
-  "F": {
-    color: "from-red-500 to-rose-700 text-white",
-    label: "Avoid",
-  },
+  "★": { chip: "bg-pixel-pink text-pixel-black", label: "Favorite" },
+  "S+": { chip: "bg-pixel-pink text-pixel-black", label: "Masterpiece" },
+  "S": { chip: "bg-pixel-pink text-pixel-black", label: "Elite" },
+  "A": { chip: "bg-pixel-mint text-pixel-black", label: "Excellent" },
+  "B": { chip: "bg-pixel-mint text-pixel-black", label: "Great" },
+  "C": { chip: "bg-pixel-forest text-pixel-blush", label: "Above Average" },
+  "D": { chip: "bg-pixel-forest text-pixel-blush", label: "Below Average" },
+  "F": { chip: "bg-pixel-forest text-pixel-blush", label: "Avoid" },
 };
+
+const TIERS = ["★", "S+", "S", "A", "B", "C", "D", "F"];
 
 const ratingToTier = (rating, recommended, cons, isFeatured) => {
   if (isFeatured) return "★";
   const n = parseFloat(rating);
+  const consCount = Array.isArray(cons) ? cons.length : 0;
+  const hasNoRealFlaws = Array.isArray(cons) && cons.includes("Hard to point to any real flaws");
   if (n <= 3 || recommended === "no") return "F";
   if (n <= 5) return "D";
-  if (n <= 7) return "C";
-  if (n === 8) return "B";
-  if (n === 9) return "A";
-  if (Array.isArray(cons) && cons.includes("Hard to point to any real flaws")) return "S+";
-  return "S";
+  if (n <= 6) return "C";
+  if (n === 7) return consCount <= 2 ? "B" : "C";
+  if (n === 8) return consCount <= 2 ? "A" : "B";
+  if (n === 9) { if (hasNoRealFlaws) return "S+"; return consCount <= 2 ? "S" : "A"; }
+  if (n === 10) return hasNoRealFlaws ? "S+" : "S";
+  return "C";
 };
 
 export default function TierList() {
   const { reviews, loading } = useReviews();
-
-  if (loading) {
-    return (
-      <div className="min-h-[60vh] grid place-items-center text-slate-400 text-sm">
-        <div className="flex items-center gap-3">
-          <span className="w-4 h-4 border-2 border-sky-300 border-t-transparent rounded-full animate-spin" />
-          Loading tier list…
-        </div>
-      </div>
-    );
-  }
-
-  const grouped = ["★", "S+", "S", "A", "B", "C", "D", "F"].reduce((acc, t) => {
-    acc[t] = reviews
-      .filter((r) => ratingToTier(r.rating, r.recommended, r.cons, r.isFeatured) === t)
-      .sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+  const grouped = TIERS.reduce((acc, t) => {
+    acc[t] = reviews.filter((r) => ratingToTier(r.rating, r.recommended, r.cons, r.isFeatured) === t).sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
     return acc;
   }, {});
 
   return (
-    <div data-testid="tier-list-page">
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-        <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-4">
-          Where everything landed
-        </p>
-        <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl tracking-tighter text-slate-900 max-w-3xl leading-[1.02]">
-          Every game I finished, sorted.
-        </h1>
-        <p className="mt-6 text-lg text-slate-500 max-w-2xl">
-          Sorted by tier, not by score. A 5 can still land in F. Read the
-          guidelines if that surprises you.
-        </p>
-      </section>
+    <div className="relative bg-pixel-blush">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+        <div className="panel-framed rounded-2xl px-4 py-12 sm:px-10 lg:px-14 lg:py-16">
+          <div className="relative text-center">
+            <Kicker>Where everything landed</Kicker>
+            <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-pixel-black">Tier List</h1>
+            <p className="mt-5 mx-auto max-w-xl text-sm sm:text-base leading-relaxed text-pixel-black/70">
+              Sorted by tier, not by score. A 5 can still land in F —
+              {" "}<Link to="/guidelines" className="underline decoration-pixel-pink decoration-2 underline-offset-4 font-bold text-pixel-black">read the guidelines</Link>{" "}
+              if that surprises you.
+            </p>
+          </div>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20 space-y-6">
-        {["★", "S+", "S", "A", "B", "C", "D", "F"].map((t) => {
-          const meta = tierMeta[t];
-          const list = grouped[t];
-          return (
-            <div
-              key={t}
-              data-testid={`tier-row-${t}`}
-              className={`grid grid-cols-1 md:grid-cols-[140px_1fr] gap-0 md:gap-6 rounded-3xl border border-slate-200 bg-white overflow-hidden`}
-            >
-              <div
-                className={`bg-gradient-to-br ${meta.color} p-6 md:p-8 flex flex-col items-center justify-center text-center`}
-              >
-                <div className="font-display text-6xl md:text-7xl font-bold leading-none">
-                  {t}
-                </div>
-                <div className="text-[0.65rem] tracking-[0.06em] uppercase font-medium mt-2 opacity-90">
-                  {meta.label}
-                </div>
-                <div className="text-xs mt-2 opacity-70">
-                  {list.length} {list.length === 1 ? "title" : "titles"}
-                </div>
-              </div>
+          <div className="relative mt-12 space-y-10">
+            {TIERS.map((t) => {
+              const meta = tierMeta[t];
+              return (
+                <div key={t}>
+                  <div className="flex items-center justify-center">
+                    <PillHeading>
+                      <span className="not-italic font-extrabold tracking-wide mr-2">{t}</span>
+                      {meta.label}
+                    </PillHeading>
+                  </div>
 
-              <div className="p-5 md:p-6">
-                {list.length === 0 ? (
-                  <div className="h-full grid place-items-center text-slate-400 italic text-sm py-8">
-                    Nothing here yet.
+                  <div className="mt-5 rounded-xl border border-pixel-black/10 bg-pixel-blush/70 p-4 sm:p-5 min-h-[104px]">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className={`inline-flex items-center h-6 px-3 rounded-full text-[0.75rem] font-extrabold uppercase tracking-[0.06em] ${meta.chip}`}>
+                        Tier {t}
+                      </span>
+                      {!loading && (
+                        <span className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-pixel-black">
+                          {grouped[t].length} {grouped[t].length === 1 ? "title" : "titles"}
+                        </span>
+                      )}
+                    </div>
+
+                    {loading ? <SkeletonTierCards count={3} /> : grouped[t].length === 0 ? (
+                      <div className="grid place-items-center py-6 display-heading text-sm text-pixel-black/45">Nothing here yet.</div>
+                    ) : (
+                      <div className="flex flex-wrap gap-3">
+                        {grouped[t].map((r) => {
+                          const cover = r.cover_url?.startsWith("http") ? r.cover_url : `https://${r.cover_url}`;
+                          return (
+                            <Link key={r.slug} to={`/reviews/${r.slug}`}
+                              className="group flex items-start gap-3 bg-pixel-mint border border-pixel-black/10 hover:border-pixel-pink p-2 w-full sm:w-[calc(50%-6px)] lg:w-[calc(33.333%-8px)] transition-colors">
+                              <div className="sticker-frame w-14 h-14 overflow-hidden shrink-0 bg-pixel-mint">
+                                <img src={cover} alt={r.title} loading="lazy" className="w-full h-full object-cover" />
+                              </div>
+                              <div className="min-w-0">
+                                <div className="font-display font-bold text-base text-pixel-black leading-normal">{r.title}</div>
+                                <div className="text-sm font-bold text-pixel-black/70 mt-1">{r.platform} · {r.rating}</div>
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="flex flex-wrap gap-3">
-                    {list.map((r) => {
-                      const cover = r.cover_url
-                        ? r.cover_url.startsWith("http")
-                          ? r.cover_url
-                          : `https://${r.cover_url}`
-                        : "https://images.pexels.com/photos/32977036/pexels-photo-32977036.jpeg";
-                      return (
-                          <Link
-                            to={`/reviews/${r.slug}`}
-                            key={r.slug}
-                            data-testid={`tier-item-${r.slug}`}
-                            className="group flex items-center gap-3 bg-slate-50 border border-slate-200 hover:border-sky-300 hover:bg-white rounded-xl p-2 w-full sm:w-[calc(50%-6px)] lg:w-[calc(25%-9px)]"
-                          >
-                            <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-slate-100">
-                              <img
-                                src={cover}
-                                alt={r.title}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          <div>
-                            <div className="font-display text-sm text-slate-900 group-hover:text-sky-800 leading-tight">
-                              {r.title}
-                            </div>
-                            <div className="text-xs text-slate-400">
-                              {r.platform} · {r.rating}
-                            </div>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </section>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="relative mt-14 text-center">
+            <Link to="/reviews" className="pill pill-ember h-12 px-8 text-sm">Browse every review</Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

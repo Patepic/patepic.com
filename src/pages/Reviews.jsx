@@ -58,7 +58,7 @@ export default function Reviews() {
 
   return (
     <div>
-      <div className="relative bg-pixel-blush pb-24 lg:pb-32">
+      <div className="relative bg-pixel-blush pb-20 md:pb-28">
         <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 lg:pt-14 text-center">
           <Kicker>Every finished playthrough</Kicker>
           <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-pixel-black">Reviews</h1>
@@ -97,7 +97,7 @@ export default function Reviews() {
             <div className={`relative mt-6 grid grid-cols-1 sm:grid-cols-3 gap-6 ${mobileFilters ? "block" : "hidden md:grid"}`}>
               <div>
                 <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-pixel-black mb-3">Verdict</p>
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex gap-3 flex-wrap">
                   {[
                     { value: "all", label: "All" },
                     { value: "recommended", label: "✓ Recommended" },
@@ -169,7 +169,7 @@ export default function Reviews() {
               </div>
 
               {totalPages > 1 && (
-                <div className="mt-12 flex items-center justify-center gap-2 flex-wrap">
+                <div className="mt-12 flex items-center justify-center gap-3 flex-wrap">
                   <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
                     className="pill pill-outline h-9 px-4 text-sm disabled:opacity-30">← Prev</button>
                   <div className="flex gap-1">

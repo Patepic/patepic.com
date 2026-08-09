@@ -67,7 +67,7 @@ export function MonthlyTimeline({ monthlyGames }) {
   if (months.length === 0) return null;
 
   return (
-    <div className="relative bg-pixel-blush pb-24 lg:pb-32">
+    <div className="relative bg-pixel-blush pb-20 md:pb-28">
       <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 lg:pt-14 text-center">
         <Kicker>Month by month</Kicker>
         <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-pixel-black">

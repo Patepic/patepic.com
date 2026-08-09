@@ -45,7 +45,7 @@ export default function Contact() {
   if (sent) {
     return (
       <div className="relative bg-pixel-blush">
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-28 lg:py-36">
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="panel-framed rounded-2xl px-6 py-14 sm:px-12 text-center">
             <div className="relative inline-grid place-items-center w-16 h-16 rounded-full mb-6 bg-pixel-forest">
               <CheckCircle2 className="w-7 h-7 text-pixel-pink" />
@@ -64,7 +64,7 @@ export default function Contact() {
 
   return (
     <div className="relative bg-pixel-blush">
-      <section className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8 lg:pt-24">
+      <section className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 md:pt-28">
         {/* Envelope flap peeking out from behind the card — the letter is "inside" */}
         <div aria-hidden="true" className="absolute left-1/2 -translate-x-1/2 top-3 lg:top-6 w-[88%] max-w-[520px] h-20 sm:h-24">
           <div className="absolute inset-0 bg-pixel-pink rounded-t-2xl" style={{ clipPath: "polygon(0 100%, 50% 15%, 100% 100%)" }} />
@@ -125,7 +125,7 @@ export default function Contact() {
       </section>
 
       {/* ── Channel blocks with golden pill buttons (the agent row in the reference) ── */}
-      <section className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 lg:pb-32">
+      <section className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <ChannelBlock
             wordmark={creator.twitch.handle}

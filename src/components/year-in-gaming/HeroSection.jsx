@@ -5,7 +5,7 @@ export function HeroSection({ data }) {
     <section className="relative overflow-hidden bg-pixel-forest">
       <div className="absolute inset-0 bg-gradient-to-br from-pixel-forest via-pixel-forest to-pixel-forest" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
         <div className="max-w-3xl">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pixel-mint/20 border border-pixel-teal/30 text-sm tracking-[0.06em] uppercase text-pixel-white mb-8">
             <Trophy className="w-3.5 h-3.5" /> 2026 Year in Review

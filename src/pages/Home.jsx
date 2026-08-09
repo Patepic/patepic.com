@@ -23,7 +23,7 @@ export default function Home() {
     <div>
       {/* ── Hero ── */}
       <section className="relative overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 lg:pt-32 lg:pb-24">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="max-w-2xl animate-reveal">
             <div className="flex items-center gap-4">
               <StickerBadge icon={Feather} className="w-14 h-14 lg:w-16 lg:h-16" />
@@ -62,7 +62,7 @@ export default function Home() {
       </section>
 
       {/* ── Short teaser — the full bio lives on /about, this is just the hook ── */}
-      <section className="relative pb-20 lg:pb-28">
+      <section className="relative pb-16 md:pb-24">
         <div className="relative max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="label-chip text-lg sm:text-xl">Meet {creator.name}</div>
 
@@ -86,7 +86,7 @@ export default function Home() {
       </section>
 
       {/* ── Stats ── */}
-      <section className="relative bg-pixel-blush py-16 lg:py-20">
+      <section className="relative bg-pixel-blush py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
             {loading ? Array.from({ length: 4 }).map((_, i) => (
@@ -115,7 +115,7 @@ export default function Home() {
       </section>
 
       {/* ── Latest reviews ── */}
-      <section className="relative bg-pixel-blush pb-20 lg:pb-28" data-testid="recent-reviews">
+      <section className="relative bg-pixel-blush pb-16 md:pb-24" data-testid="recent-reviews">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10 gap-4 flex-wrap">
             <div>
@@ -137,7 +137,7 @@ export default function Home() {
       </section>
 
       {/* ── Method band ── */}
-      <section className="relative pb-20 lg:pb-28">
+      <section className="relative pb-16 md:pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="max-w-2xl mx-auto panel-framed rounded-2xl px-6 py-12 sm:px-12 lg:py-16">
             <div className="relative">
