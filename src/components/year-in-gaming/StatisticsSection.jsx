@@ -1,0 +1,176 @@
+import { Link } from "react-router-dom";
+import {
+  Trophy,
+  Star,
+  Gamepad2,
+  Swords,
+  Monitor,
+  Layers,
+  Heart,
+  Sparkles,
+  Frown,
+  Zap,
+} from "lucide-react";
+
+export function StatisticsSection({ data }) {
+  const stats = [
+    {
+      icon: <Trophy className="w-5 h-5" />,
+      label: "Game of the Year",
+      value: data.gameOfTheYear?.title || "—",
+      subtitle: `Scored ${data.gameOfTheYear?.rating}/10`,
+      slug: data.gameOfTheYear?.slug,
+      accent: "amber",
+    },
+    {
+      icon: <Zap className="w-5 h-5" />,
+      label: "Highest Rated",
+      value: data.highestRated?.title || "—",
+      subtitle: `${data.highestRated?.rating}/10`,
+      slug: data.highestRated?.slug,
+      accent: "emerald",
+    },
+    {
+      icon: <Frown className="w-5 h-5" />,
+      label: "Lowest Rated",
+      value: data.lowestRated?.title || "—",
+      subtitle: `${data.lowestRated?.rating}/10`,
+      slug: data.lowestRated?.slug,
+      accent: "rose",
+    },
+    {
+      icon: <Sparkles className="w-5 h-5" />,
+      label: "Biggest Surprise",
+      value: data.biggestSurprise?.title || "—",
+      subtitle: data.biggestSurprise
+        ? `Scored ${data.biggestSurprise.rating}/10`
+        : null,
+      slug: data.biggestSurprise?.slug,
+      accent: "blue",
+    },
+    {
+      icon: <Frown className="w-5 h-5" />,
+      label: "Biggest Disappointment",
+      value: data.biggestDisappointment?.title || "—",
+      subtitle: data.biggestDisappointment
+        ? `Scored ${data.biggestDisappointment.rating}/10`
+        : null,
+      slug: data.biggestDisappointment?.slug,
+      accent: "rose",
+    },
+    {
+      icon: <Star className="w-5 h-5" />,
+      label: "Average Score",
+      value: `${data.averageScore}/10`,
+      accent: "amber",
+    },
+    {
+      icon: <Swords className="w-5 h-5" />,
+      label: "Most Played Genre",
+      value: data.mostPlayedGenre || "—",
+      accent: "blue",
+    },
+    {
+      icon: <Monitor className="w-5 h-5" />,
+      label: "Most Played Platform",
+      value: data.favoritePlatform || "—",
+      accent: "purple",
+    },
+    {
+      icon: <Layers className="w-5 h-5" />,
+      label: "Most Reviewed Franchise",
+      value: data.mostReviewedFranchise || "—",
+      accent: "emerald",
+    },
+    {
+      icon: <Heart className="w-5 h-5" />,
+      label: "Games Finished",
+      value: data.gamesFinished,
+      accent: "rose",
+    },
+    {
+      icon: <Gamepad2 className="w-5 h-5" />,
+      label: "Oldest Game Played",
+      value: data.oldestGame?.title || "—",
+      subtitle: data.oldestGame?.date,
+      slug: data.oldestGame?.slug,
+      accent: "stone",
+    },
+  ];
+
+  return (
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+      {/* Divider */}
+      <div className="flex items-center gap-6 mb-12">
+        <div className="flex-1 h-px bg-pixel-mint" />
+        <Trophy className="w-5 h-5 text-pixel-black" />
+        <div className="flex-1 h-px bg-pixel-mint" />
+      </div>
+
+      <div className="mb-12">
+        <p className="text-sm tracking-[0.06em] uppercase text-pixel-black mb-3">
+          By the numbers
+        </p>
+        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-pixel-black tracking-tight">
+          Gaming Statistics
+        </h2>
+        <p className="mt-4 text-pixel-black max-w-2xl">
+          Every stat, carefully calculated from my 2026 reviews.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {stats.map((stat) => (
+          <StatCard key={stat.label} {...stat} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function StatCard({ icon, label, value, subtitle, slug, accent = "amber" }) {
+  const accentMap = {
+    // Accent keys are kept for call-site compatibility; every value is warm.
+    amber: { border: "border-pixel-black hover:border-pixel-black", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
+    emerald: { border: "border-pixel-black hover:border-pixel-black", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
+    rose: { border: "border-pixel-pink ", bg: "bg-pixel-pink", text: "text-pixel-black", icon: "text-pixel-black" },
+    blue: { border: "border-pixel-black hover:border-pixel-black", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
+    purple: { border: "border-pixel-pink ", bg: "bg-pixel-pink/40", text: "text-pixel-black", icon: "text-pixel-black" },
+    stone: { border: "border-pixel-teal ", bg: "bg-pixel-blush", text: "text-pixel-black", icon: "text-pixel-black" },
+  };
+
+  const colors = accentMap[accent] || accentMap.amber;
+
+  const content = (
+    <div
+      className={`bg-pixel-blush border ${colors.border} rounded-2xl p-5 transition-all duration-300 hover:shadow-md group h-full`}
+    >
+      <div className="flex items-start justify-between gap-3 mb-3">
+        <span className="text-[0.75rem] leading-snug tracking-[0.16em] uppercase text-pixel-black">
+          {label}
+        </span>
+        <span className={`shrink-0 ${colors.icon} group-hover:scale-110 transition-transform`}>
+          {icon}
+        </span>
+      </div>
+      <div className="font-display text-base text-pixel-black tracking-tight leading-snug break-words">
+        {value}
+      </div>
+      {subtitle && (
+        <div className="text-sm text-pixel-black mt-1.5 leading-tight break-words">
+          {subtitle}
+        </div>
+      )}
+    </div>
+  );
+
+  if (slug) {
+    return (
+      <Link to={`/reviews/${slug}`} className="block">
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
+}
