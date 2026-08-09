@@ -106,9 +106,9 @@ function AboutContent() {
 function WatchCard({ href, eyebrow, title, body, Icon }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer"
-      className="group bg-pixel-mint border border-pixel-black/10 shadow-pixel-sm hover:shadow-pixel transition-shadow p-7">
+      className="group bg-pixel-mint border border-pixel-black/10 shadow-pixel-sm hover:shadow-pixel transition-shadow rounded-xl p-7">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-12 h-12 grid place-items-center bg-pixel-forest text-pixel-pink">
+        <div className="w-12 h-12 grid place-items-center bg-pixel-forest text-pixel-pink rounded-lg">
           <Icon className="w-5 h-5" />
         </div>
         <div>

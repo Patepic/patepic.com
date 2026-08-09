@@ -118,7 +118,7 @@ export default function Contact() {
             </div>
             <button type="submit" disabled={loading || !allFilled}
               className="mt-8 w-full pill pill-gold h-12 px-8 text-sm disabled:opacity-40">
-              {loading ? <><span className="w-4 h-4 border-2 border-pixel-forest/30 border-t-pixel-forest animate-spin" /> Sending…</> : <><Send className="w-4 h-4" /> Send message</>}
+              {loading ? <><span className="w-4 h-4 rounded-full border-2 border-pixel-forest/30 border-t-pixel-forest animate-spin" /> Sending…</> : <><Send className="w-4 h-4" /> Send message</>}
             </button>
           </form>
         </div>
@@ -153,7 +153,7 @@ function ChannelBlock({ wordmark, sub, Icon, href, action, caption }) {
   return (
     <div className="text-center">
       <div className="inline-flex flex-col items-center">
-        <div className="w-16 h-16 grid place-items-center bg-pixel-pink text-pixel-black border border-pixel-black/10 shadow-pixel-sm">
+        <div className="w-16 h-16 grid place-items-center bg-pixel-pink text-pixel-black border border-pixel-black/10 shadow-pixel-sm rounded-lg">
           <Icon className="w-7 h-7" />
         </div>
         <div className="display-hero mt-3 text-2xl text-pixel-black">{wordmark}</div>

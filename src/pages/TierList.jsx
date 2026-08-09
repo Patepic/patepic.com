@@ -84,8 +84,8 @@ export default function TierList() {
                           const cover = r.cover_url?.startsWith("http") ? r.cover_url : `https://${r.cover_url}`;
                           return (
                             <Link key={r.slug} to={`/reviews/${r.slug}`}
-                              className="group flex items-start gap-3 bg-pixel-mint border border-pixel-black/10 hover:border-pixel-pink p-2 w-full sm:w-[calc(50%-6px)] lg:w-[calc(33.333%-8px)] transition-colors">
-                              <div className="sticker-frame w-14 h-14 overflow-hidden shrink-0 bg-pixel-mint">
+                              className="group flex items-start gap-3 bg-pixel-mint border border-pixel-black/10 hover:border-pixel-pink rounded-lg p-2 w-full sm:w-[calc(50%-6px)] lg:w-[calc(33.333%-8px)] transition-colors">
+                              <div className="sticker-frame w-14 h-14 overflow-hidden shrink-0 bg-pixel-mint rounded-md">
                                 <img src={cover} alt={r.title} loading="lazy" className="w-full h-full object-cover" />
                               </div>
                               <div className="min-w-0">
