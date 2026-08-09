@@ -9,8 +9,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-pixel-forest text-pixel-white hover:bg-[#1f4d3d]",
-        accent: "bg-pixel-pink text-pixel-black hover:bg-[#f07eae]",
+        default: "bg-pixel-forest text-pixel-white filter hover:brightness-90",
+        accent: "bg-pixel-pink text-pixel-black filter hover:brightness-90",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline: "border border-pixel-black/10 text-pixel-forest hover:bg-pixel-forest/[0.06]",
         secondary: "bg-pixel-blush text-pixel-forest hover:bg-pixel-blush/70",

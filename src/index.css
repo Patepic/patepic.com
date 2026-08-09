@@ -11,40 +11,41 @@ html, body {
 }
 
 body {
-  background-color: #f7f4ef;
-  color: #181411;
+  background-color: #F0F0F0;
+  color: #121212;
 }
 
 ::selection {
-  background: #f7a1c4;
-  color: #181411;
+  background: #D4AF37;
+  color: #121212;
 }
 
 /* ---------------------------------------------------------------
-   Palette tokens
+   Palette tokens — primary red/near-black/off-white, secondary
+   gold/dark-gray, accent red/tan. Hover-darkening is done with a
+   brightness() filter rather than a second hex per color, so the
+   palette stays limited to exactly these 6 hex values.
    --------------------------------------------------------------- */
 :root {
-  --pixel-forest: #2e7058;
-  --pixel-forest-dark: #1f4d3d;
-  --pixel-teal: #7fbcbf;
-  --pixel-mint: #a8e6cf;
-  --pixel-pink: #f7a1c4;
-  --pixel-pink-dark: #f07eae;
-  --pixel-blush: #ffdde6;
-  --pixel-black: #181411;
-  --pixel-white: #f7f4ef;
-  --ink: #181411;
-  --ink-muted: rgba(24, 20, 17, 0.65);
+  --pixel-forest: #D91E2D;
+  --pixel-teal: #2D2D2D;
+  --pixel-mint: #DBBFA2;
+  --pixel-pink: #D4AF37;
+  --pixel-blush: #F0F0F0;
+  --pixel-black: #121212;
+  --pixel-white: #F0F0F0;
+  --ink: #121212;
+  --ink-muted: rgba(18, 18, 18, 0.65);
 
   /* shadcn-primitive semantic tokens — HSL triplets (no hsl() wrapper),
      converted from the hex palette above so bg-background/text-foreground/
      bg-card/bg-popover resolve instead of being undefined. */
-  --background: 38 30% 95%;       /* pixel-white page canvas */
-  --foreground: 24 18% 8%;        /* pixel-black ink */
-  --card: 38 30% 95%;             /* pixel-white card surface, matches background */
-  --card-foreground: 24 18% 8%;
-  --popover: 38 30% 95%;          /* pixel-white popover surface, matches background */
-  --popover-foreground: 24 18% 8%;
+  --background: 0 0% 94%;         /* off-white page canvas (#F0F0F0) */
+  --foreground: 0 0% 7%;          /* near-black ink (#121212) */
+  --card: 0 0% 94%;               /* off-white card surface, matches background */
+  --card-foreground: 0 0% 7%;
+  --popover: 0 0% 94%;            /* off-white popover surface, matches background */
+  --popover-foreground: 0 0% 7%;
 }
 
 /* Raster images that should keep hard pixel edges instead of smooth
@@ -73,27 +74,27 @@ body {
   background: var(--pixel-forest);
   color: var(--pixel-white);
 }
-.pill-ember:hover { background: var(--pixel-forest-dark); box-shadow: 0 6px 20px -6px rgba(24, 20, 17, 0.25); }
+.pill-ember:hover { filter: brightness(0.85); box-shadow: 0 6px 20px -6px rgba(18, 18, 18, 0.25); }
 
 .pill-gold {
   background: var(--pixel-pink);
   color: var(--pixel-black);
 }
-.pill-gold:hover { background: var(--pixel-pink-dark); box-shadow: 0 6px 20px -6px rgba(24, 20, 17, 0.2); }
+.pill-gold:hover { filter: brightness(0.85); box-shadow: 0 6px 20px -6px rgba(18, 18, 18, 0.2); }
 
 .pill-outline {
   background: transparent;
   color: var(--pixel-forest);
-  border-color: rgba(24, 20, 17, 0.14);
+  border-color: rgba(18, 18, 18, 0.14);
 }
-.pill-outline:hover { background: rgba(46, 112, 88, 0.06); border-color: rgba(24, 20, 17, 0.22); }
+.pill-outline:hover { background: rgba(217, 30, 45, 0.06); border-color: rgba(18, 18, 18, 0.22); }
 
 .pill-live {
-  background: rgba(247, 161, 196, 0.16);
+  background: rgba(212, 175, 55, 0.16);
   color: var(--pixel-forest);
-  border-color: rgba(24, 20, 17, 0.1);
+  border-color: rgba(18, 18, 18, 0.1);
 }
-.pill-live:hover { background: rgba(247, 161, 196, 0.26); }
+.pill-live:hover { background: rgba(212, 175, 55, 0.26); }
 
 /* ---------------------------------------------------------------
    Display type — Inter, heavier weights, tight tracking. Class
@@ -132,10 +133,10 @@ body {
   line-height: 1.4;
   color: var(--pixel-white);
   background: var(--pixel-forest);
-  border: 1px solid rgba(24, 20, 17, 0.08);
+  border: 1px solid rgba(18, 18, 18, 0.08);
   border-radius: 10px;
   padding: 0.6rem 1rem;
-  box-shadow: 0 1px 2px 0 rgba(24, 20, 17, 0.04);
+  box-shadow: 0 1px 2px 0 rgba(18, 18, 18, 0.04);
 }
 
 /* Inline emphasis inside body copy — weight only, no highlight fill
@@ -149,14 +150,14 @@ body {
    double-border. */
 .panel-framed {
   background: var(--pixel-white);
-  border: 1px solid rgba(24, 20, 17, 0.08);
-  box-shadow: 0 1px 2px 0 rgba(24, 20, 17, 0.04);
+  border: 1px solid rgba(18, 18, 18, 0.08);
+  box-shadow: 0 1px 2px 0 rgba(18, 18, 18, 0.04);
 }
 
 /* Thumbnail frame — hairline border, no rotation, subtle hover lift
    via opacity rather than a hard offset-shadow lift. */
 .sticker-frame {
-  border: 1px solid rgba(24, 20, 17, 0.08);
+  border: 1px solid rgba(18, 18, 18, 0.08);
   transition: opacity 0.15s ease;
 }
 .sticker-frame:hover { opacity: 0.92; }
@@ -202,11 +203,11 @@ body {
   place-items: center;
   background: var(--pixel-forest);
   color: var(--pixel-white);
-  box-shadow: 0 6px 20px -6px rgba(24, 20, 17, 0.3);
+  box-shadow: 0 6px 20px -6px rgba(18, 18, 18, 0.3);
   opacity: 0;
   transform: translateY(8px);
   pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.2s ease, background-color 0.2s ease;
+  transition: opacity 0.25s ease, transform 0.2s ease, filter 0.2s ease;
 }
 .back-to-top.is-visible {
   opacity: 1;
@@ -214,7 +215,7 @@ body {
   pointer-events: auto;
 }
 .back-to-top:hover {
-  background: var(--pixel-forest-dark);
+  filter: brightness(0.85);
 }
 
 *:focus-visible {
