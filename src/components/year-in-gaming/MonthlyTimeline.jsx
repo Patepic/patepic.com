@@ -124,7 +124,7 @@ export function MonthlyTimeline({ monthlyGames }) {
                           loading="lazy"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-pixel-black/40 via-transparent to-transparent" />
                         <div className="absolute top-1 right-1 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-pixel-pink text-pixel-black text-[0.7rem] font-display font-bold">
                           <Star className="w-2.5 h-2.5" />
                           {rating}

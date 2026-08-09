@@ -76,7 +76,7 @@ export function SeriesMarathon({ seriesMarathons }) {
                             loading="lazy"
                             className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-pixel-black/40 via-transparent to-transparent" />
                           <div className="absolute bottom-2 left-2">
                             <div className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-pixel-blush text-sm font-bold text-pixel-black">
                               <Star className="w-3 h-3 text-pixel-black" />
