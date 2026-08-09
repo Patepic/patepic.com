@@ -52,7 +52,7 @@ export default function Home() {
               <Link to="/guidelines" className="pill pill-outline h-12 px-7 text-sm">How I score</Link>
               {creator.isLive && (
                 <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer" className="pill pill-live h-12 px-7 text-sm">
-                  <span className="w-2.5 h-2.5 bg-pixel-forest animate-blink" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-pixel-forest" />
                   <Twitch className="w-4 h-4" /> Live now · {creator.liveGame}
                 </a>
               )}
@@ -91,7 +91,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
             {loading ? Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className={`bg-pixel-mint border border-pixel-black/10 shadow-pixel-sm rounded-2xl p-5 ${["md:col-span-2", "md:col-span-2", "md:col-span-3", "md:col-span-5"][i]}`}>
-                <div className="animate-pulse bg-pixel-mint h-8 w-12 rounded-lg" />
+                <div className="animate-pulse bg-pixel-black/10 h-8 w-12 rounded-lg" />
               </div>
             )) : (
               <>

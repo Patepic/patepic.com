@@ -20,13 +20,13 @@ export const SkeletonImage = ({ aspectRatio = "video", className = "" }) => {
 
 /** Matches ReviewListing's shape: square thumbnail, two text lines, pill button. */
 export const SkeletonReviewListing = () => (
-  <div className="rounded-2xl border border-pixel-black/10 bg-pixel-white p-3 sm:p-4 flex items-center gap-4" aria-hidden="true">
+  <div className="rounded-2xl border border-pixel-black/10 bg-pixel-mint p-3 sm:p-4 flex items-center gap-4" aria-hidden="true">
     <Skeleton className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl shrink-0" />
     <div className="flex-1 space-y-2">
       <Skeleton className="h-5 w-2/3" />
       <Skeleton className="h-4 w-1/3" />
     </div>
-    <Skeleton className="h-9 sm:h-10 w-24 rounded-full shrink-0" />
+    <Skeleton className="h-9 sm:h-10 w-24 rounded-lg shrink-0" />
   </div>
 );
 

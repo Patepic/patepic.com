@@ -53,7 +53,7 @@ export const Navbar = () => {
   const live = useTwitchLive(handle);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-pixel-mint/95 backdrop-blur-none border-b border-pixel-black/10">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-pixel-mint/95 border-b border-pixel-black/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
         <Link to="/" className="flex items-center gap-2 shrink-0 mr-2">
           <span className="display-heading text-xl text-pixel-black tracking-tight">

@@ -94,7 +94,7 @@ export default function Reviews() {
               </button>
             </div>
 
-            <div className={`relative mt-6 grid grid-cols-1 sm:grid-cols-3 gap-6 ${mobileFilters ? "block" : "hidden md:grid"}`}>
+            <div className={`relative mt-6 grid grid-cols-1 sm:grid-cols-3 gap-6 ${mobileFilters ? "grid" : "hidden md:grid"}`}>
               <div>
                 <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-pixel-black mb-3">Verdict</p>
                 <div className="flex gap-3 flex-wrap">
