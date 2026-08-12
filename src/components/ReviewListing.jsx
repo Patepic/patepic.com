@@ -40,7 +40,7 @@ export function ReviewListing({ review }) {
       </div>
 
       <div className="flex flex-col items-end gap-2 shrink-0">
-        <span className="hidden sm:grid place-items-center w-10 h-10 rounded-full bg-pixel-pink text-pixel-black font-display font-bold text-sm">
+        <span className="hidden sm:grid place-items-center w-10 h-10 rounded-full bg-pixel-pink text-pixel-white font-display font-bold text-sm">
           {review.rating}
         </span>
         <Link to={`/reviews/${review.slug}`}

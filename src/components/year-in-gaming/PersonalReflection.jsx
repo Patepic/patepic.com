@@ -72,19 +72,19 @@ export function PersonalReflection() {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.06em] text-pixel-blush/80">
+                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.06em] text-pixel-black/80">
                       Achievement Unlocked
                     </p>
                     <span
-                      className="text-[0.6rem] font-bold uppercase tracking-[0.06em] px-2 py-0.5 rounded-full border text-pixel-mint"
+                      className="text-[0.6rem] font-bold uppercase tracking-[0.06em] px-2 py-0.5 rounded-full border text-pixel-pink"
                     >
                       {entry.rarity}
                     </span>
                   </div>
-                  <h3 className="mt-1 font-display text-base sm:text-lg text-pixel-blush tracking-tight">
+                  <h3 className="mt-1 font-display text-base sm:text-lg text-pixel-black tracking-tight">
                     {entry.title}
                   </h3>
-                  <p className="mt-1.5 text-sm text-pixel-blush/80 leading-relaxed">
+                  <p className="mt-1.5 text-sm text-pixel-black/80 leading-relaxed">
                     {entry.placeholder}
                   </p>
                 </div>

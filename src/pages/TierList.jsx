@@ -4,14 +4,14 @@ import { SkeletonTierCards } from "../components/ui/skeleton";
 import { PillHeading, Kicker } from "../components/ui/decor";
 
 const tierMeta = {
-  "★": { chip: "bg-pixel-pink text-pixel-black", label: "Favorite" },
-  "S+": { chip: "bg-pixel-pink text-pixel-black", label: "Masterpiece" },
-  "S": { chip: "bg-pixel-pink text-pixel-black", label: "Elite" },
+  "★": { chip: "bg-pixel-pink text-pixel-white", label: "Favorite" },
+  "S+": { chip: "bg-pixel-pink text-pixel-white", label: "Masterpiece" },
+  "S": { chip: "bg-pixel-pink text-pixel-white", label: "Elite" },
   "A": { chip: "bg-pixel-mint text-pixel-black", label: "Excellent" },
   "B": { chip: "bg-pixel-mint text-pixel-black", label: "Great" },
-  "C": { chip: "bg-pixel-forest text-pixel-blush", label: "Above Average" },
-  "D": { chip: "bg-pixel-forest text-pixel-blush", label: "Below Average" },
-  "F": { chip: "bg-pixel-forest text-pixel-blush", label: "Avoid" },
+  "C": { chip: "bg-pixel-forest text-pixel-black", label: "Above Average" },
+  "D": { chip: "bg-pixel-forest text-pixel-black", label: "Below Average" },
+  "F": { chip: "bg-pixel-forest text-pixel-black", label: "Avoid" },
 };
 
 const TIERS = ["★", "S+", "S", "A", "B", "C", "D", "F"];

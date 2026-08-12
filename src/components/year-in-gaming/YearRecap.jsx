@@ -49,7 +49,7 @@ export function YearRecap({ data }) {
                 alt={goty?.title || "Game of the Year"}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-pixel-forest/90 via-pixel-forest/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-pixel-white/90 via-pixel-white/40 to-transparent" />
 
               <div className="absolute top-4 left-4">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pixel-mint text-pixel-black text-[0.7rem] sm:text-sm font-bold tracking-wider uppercase shadow-lg">
@@ -72,18 +72,18 @@ export function YearRecap({ data }) {
               </div>
 
               <div className="absolute bottom-4 left-4 right-20 sm:right-28">
-                <div className="font-display text-xl sm:text-2xl lg:text-3xl text-pixel-blush group-hover:text-pixel-pink transition-colors drop-shadow-lg leading-tight">
+                <div className="font-display text-xl sm:text-2xl lg:text-3xl text-pixel-black group-hover:text-pixel-pink transition-colors drop-shadow-lg leading-tight">
                   {goty?.title}
                 </div>
                 <div className="flex items-center gap-2.5 mt-2.5 flex-wrap">
                   {goty?.platform && (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-pixel-blush/20 text-pixel-blush text-[0.75rem] sm:text-sm">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-pixel-black/20 text-pixel-black text-[0.75rem] sm:text-sm">
                       <Gamepad2 className="w-3 h-3" />
                       {goty.platform}
                     </div>
                   )}
                   {goty?.date && (
-                    <span className="text-[0.75rem] sm:text-sm text-pixel-blush/60">{goty.date}</span>
+                    <span className="text-[0.75rem] sm:text-sm text-pixel-black/60">{goty.date}</span>
                   )}
                 </div>
               </div>
@@ -114,7 +114,7 @@ export function YearRecap({ data }) {
             value={data.biggestDisappointment?.title || "—"}
             subtitle={data.biggestDisappointment ? `Scored ${data.biggestDisappointment.rating}/10` : null}
             slug={data.biggestDisappointment?.slug}
-            badgeClass="bg-pixel-pink text-pixel-black"
+            badgeClass="bg-pixel-pink text-pixel-white"
           />
 
           <div className="rounded-2xl border border-pixel-teal bg-pixel-blush p-1 flex-1 grid grid-cols-2 divide-x divide-pixel-teal/40">

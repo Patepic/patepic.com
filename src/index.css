@@ -11,41 +11,46 @@ html, body {
 }
 
 body {
-  background-color: #F0F0F0;
-  color: #121212;
+  background-color: #17151A;
+  color: #F2E8E3;
 }
 
 ::selection {
-  background: #D4AF37;
-  color: #121212;
+  background: #C89A4B;
+  color: #17151A;
 }
 
 /* ---------------------------------------------------------------
-   Palette tokens — primary red/near-black/off-white, secondary
-   gold/dark-gray, accent red/tan. Hover-darkening is done with a
-   brightness() filter rather than a second hex per color, so the
-   palette stays limited to exactly these 6 hex values.
+   Palette tokens — dark theme: ~55% near-black (#17151A) as the
+   dominant surface, ~20% dark crimson (#A51F36) for card/section
+   fills, ~12% red (#C93646) as the primary action color, ~8% gold
+   (#C89A4B) as accent, ~5% cream (#F2E8E3) as text/light accents.
+   Ink and surface roles are inverted from a light theme: pixel-black
+   is now the light ink color (text-on-dark), pixel-white is now the
+   dark surface color. Hover-darkening uses a brightness() filter
+   rather than a second hex per color, so the palette stays limited
+   to exactly these 5 hex values.
    --------------------------------------------------------------- */
 :root {
-  --pixel-forest: #D91E2D;
-  --pixel-teal: #2D2D2D;
-  --pixel-mint: #DBBFA2;
-  --pixel-pink: #D4AF37;
-  --pixel-blush: #F0F0F0;
-  --pixel-black: #121212;
-  --pixel-white: #F0F0F0;
-  --ink: #121212;
-  --ink-muted: rgba(18, 18, 18, 0.65);
+  --pixel-forest: #C93646;
+  --pixel-teal: #F2E8E3;
+  --pixel-mint: #A51F36;
+  --pixel-pink: #C89A4B;
+  --pixel-blush: #17151A;
+  --pixel-black: #F2E8E3;
+  --pixel-white: #17151A;
+  --ink: #F2E8E3;
+  --ink-muted: rgba(242, 232, 227, 0.65);
 
   /* shadcn-primitive semantic tokens — HSL triplets (no hsl() wrapper),
      converted from the hex palette above so bg-background/text-foreground/
      bg-card/bg-popover resolve instead of being undefined. */
-  --background: 0 0% 94%;         /* off-white page canvas (#F0F0F0) */
-  --foreground: 0 0% 7%;          /* near-black ink (#121212) */
-  --card: 0 0% 94%;               /* off-white card surface, matches background */
-  --card-foreground: 0 0% 7%;
-  --popover: 0 0% 94%;            /* off-white popover surface, matches background */
-  --popover-foreground: 0 0% 7%;
+  --background: 264 11% 9%;       /* near-black page canvas (#17151A) */
+  --foreground: 20 7% 92%;        /* cream ink (#F2E8E3) */
+  --card: 264 11% 9%;             /* near-black card surface, matches background */
+  --card-foreground: 20 7% 92%;
+  --popover: 264 11% 9%;          /* near-black popover surface, matches background */
+  --popover-foreground: 20 7% 92%;
 }
 
 /* Raster images that should keep hard pixel edges instead of smooth
@@ -72,29 +77,29 @@ body {
 
 .pill-ember {
   background: var(--pixel-forest);
-  color: var(--pixel-white);
+  color: var(--pixel-black);
 }
-.pill-ember:hover { filter: brightness(0.85); box-shadow: 0 6px 20px -6px rgba(18, 18, 18, 0.25); }
+.pill-ember:hover { filter: brightness(1.15); box-shadow: 0 6px 20px -6px rgba(23, 21, 26, 0.6); }
 
 .pill-gold {
   background: var(--pixel-pink);
-  color: var(--pixel-black);
+  color: var(--pixel-white);
 }
-.pill-gold:hover { filter: brightness(0.85); box-shadow: 0 6px 20px -6px rgba(18, 18, 18, 0.2); }
+.pill-gold:hover { filter: brightness(1.1); box-shadow: 0 6px 20px -6px rgba(23, 21, 26, 0.55); }
 
 .pill-outline {
   background: transparent;
   color: var(--pixel-forest);
-  border-color: rgba(18, 18, 18, 0.14);
+  border-color: rgba(242, 232, 227, 0.18);
 }
-.pill-outline:hover { background: rgba(217, 30, 45, 0.06); border-color: rgba(18, 18, 18, 0.22); }
+.pill-outline:hover { background: rgba(201, 54, 70, 0.1); border-color: rgba(242, 232, 227, 0.3); }
 
 .pill-live {
-  background: rgba(212, 175, 55, 0.16);
-  color: var(--pixel-forest);
-  border-color: rgba(18, 18, 18, 0.1);
+  background: rgba(200, 154, 75, 0.18);
+  color: var(--pixel-pink);
+  border-color: rgba(242, 232, 227, 0.14);
 }
-.pill-live:hover { background: rgba(212, 175, 55, 0.26); }
+.pill-live:hover { background: rgba(200, 154, 75, 0.28); }
 
 /* ---------------------------------------------------------------
    Display type — Inter, heavier weights, tight tracking. Class
@@ -131,12 +136,12 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.03em;
   line-height: 1.4;
-  color: var(--pixel-white);
+  color: var(--pixel-black);
   background: var(--pixel-forest);
-  border: 1px solid rgba(18, 18, 18, 0.08);
+  border: 1px solid rgba(242, 232, 227, 0.1);
   border-radius: 10px;
   padding: 0.6rem 1rem;
-  box-shadow: 0 1px 2px 0 rgba(18, 18, 18, 0.04);
+  box-shadow: 0 1px 2px 0 rgba(23, 21, 26, 0.35);
 }
 
 /* Inline emphasis inside body copy — weight only, no highlight fill
@@ -150,14 +155,14 @@ body {
    double-border. */
 .panel-framed {
   background: var(--pixel-white);
-  border: 1px solid rgba(18, 18, 18, 0.08);
-  box-shadow: 0 1px 2px 0 rgba(18, 18, 18, 0.04);
+  border: 1px solid rgba(242, 232, 227, 0.1);
+  box-shadow: 0 1px 2px 0 rgba(23, 21, 26, 0.35);
 }
 
 /* Thumbnail frame — hairline border, no rotation, subtle hover lift
    via opacity rather than a hard offset-shadow lift. */
 .sticker-frame {
-  border: 1px solid rgba(18, 18, 18, 0.08);
+  border: 1px solid rgba(242, 232, 227, 0.1);
   transition: opacity 0.15s ease;
 }
 .sticker-frame:hover { opacity: 0.92; }
@@ -202,8 +207,8 @@ body {
   display: grid;
   place-items: center;
   background: var(--pixel-forest);
-  color: var(--pixel-white);
-  box-shadow: 0 6px 20px -6px rgba(18, 18, 18, 0.3);
+  color: var(--pixel-black);
+  box-shadow: 0 6px 20px -6px rgba(23, 21, 26, 0.45);
   opacity: 0;
   transform: translateY(8px);
   pointer-events: none;

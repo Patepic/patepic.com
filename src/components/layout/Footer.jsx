@@ -26,16 +26,16 @@ export const Footer = () => {
           <div className="flex items-center gap-2">
             <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer" data-testid="footer-twitch"
               aria-label="Twitch"
-              className="w-8 h-8 grid place-items-center rounded-lg bg-pixel-forest text-pixel-blush hover:bg-pixel-teal transition-colors">
+              className="w-8 h-8 grid place-items-center rounded-lg bg-pixel-forest text-pixel-black hover:bg-pixel-teal hover:text-pixel-white transition-colors">
               <Twitch className="w-4 h-4" />
             </a>
             <a href={creator.youtube.url} target="_blank" rel="noopener noreferrer" data-testid="footer-youtube"
               aria-label="YouTube"
-              className="w-8 h-8 grid place-items-center rounded-lg bg-pixel-forest text-pixel-blush hover:bg-pixel-teal transition-colors">
+              className="w-8 h-8 grid place-items-center rounded-lg bg-pixel-forest text-pixel-black hover:bg-pixel-teal hover:text-pixel-white transition-colors">
               <Youtube className="w-4 h-4" />
             </a>
             <a href="mailto:contact@patepic.com" aria-label="Email"
-              className="w-8 h-8 grid place-items-center rounded-lg bg-pixel-forest text-pixel-blush hover:bg-pixel-teal transition-colors">
+              className="w-8 h-8 grid place-items-center rounded-lg bg-pixel-forest text-pixel-black hover:bg-pixel-teal hover:text-pixel-white transition-colors">
               <Mail className="w-4 h-4" />
             </a>
           </div>

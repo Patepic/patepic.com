@@ -108,7 +108,7 @@ export default function Contact() {
             <div className="mt-5">
               <div className="flex items-center justify-between mb-2">
                 <Label htmlFor="message" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-pixel-black">Message <span className="text-pixel-black">*</span></Label>
-                <span className={`text-sm font-bold tabular-nums px-2.5 py-0.5 rounded-full border ${charsOver ? "bg-pixel-forest border-pixel-teal text-pixel-blush" : "bg-pixel-blush border-pixel-teal text-pixel-black/60"}`}>
+                <span className={`text-sm font-bold tabular-nums px-2.5 py-0.5 rounded-full border ${charsOver ? "bg-pixel-forest border-pixel-teal text-pixel-black" : "bg-pixel-blush border-pixel-teal text-pixel-black/60"}`}>
                   {form.message.length} / {MAX_MESSAGE}
                 </span>
               </div>
@@ -153,7 +153,7 @@ function ChannelBlock({ wordmark, sub, Icon, href, action, caption }) {
   return (
     <div className="text-center">
       <div className="inline-flex flex-col items-center">
-        <div className="w-16 h-16 grid place-items-center bg-pixel-pink text-pixel-black border border-pixel-black/10 shadow-pixel-sm rounded-lg">
+        <div className="w-16 h-16 grid place-items-center bg-pixel-pink text-pixel-white border border-pixel-black/10 shadow-pixel-sm rounded-lg">
           <Icon className="w-7 h-7" />
         </div>
         <div className="display-hero mt-3 text-2xl text-pixel-black">{wordmark}</div>

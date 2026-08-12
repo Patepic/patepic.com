@@ -54,7 +54,7 @@ export default function ReviewDetail() {
             <div className="lg:col-span-7 order-2 lg:order-1">
               <div className="flex flex-wrap items-center gap-2 mb-5">
                 {review.platform && (
-                  <span className="pill h-8 px-4 text-[0.8rem] uppercase tracking-[0.06em] bg-pixel-forest text-pixel-blush">
+                  <span className="pill h-8 px-4 text-[0.8rem] uppercase tracking-[0.06em] bg-pixel-forest text-pixel-black">
                     <Gamepad2 className="w-3 h-3 text-pixel-pink" /> {review.platform}
                   </span>
                 )}
@@ -75,7 +75,7 @@ export default function ReviewDetail() {
             <div className="lg:col-span-5 order-1 lg:order-2">
               <div className="relative overflow-hidden rounded-xl border border-pixel-black/10 shadow-pixel">
                 <img src={cover} alt={review.title} className="w-full aspect-video object-cover" />
-                <div className="absolute bottom-3 left-3 grid place-items-center w-12 h-12 rounded-full bg-pixel-pink text-pixel-black font-display font-bold text-lg">
+                <div className="absolute bottom-3 left-3 grid place-items-center w-12 h-12 rounded-full bg-pixel-pink text-pixel-white font-display font-bold text-lg">
                   {review.rating}
                 </div>
               </div>
@@ -160,7 +160,7 @@ export default function ReviewDetail() {
                       <div className="text-[0.75rem] font-extrabold uppercase tracking-[0.06em] mb-1 text-pixel-black">{r.platform}</div>
                       <div className="font-display font-bold text-base leading-normal text-pixel-black">{r.title}</div>
                       <div className="mt-3 flex items-center justify-between">
-                        <span className="inline-grid place-items-center w-8 h-8 rounded-full bg-pixel-pink text-pixel-black font-display font-bold text-sm">{r.rating}</span>
+                        <span className="inline-grid place-items-center w-8 h-8 rounded-full bg-pixel-pink text-pixel-white font-display font-bold text-sm">{r.rating}</span>
                         <ArrowUpRight className="w-4 h-4 text-pixel-black group-hover:text-pixel-pink transition-colors" />
                       </div>
                     </div>

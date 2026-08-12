@@ -2,14 +2,14 @@ import { Link } from "react-router-dom";
 import { SectionTitle, Kicker } from "../components/ui/decor";
 
 const tiers = [
-  { tier: "★", label: "Favorite", chip: "bg-pixel-pink text-pixel-black", desc: "Personal favorite. Not always the best, but the one that stuck with me the most." },
-  { tier: "S+", label: "Masterpiece", chip: "bg-pixel-pink text-pixel-black", desc: "Everything I expected and more. A flawless experience that I can't stop thinking about." },
-  { tier: "S", label: "Elite", chip: "bg-pixel-pink text-pixel-black", desc: "Exceptional from beginning to end. A few minor flaws exist, but they never get in the way." },
+  { tier: "★", label: "Favorite", chip: "bg-pixel-pink text-pixel-white", desc: "Personal favorite. Not always the best, but the one that stuck with me the most." },
+  { tier: "S+", label: "Masterpiece", chip: "bg-pixel-pink text-pixel-white", desc: "Everything I expected and more. A flawless experience that I can't stop thinking about." },
+  { tier: "S", label: "Elite", chip: "bg-pixel-pink text-pixel-white", desc: "Exceptional from beginning to end. A few minor flaws exist, but they never get in the way." },
   { tier: "A", label: "Excellent", chip: "bg-pixel-mint text-pixel-black", desc: "Easy to recommend. Consistently engaging with only a handful of flaws." },
   { tier: "B", label: "Great", chip: "bg-pixel-mint text-pixel-black", desc: "A strong experience that delivers on its promises. Some noticeable flaws hold it back." },
-  { tier: "C", label: "Above Average", chip: "bg-pixel-forest text-pixel-blush", desc: "Moments of brilliance surrounded by too much filler." },
-  { tier: "D", label: "Below Average", chip: "bg-pixel-forest text-pixel-blush", desc: "The vision was there. Almost nothing else was." },
-  { tier: "F", label: "Avoid", chip: "bg-pixel-forest text-pixel-blush", desc: "Either scored 3 or below, or it's a game I can't recommend regardless of the score." },
+  { tier: "C", label: "Above Average", chip: "bg-pixel-forest text-pixel-black", desc: "Moments of brilliance surrounded by too much filler." },
+  { tier: "D", label: "Below Average", chip: "bg-pixel-forest text-pixel-black", desc: "The vision was there. Almost nothing else was." },
+  { tier: "F", label: "Avoid", chip: "bg-pixel-forest text-pixel-black", desc: "Either scored 3 or below, or it's a game I can't recommend regardless of the score." },
 ];
 
 const principles = [

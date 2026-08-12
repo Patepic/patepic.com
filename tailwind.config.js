@@ -22,43 +22,46 @@ module.exports = {
       colors: {
         // Token names kept as-is (pixel-forest/teal/mint/pink/blush/black/white)
         // so every existing Tailwind class site needs zero edits — only the
-        // hex values changed, per the new brand palette below:
-        //   pixel-forest -> primary/action red   (#D91E2D)
-        //   pixel-teal   -> structural neutral    (#2D2D2D)
-        //   pixel-mint   -> soft section tint     (#DBBFA2)
-        //   pixel-pink   -> accent/CTA gold       (#D4AF37)
-        //   pixel-blush  -> page background wash  (#F0F0F0)
-        //   pixel-black  -> ink/text/borders      (#121212)
-        //   pixel-white  -> surface/card bg       (#F0F0F0)
-        'pixel-forest': '#D91E2D',
-        'pixel-teal': '#2D2D2D',
-        'pixel-mint': '#DBBFA2',
-        'pixel-pink': '#D4AF37',
-        'pixel-blush': '#F0F0F0',
-        'pixel-black': '#121212',
-        'pixel-white': '#F0F0F0',
+        // hex values changed, per the dark-theme brand palette below
+        // (~55% #17151A / 20% #A51F36 / 12% #C93646 / 8% #C89A4B / 5% #F2E8E3):
+        //   pixel-forest -> primary action red      (#C93646)
+        //   pixel-teal   -> hairline borders/cream   (#F2E8E3, light-on-dark)
+        //   pixel-mint   -> card/section fill        (#A51F36 dark crimson)
+        //   pixel-pink   -> accent/CTA gold          (#C89A4B)
+        //   pixel-blush  -> page background          (#17151A, dominant)
+        //   pixel-black  -> ink/text                 (#F2E8E3, INVERTED: light text on dark bg)
+        //   pixel-white  -> surface/card background  (#17151A, INVERTED: dark surface)
+        'pixel-forest': '#C93646',
+        'pixel-teal': '#F2E8E3',
+        'pixel-mint': '#A51F36',
+        'pixel-pink': '#C89A4B',
+        'pixel-blush': '#17151A',
+        'pixel-black': '#F2E8E3',
+        'pixel-white': '#17151A',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
         popover: { DEFAULT: 'hsl(var(--popover))', foreground: 'hsl(var(--popover-foreground))' },
-        primary: { DEFAULT: '#D91E2D', foreground: '#F0F0F0' },
-        secondary: { DEFAULT: '#F0F0F0', foreground: '#D91E2D' },
-        muted: { DEFAULT: '#DBBFA2', foreground: '#D91E2D' },
-        accent: { DEFAULT: '#D4AF37', foreground: '#121212' },
-        destructive: { DEFAULT: '#D91E2D', foreground: '#F0F0F0' },
-        border: '#2D2D2D',
-        input: '#2D2D2D',
-        ring: '#D4AF37',
+        primary: { DEFAULT: '#C93646', foreground: '#F2E8E3' },
+        secondary: { DEFAULT: '#17151A', foreground: '#C93646' },
+        muted: { DEFAULT: '#A51F36', foreground: '#F2E8E3' },
+        accent: { DEFAULT: '#C89A4B', foreground: '#17151A' },
+        destructive: { DEFAULT: '#C93646', foreground: '#F2E8E3' },
+        border: '#F2E8E3',
+        input: '#F2E8E3',
+        ring: '#C89A4B',
       },
       spacing: {
         '4.5': '18px',
         '13': '52px',
       },
       boxShadow: {
-        'pixel-sm': '0 1px 2px 0 rgba(18, 18, 18, 0.06)',
-        pixel: '0 6px 20px -6px rgba(18, 18, 18, 0.18)',
-        'pixel-lg': '0 16px 40px -12px rgba(18, 18, 18, 0.22)',
-        'pixel-pink': '0 6px 20px -6px rgba(18, 18, 18, 0.18)',
+        // Shadows stay near-black regardless of theme (elevation shadows are
+        // conventionally dark even on dark surfaces), using #17151A's rgb.
+        'pixel-sm': '0 1px 2px 0 rgba(23, 21, 26, 0.35)',
+        pixel: '0 6px 20px -6px rgba(23, 21, 26, 0.5)',
+        'pixel-lg': '0 16px 40px -12px rgba(23, 21, 26, 0.6)',
+        'pixel-pink': '0 6px 20px -6px rgba(23, 21, 26, 0.5)',
       },
       keyframes: {
         'accordion-down': { from: { height: '0' }, to: { height: 'var(--radix-accordion-content-height)' } },

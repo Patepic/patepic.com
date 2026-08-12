@@ -90,7 +90,7 @@ export default function Reviews() {
               <button onClick={() => setMobileFilters(!mobileFilters)}
                 className="md:hidden pill pill-outline h-12 px-5 text-sm">
                 <SlidersHorizontal className="w-4 h-4" /> Filters
-                {activeCount > 0 && <span className="ml-1 px-2 py-0.5 rounded-full bg-pixel-forest text-pixel-blush text-sm">{activeCount}</span>}
+                {activeCount > 0 && <span className="ml-1 px-2 py-0.5 rounded-full bg-pixel-forest text-pixel-black text-sm">{activeCount}</span>}
               </button>
             </div>
 
@@ -179,7 +179,7 @@ export default function Reviews() {
                         <span key={`e-${i}`} className="h-9 w-9 flex items-center justify-center text-sm text-pixel-black">…</span>
                       ) : (
                         <button key={p} onClick={() => setPage(p)}
-                          className={`h-9 w-9 rounded-full text-sm font-bold transition-colors ${page === p ? "bg-pixel-forest text-pixel-blush" : "bg-pixel-mint border border-pixel-black/10 text-pixel-black"}`}>{p}</button>
+                          className={`h-9 w-9 rounded-full text-sm font-bold transition-colors ${page === p ? "bg-pixel-forest text-pixel-black" : "bg-pixel-mint border border-pixel-black/10 text-pixel-black"}`}>{p}</button>
                       ))}
                   </div>
                   <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}

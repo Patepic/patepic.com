@@ -19,7 +19,7 @@ export const SocialRow = ({ className = "", size = "w-10 h-10" }) => {
           rel="noopener noreferrer"
           aria-label={label}
           data-testid={`social-${label.toLowerCase()}`}
-          className={`${size} rounded-lg bg-pixel-forest text-pixel-blush hover:bg-pixel-teal grid place-items-center transition-colors`}
+          className={`${size} rounded-lg bg-pixel-forest text-pixel-black hover:bg-pixel-teal hover:text-pixel-white grid place-items-center transition-colors`}
         >
           <Icon className="w-4 h-4" />
         </a>
