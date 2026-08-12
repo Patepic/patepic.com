@@ -28,19 +28,19 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <StickerBadge icon={Feather} className="w-14 h-14 lg:w-16 lg:h-16" />
               <div>
-                <Kicker tone="text-pixel-black">Hello, I&apos;m</Kicker>
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-pixel-black/60">
+                <Kicker tone="text-ink">Hello, I&apos;m</Kicker>
+                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-ink/60">
                   Owl Sorcerer of Time
                 </p>
               </div>
             </div>
-            <h1 className="display-hero mt-4 text-3xl sm:text-4xl lg:text-6xl text-pixel-black">
-              {creator.name}<span className="text-pixel-pink">.</span>
+            <h1 className="display-hero mt-4 text-3xl sm:text-4xl lg:text-6xl text-ink">
+              {creator.name}<span className="text-gold">.</span>
             </h1>
-            <p className="display-heading mt-5 text-xl sm:text-2xl lg:text-3xl text-pixel-black">
+            <p className="display-heading mt-5 text-xl sm:text-2xl lg:text-3xl text-ink">
               Reviewer, Streamer, VTuber
             </p>
-            <p className="mt-8 max-w-lg text-sm sm:text-base leading-relaxed text-pixel-black/70">
+            <p className="mt-8 max-w-lg text-sm sm:text-base leading-relaxed text-ink/70">
               Long-form reviews from someone who finishes every game before saying a word about it.
               Catch the playthrough live, then read the verdict after the credits roll.
             </p>
@@ -52,7 +52,7 @@ export default function Home() {
               <Link to="/guidelines" className="pill pill-outline h-12 px-7 text-sm">How I score</Link>
               {creator.isLive && (
                 <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer" className="pill pill-live h-12 px-7 text-sm">
-                  <span className="w-2.5 h-2.5 rounded-full bg-pixel-forest" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-scarlet" />
                   <Twitch className="w-4 h-4" /> Live now · {creator.liveGame}
                 </a>
               )}
@@ -66,7 +66,7 @@ export default function Home() {
         <div className="relative max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="label-chip text-lg sm:text-xl">Meet {creator.name}</div>
 
-          <p className="mt-8 text-sm sm:text-base leading-[1.75] text-pixel-black/85">
+          <p className="mt-8 text-sm sm:text-base leading-[1.75] text-ink/85">
             <span className="hl">Reviewer by day, VTuber by night</span> — the two feed each other. Nothing gets
             scored until the credits roll, and the same playthrough shows up here as a long-form review and on
             stream as full-length chaos.
@@ -79,19 +79,19 @@ export default function Home() {
           </div>
 
           <div className="mt-14">
-            <p className="text-sm font-bold uppercase tracking-[0.06em] text-pixel-black mb-4">Follow me on socials!</p>
+            <p className="text-sm font-bold uppercase tracking-[0.06em] text-ink mb-4">Follow me on socials!</p>
             <div className="flex justify-center"><SocialRow /></div>
           </div>
         </div>
       </section>
 
       {/* ── Stats ── */}
-      <section className="relative bg-pixel-blush py-16 md:py-24">
+      <section className="relative bg-surface py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
             {loading ? Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className={`bg-pixel-mint border border-pixel-black/10 shadow-pixel-sm rounded-2xl p-5 ${["md:col-span-2", "md:col-span-2", "md:col-span-3", "md:col-span-5"][i]}`}>
-                <div className="animate-pulse bg-pixel-black/10 h-8 w-12 rounded-lg" />
+              <div key={i} className={`bg-crimson border border-ink/10 shadow-soft-sm rounded-2xl p-5 ${["md:col-span-2", "md:col-span-2", "md:col-span-3", "md:col-span-5"][i]}`}>
+                <div className="animate-pulse bg-ink/10 h-8 w-12 rounded-lg" />
               </div>
             )) : (
               <>
@@ -99,13 +99,13 @@ export default function Home() {
                 <StatCard className="md:col-span-2 animate-reveal delay-2" label="Average score" value={averageScore} icon={<Star className="w-4 h-4" />} testId="stat-average-score" />
                 <StatCard className="md:col-span-3 animate-reveal delay-3" label="Top platform" value={topPlatform} icon={<Gamepad2 className="w-4 h-4" />} testId="stat-top-platform" />
                 {goldStandard && (
-                  <Link to={`/reviews/${goldStandard.slug}`} data-testid="stat-gold-standard" className="md:col-span-5 bg-pixel-mint border border-pixel-black/10 shadow-pixel-sm rounded-2xl p-5 animate-reveal delay-4 hover:border-pixel-teal transition-colors">
+                  <Link to={`/reviews/${goldStandard.slug}`} data-testid="stat-gold-standard" className="md:col-span-5 bg-crimson border border-ink/10 shadow-soft-sm rounded-2xl p-5 animate-reveal delay-4 hover:border-ink transition-colors">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-bold uppercase tracking-[0.06em] text-pixel-black">Gold standard</span>
-                      <Trophy className="w-4 h-4 text-pixel-pink" />
+                      <span className="text-sm font-bold uppercase tracking-[0.06em] text-ink">Gold standard</span>
+                      <Trophy className="w-4 h-4 text-gold" />
                     </div>
-                    <div className="display-hero text-2xl text-pixel-black">{goldStandard.title}</div>
-                    <div className="text-sm font-bold text-pixel-black/60 mt-1">Scored {goldStandard.rating} / 10</div>
+                    <div className="display-hero text-2xl text-ink">{goldStandard.title}</div>
+                    <div className="text-sm font-bold text-ink/60 mt-1">Scored {goldStandard.rating} / 10</div>
                   </Link>
                 )}
               </>
@@ -115,7 +115,7 @@ export default function Home() {
       </section>
 
       {/* ── Latest reviews ── */}
-      <section className="relative bg-pixel-blush pb-16 md:pb-24" data-testid="recent-reviews">
+      <section className="relative bg-surface pb-16 md:pb-24" data-testid="recent-reviews">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10 gap-4 flex-wrap">
             <div>
@@ -143,7 +143,7 @@ export default function Home() {
             <div className="relative">
               <div className="magazine-rule mb-5"><span>The {creator.name} Method</span></div>
               <SectionTitle>No score until the credits roll.</SectionTitle>
-              <p className="mt-6 leading-relaxed text-sm sm:text-base text-pixel-black/70">
+              <p className="mt-6 leading-relaxed text-sm sm:text-base text-ink/70">
                 Every score comes from a finished playthrough. What you read is what I actually think.
               </p>
               <div className="mt-9 flex gap-3 flex-wrap justify-center">
@@ -159,21 +159,21 @@ export default function Home() {
 }
 
 const StatCard = ({ label, value, icon, className = "", testId }) => (
-  <div data-testid={testId} className={`bg-pixel-mint border border-pixel-black/10 shadow-pixel-sm rounded-2xl p-5 ${className}`}>
+  <div data-testid={testId} className={`bg-crimson border border-ink/10 shadow-soft-sm rounded-2xl p-5 ${className}`}>
     <div className="flex items-start justify-between gap-3 mb-3">
-      <span className="text-sm font-bold uppercase tracking-[0.06em] text-pixel-black">{label}</span>
-      <span className="text-pixel-pink">{icon}</span>
+      <span className="text-sm font-bold uppercase tracking-[0.06em] text-ink">{label}</span>
+      <span className="text-gold">{icon}</span>
     </div>
-    <div className="display-hero text-3xl text-pixel-black break-words">{value}</div>
+    <div className="display-hero text-3xl text-ink break-words">{value}</div>
   </div>
 );
 
 const HomeDataState = ({ title, compact = false }) => (
-  <div className={compact ? "bg-pixel-mint border border-pixel-black/10 shadow-pixel-sm rounded-2xl p-10 text-center" : "min-h-[70vh] grid place-items-center px-4 bg-pixel-blush"}>
+  <div className={compact ? "bg-crimson border border-ink/10 shadow-soft-sm rounded-2xl p-10 text-center" : "min-h-[70vh] grid place-items-center px-4 bg-surface"}>
     <div className="max-w-md text-center">
-      <p className="text-sm font-bold uppercase tracking-[0.06em] text-pixel-black">Reviews unavailable</p>
-      <h1 className="display-hero mt-3 text-3xl text-pixel-black">{title}</h1>
-      <p className="mt-3 text-sm font-semibold text-pixel-black/70">Check the API connection and database, then refresh.</p>
+      <p className="text-sm font-bold uppercase tracking-[0.06em] text-ink">Reviews unavailable</p>
+      <h1 className="display-hero mt-3 text-3xl text-ink">{title}</h1>
+      <p className="mt-3 text-sm font-semibold text-ink/70">Check the API connection and database, then refresh.</p>
     </div>
   </div>
 );

@@ -8,11 +8,11 @@ function AboutContent() {
   return (
     <div>
       {/* ── "Who is Patepic?" — the full bio (the homepage only teases this) ── */}
-      <section className="relative bg-pixel-blush py-20 md:py-28 overflow-hidden">
+      <section className="relative bg-surface py-20 md:py-28 overflow-hidden">
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="label-chip text-lg sm:text-xl">Who is {creator.name}?</h1>
 
-          <div className="mt-8 space-y-5 text-sm sm:text-[0.95rem] leading-[1.75] text-pixel-black/85 text-left">
+          <div className="mt-8 space-y-5 text-sm sm:text-[0.95rem] leading-[1.75] text-ink/85 text-left">
             <p>
               {creator.name} is a <span className="hl">game reviewer, streamer and VTuber</span> — an owl sorcerer of
               time with strong opinions about difficulty spikes. Reviewer by day, VTuber by night, and the two feed
@@ -44,14 +44,14 @@ function AboutContent() {
           </div>
 
           <div className="mt-14">
-            <p className="text-sm font-bold uppercase tracking-[0.06em] text-pixel-black mb-4">Follow me on socials!</p>
+            <p className="text-sm font-bold uppercase tracking-[0.06em] text-ink mb-4">Follow me on socials!</p>
             <div className="flex justify-center"><SocialRow /></div>
           </div>
         </div>
       </section>
 
       {/* ── Profile ── */}
-      <section className="relative bg-pixel-blush py-16 md:py-24">
+      <section className="relative bg-surface py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="magazine-rule mb-6"><span>The profile</span></div>
           <SectionTitle>The frostborn owl, by the numbers.</SectionTitle>
@@ -78,7 +78,7 @@ function AboutContent() {
       </section>
 
       {/* ── Where to watch ── */}
-      <section className="relative bg-pixel-blush pb-16 md:pb-24">
+      <section className="relative bg-surface pb-16 md:pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="magazine-rule mb-8"><span>Where to watch</span></div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -106,30 +106,30 @@ function AboutContent() {
 function WatchCard({ href, eyebrow, title, body, Icon }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer"
-      className="group bg-pixel-mint border border-pixel-black/10 shadow-pixel-sm hover:shadow-pixel transition-shadow rounded-xl p-7">
+      className="group bg-crimson border border-ink/10 shadow-soft-sm hover:shadow-soft transition-shadow rounded-xl p-7">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-12 h-12 grid place-items-center bg-pixel-forest text-pixel-pink rounded-lg">
+        <div className="w-12 h-12 grid place-items-center bg-scarlet text-gold rounded-lg">
           <Icon className="w-5 h-5" />
         </div>
         <div>
-          <div className="text-[0.75rem] font-bold tracking-[0.06em] uppercase text-pixel-black">{eyebrow}</div>
-          <div className="display-hero text-xl text-pixel-black">{title}</div>
+          <div className="text-[0.75rem] font-bold tracking-[0.06em] uppercase text-ink">{eyebrow}</div>
+          <div className="display-hero text-xl text-ink">{title}</div>
         </div>
-        <ArrowUpRight className="w-4 h-4 ml-auto text-pixel-black group-hover:text-pixel-pink transition-colors" />
+        <ArrowUpRight className="w-4 h-4 ml-auto text-ink group-hover:text-gold transition-colors" />
       </div>
-      <p className="text-sm leading-relaxed text-pixel-black/70">{body}</p>
+      <p className="text-sm leading-relaxed text-ink/70">{body}</p>
     </a>
   );
 }
 
 function ProfileRow({ label, value }) {
   return (
-    <div className="flex items-baseline py-4 border-b border-pixel-teal">
-      <span className="w-2/5 pr-4 text-sm font-extrabold text-pixel-black">{label}</span>
-      <span className="w-3/5 pl-4 text-sm text-pixel-black/80 leading-relaxed">
+    <div className="flex items-baseline py-4 border-b border-ink">
+      <span className="w-2/5 pr-4 text-sm font-extrabold text-ink">{label}</span>
+      <span className="w-3/5 pl-4 text-sm text-ink/80 leading-relaxed">
         {Array.isArray(value) ? (
           <ul className="space-y-2">
-            {value.map((item) => <li key={item.title} className="ml-4 list-disc"><span className="font-extrabold text-pixel-black">{item.title}</span> - {item.desc}</li>)}
+            {value.map((item) => <li key={item.title} className="ml-4 list-disc"><span className="font-extrabold text-ink">{item.title}</span> - {item.desc}</li>)}
           </ul>
         ) : value}
       </span>

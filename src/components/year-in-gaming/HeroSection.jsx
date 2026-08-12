@@ -2,21 +2,21 @@ import { Trophy, Star, Target, Gamepad2, BookOpen } from "lucide-react";
 
 export function HeroSection({ data }) {
   return (
-    <section className="relative overflow-hidden bg-pixel-forest">
+    <section className="relative overflow-hidden bg-scarlet">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pixel-mint/20 border border-pixel-teal/30 text-sm tracking-[0.06em] uppercase text-pixel-black mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-crimson/20 border border-ink/30 text-sm tracking-[0.06em] uppercase text-ink mb-8">
             <Trophy className="w-3.5 h-3.5" /> 2026 Year in Review
           </div>
 
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-6xl tracking-tighter text-pixel-black leading-[1.15]">
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-6xl tracking-tighter text-ink leading-[1.15]">
             Year in Gaming
-            <em className="text-pixel-pink not-italic font-display block mt-2">
+            <em className="text-gold not-italic font-display block mt-2">
               2026
             </em>
           </h1>
 
-          <p className="mt-6 text-lg sm:text-xl text-pixel-black/70 max-w-xl leading-relaxed">
+          <p className="mt-6 text-lg sm:text-xl text-ink/70 max-w-xl leading-relaxed">
             A look back at every game I played, finished, and reviewed during a
             year of discovery, challenge, and unforgettable stories.
           </p>
@@ -58,21 +58,21 @@ export function HeroSection({ data }) {
 function HeroStatCard({ icon, label, value, subtitle, className = "" }) {
   return (
     <div
-      className={`bg-pixel-white/10 border border-pixel-white/15 rounded-lg p-4 hover:bg-pixel-white/15 transition-colors duration-200 group ${className}`}
+      className={`bg-surface/10 border border-surface/15 rounded-lg p-4 hover:bg-surface/15 transition-colors duration-200 group ${className}`}
     >
       <div className="flex items-start justify-between gap-2 mb-2">
-        <span className="text-[0.75rem] leading-snug tracking-[0.06em] uppercase text-pixel-black/60 whitespace-nowrap">
+        <span className="text-[0.75rem] leading-snug tracking-[0.06em] uppercase text-ink/60 whitespace-nowrap">
           {label}
         </span>
-        <span className="shrink-0 text-pixel-black/60 group-hover:text-pixel-pink transition-colors">
+        <span className="shrink-0 text-ink/60 group-hover:text-gold transition-colors">
           {icon}
         </span>
       </div>
-      <div className="font-display text-lg lg:text-xl text-pixel-black tracking-tight leading-snug break-words">
+      <div className="font-display text-lg lg:text-xl text-ink tracking-tight leading-snug break-words">
         {value}
       </div>
       {subtitle && (
-        <div className="text-[0.75rem] text-pixel-black/50 mt-1 leading-snug break-words">
+        <div className="text-[0.75rem] text-ink/50 mt-1 leading-snug break-words">
           {subtitle}
         </div>
       )}

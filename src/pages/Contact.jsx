@@ -44,14 +44,14 @@ export default function Contact() {
 
   if (sent) {
     return (
-      <div className="relative bg-pixel-blush">
+      <div className="relative bg-surface">
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="panel-framed rounded-2xl px-6 py-14 sm:px-12 text-center">
-            <div className="relative inline-grid place-items-center w-16 h-16 rounded-full mb-6 bg-pixel-forest">
-              <CheckCircle2 className="w-7 h-7 text-pixel-pink" />
+            <div className="relative inline-grid place-items-center w-16 h-16 rounded-full mb-6 bg-scarlet">
+              <CheckCircle2 className="w-7 h-7 text-gold" />
             </div>
-            <h1 className="relative display-heading text-4xl sm:text-5xl text-pixel-black">Message received.</h1>
-            <p className="relative mt-4 max-w-md mx-auto text-sm sm:text-base leading-relaxed text-pixel-black/75">
+            <h1 className="relative display-heading text-4xl sm:text-5xl text-ink">Message received.</h1>
+            <p className="relative mt-4 max-w-md mx-auto text-sm sm:text-base leading-relaxed text-ink/75">
               Thanks, {form.name || "stranger"}. I read every message — replies usually go out within a week.
             </p>
             <button onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); }}
@@ -63,23 +63,23 @@ export default function Contact() {
   }
 
   return (
-    <div className="relative bg-pixel-blush">
+    <div className="relative bg-surface">
       <section className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 md:pt-28">
         {/* Envelope flap peeking out from behind the card — the letter is "inside" */}
         <div aria-hidden="true" className="absolute left-1/2 -translate-x-1/2 top-3 lg:top-6 w-[88%] max-w-[520px] h-20 sm:h-24">
-          <div className="absolute inset-0 bg-pixel-pink rounded-t-2xl" style={{ clipPath: "polygon(0 100%, 50% 15%, 100% 100%)" }} />
+          <div className="absolute inset-0 bg-gold rounded-t-2xl" style={{ clipPath: "polygon(0 100%, 50% 15%, 100% 100%)" }} />
         </div>
 
         {/* ── Cream bordered contact box ── */}
         <div className="panel-framed relative z-10 rounded-2xl px-5 py-10 sm:px-10 lg:px-14 lg:py-14">
           <div className="relative text-center">
             <StickerBadge icon={Mail} className="mx-auto mb-4" />
-            <h1 className="display-heading text-5xl sm:text-6xl text-pixel-black">Contact</h1>
+            <h1 className="display-heading text-5xl sm:text-6xl text-ink">Contact</h1>
             <a href={`mailto:${EMAIL}`}
-              className="inline-block mt-4 text-sm sm:text-base font-semibold text-pixel-black underline decoration-pixel-pink decoration-2 underline-offset-[6px] hover:decoration-pixel-forest">
+              className="inline-block mt-4 text-sm sm:text-base font-semibold text-ink underline decoration-gold decoration-2 underline-offset-[6px] hover:decoration-scarlet">
               {EMAIL}
             </a>
-            <p className="mt-3 text-[0.7rem] font-extrabold uppercase tracking-[0.06em] text-pixel-black">
+            <p className="mt-3 text-[0.7rem] font-extrabold uppercase tracking-[0.06em] text-ink">
               Business Inquiries ONLY
             </p>
           </div>
@@ -87,38 +87,38 @@ export default function Contact() {
           <form onSubmit={submit} className="relative mt-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <Label htmlFor="name" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-pixel-black">Name <span className="text-pixel-black">*</span></Label>
+                <Label htmlFor="name" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-ink">Name <span className="text-ink">*</span></Label>
                 <Input id="name" value={form.name} onChange={(e) => update("name", e.target.value)} placeholder="Your name"
-                  className="mt-2 h-12 bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40" />
-                {errors.name && <p className="text-sm font-bold text-pixel-black mt-1.5">{errors.name}</p>}
+                  className="mt-2 h-12 bg-surface border-ink text-ink placeholder:text-ink/40" />
+                {errors.name && <p className="text-sm font-bold text-ink mt-1.5">{errors.name}</p>}
               </div>
               <div>
-                <Label htmlFor="email" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-pixel-black">Email <span className="text-pixel-black">*</span></Label>
+                <Label htmlFor="email" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-ink">Email <span className="text-ink">*</span></Label>
                 <Input id="email" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="you@example.com"
-                  className="mt-2 h-12 bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40" />
-                {errors.email && <p className="text-sm font-bold text-pixel-black mt-1.5">{errors.email}</p>}
+                  className="mt-2 h-12 bg-surface border-ink text-ink placeholder:text-ink/40" />
+                {errors.email && <p className="text-sm font-bold text-ink mt-1.5">{errors.email}</p>}
               </div>
             </div>
             <div className="mt-5">
-              <Label htmlFor="subject" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-pixel-black">Subject <span className="text-pixel-black">*</span></Label>
+              <Label htmlFor="subject" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-ink">Subject <span className="text-ink">*</span></Label>
               <Input id="subject" value={form.subject} onChange={(e) => update("subject", e.target.value)} placeholder="Business / partnerships / feedback"
-                className="mt-2 h-12 bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40" />
-              {errors.subject && <p className="text-sm font-bold text-pixel-black mt-1.5">{errors.subject}</p>}
+                className="mt-2 h-12 bg-surface border-ink text-ink placeholder:text-ink/40" />
+              {errors.subject && <p className="text-sm font-bold text-ink mt-1.5">{errors.subject}</p>}
             </div>
             <div className="mt-5">
               <div className="flex items-center justify-between mb-2">
-                <Label htmlFor="message" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-pixel-black">Message <span className="text-pixel-black">*</span></Label>
-                <span className={`text-sm font-bold tabular-nums px-2.5 py-0.5 rounded-full border ${charsOver ? "bg-pixel-forest border-pixel-teal text-pixel-black" : "bg-pixel-blush border-pixel-teal text-pixel-black/60"}`}>
+                <Label htmlFor="message" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-ink">Message <span className="text-ink">*</span></Label>
+                <span className={`text-sm font-bold tabular-nums px-2.5 py-0.5 rounded-full border ${charsOver ? "bg-scarlet border-ink text-ink" : "bg-surface border-ink text-ink/60"}`}>
                   {form.message.length} / {MAX_MESSAGE}
                 </span>
               </div>
               <Textarea id="message" rows={7} value={form.message} onChange={(e) => update("message", e.target.value)} placeholder="Say what's on your mind…"
-                className="bg-pixel-blush border-pixel-teal text-pixel-black placeholder:text-pixel-black/40 resize-none" />
-              {errors.message && <p className="text-sm font-bold text-pixel-black mt-1.5">{errors.message}</p>}
+                className="bg-surface border-ink text-ink placeholder:text-ink/40 resize-none" />
+              {errors.message && <p className="text-sm font-bold text-ink mt-1.5">{errors.message}</p>}
             </div>
             <button type="submit" disabled={loading || !allFilled}
               className="mt-8 w-full pill pill-gold h-12 px-8 text-sm disabled:opacity-40">
-              {loading ? <><span className="w-4 h-4 rounded-full border-2 border-pixel-forest/30 border-t-pixel-forest animate-spin" /> Sending…</> : <><Send className="w-4 h-4" /> Send message</>}
+              {loading ? <><span className="w-4 h-4 rounded-full border-2 border-scarlet/30 border-t-scarlet animate-spin" /> Sending…</> : <><Send className="w-4 h-4" /> Send message</>}
             </button>
           </form>
         </div>
@@ -153,15 +153,15 @@ function ChannelBlock({ wordmark, sub, Icon, href, action, caption }) {
   return (
     <div className="text-center">
       <div className="inline-flex flex-col items-center">
-        <div className="w-16 h-16 grid place-items-center bg-pixel-pink text-pixel-white border border-pixel-black/10 shadow-pixel-sm rounded-lg">
+        <div className="w-16 h-16 grid place-items-center bg-gold text-surface border border-ink/10 shadow-soft-sm rounded-lg">
           <Icon className="w-7 h-7" />
         </div>
-        <div className="display-hero mt-3 text-2xl text-pixel-black">{wordmark}</div>
-        <div className="text-[0.75rem] font-bold uppercase tracking-[0.06em] text-pixel-black mt-1">{sub}</div>
+        <div className="display-hero mt-3 text-2xl text-ink">{wordmark}</div>
+        <div className="text-[0.75rem] font-bold uppercase tracking-[0.06em] text-ink mt-1">{sub}</div>
       </div>
       <div className="mt-5">
         <a href={href} target="_blank" rel="noopener noreferrer" className="pill pill-gold h-10 px-6 text-sm">{action}</a>
-        <p className="mt-2 text-[0.8rem] font-extrabold uppercase tracking-[0.06em] text-pixel-black/60">{caption}</p>
+        <p className="mt-2 text-[0.8rem] font-extrabold uppercase tracking-[0.06em] text-ink/60">{caption}</p>
       </div>
     </div>
   );

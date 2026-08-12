@@ -28,10 +28,10 @@ export function YearRecap({ data }) {
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       <div className="mb-14">
         <Kicker>The highlight reel</Kicker>
-        <h2 className="display-heading mt-3 text-3xl sm:text-4xl lg:text-5xl text-pixel-black tracking-tight">
+        <h2 className="display-heading mt-3 text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight">
           The Year in Review
         </h2>
-        <p className="mt-4 text-pixel-black/70 max-w-2xl">
+        <p className="mt-4 text-ink/70 max-w-2xl">
           From the first credits to the last — here's how 2026 shaped up.
         </p>
       </div>
@@ -41,7 +41,7 @@ export function YearRecap({ data }) {
         <div className="lg:col-span-8">
           <Link
             to={`/reviews/${goty?.slug}`}
-            className="group relative flex flex-col h-full overflow-hidden rounded-3xl bg-pixel-blush border border-pixel-teal transition-all duration-500 hover:shadow-pixel-lg"
+            className="group relative flex flex-col h-full overflow-hidden rounded-3xl bg-surface border border-ink transition-all duration-500 hover:shadow-soft-lg"
           >
             <div className="relative aspect-[16/9] sm:aspect-[21/9] overflow-hidden">
               <img
@@ -49,22 +49,22 @@ export function YearRecap({ data }) {
                 alt={goty?.title || "Game of the Year"}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-pixel-white/90 via-pixel-white/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-surface/90 via-surface/40 to-transparent" />
 
               <div className="absolute top-4 left-4">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pixel-mint text-pixel-black text-[0.7rem] sm:text-sm font-bold tracking-wider uppercase shadow-lg">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-crimson text-ink text-[0.7rem] sm:text-sm font-bold tracking-wider uppercase shadow-lg">
                   <Trophy className="w-3.5 h-3.5" /> Game of the Year
                 </span>
               </div>
 
             {/* Medallion score badge, overlapping the image edge */}
             <div className="absolute top-4 right-4">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-pixel-mint shadow-lg grid place-items-center">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-crimson shadow-lg grid place-items-center">
                 <div className="text-center leading-none">
-                  <div className="font-display text-lg sm:text-2xl text-pixel-black">
+                  <div className="font-display text-lg sm:text-2xl text-ink">
                     {goty?.rating ?? "—"}
                   </div>
-                  <div className="text-[0.55rem] sm:text-[0.6rem] font-bold uppercase tracking-wider text-pixel-black/60">
+                  <div className="text-[0.55rem] sm:text-[0.6rem] font-bold uppercase tracking-wider text-ink/60">
                     / 10
                   </div>
                 </div>
@@ -72,28 +72,28 @@ export function YearRecap({ data }) {
               </div>
 
               <div className="absolute bottom-4 left-4 right-20 sm:right-28">
-                <div className="font-display text-xl sm:text-2xl lg:text-3xl text-pixel-black group-hover:text-pixel-pink transition-colors drop-shadow-lg leading-tight">
+                <div className="font-display text-xl sm:text-2xl lg:text-3xl text-ink group-hover:text-gold transition-colors drop-shadow-lg leading-tight">
                   {goty?.title}
                 </div>
                 <div className="flex items-center gap-2.5 mt-2.5 flex-wrap">
                   {goty?.platform && (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-pixel-black/20 text-pixel-black text-[0.75rem] sm:text-sm">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-ink/20 text-ink text-[0.75rem] sm:text-sm">
                       <Gamepad2 className="w-3 h-3" />
                       {goty.platform}
                     </div>
                   )}
                   {goty?.date && (
-                    <span className="text-[0.75rem] sm:text-sm text-pixel-black/60">{goty.date}</span>
+                    <span className="text-[0.75rem] sm:text-sm text-ink/60">{goty.date}</span>
                   )}
                 </div>
               </div>
             </div>
 
             <div className="p-5 pt-8 sm:pt-9 flex items-center justify-between gap-3 flex-1">
-              <p className="text-sm text-pixel-black/80 flex-1 line-clamp-2">
+              <p className="text-sm text-ink/80 flex-1 line-clamp-2">
                 {goty?.summary || "Read the full review"}
               </p>
-              <ArrowUpRight className="w-5 h-5 text-pixel-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
+              <ArrowUpRight className="w-5 h-5 text-ink group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
             </div>
           </Link>
         </div>
@@ -106,7 +106,7 @@ export function YearRecap({ data }) {
             value={data.biggestSurprise?.title || "—"}
             subtitle={data.biggestSurprise ? `Scored ${data.biggestSurprise.rating}/10` : null}
             slug={data.biggestSurprise?.slug}
-            badgeClass="bg-pixel-teal text-pixel-blush"
+            badgeClass="bg-ink text-surface"
           />
           <RecapHighlightCard
             icon={<Frown className="w-4 h-4" />}
@@ -114,10 +114,10 @@ export function YearRecap({ data }) {
             value={data.biggestDisappointment?.title || "—"}
             subtitle={data.biggestDisappointment ? `Scored ${data.biggestDisappointment.rating}/10` : null}
             slug={data.biggestDisappointment?.slug}
-            badgeClass="bg-pixel-pink text-pixel-white"
+            badgeClass="bg-gold text-surface"
           />
 
-          <div className="rounded-2xl border border-pixel-teal bg-pixel-blush p-1 flex-1 grid grid-cols-2 divide-x divide-pixel-teal/40">
+          <div className="rounded-2xl border border-ink bg-surface p-1 flex-1 grid grid-cols-2 divide-x divide-ink/40">
             <MiniStat
               icon={<Gamepad2 className="w-4 h-4" />}
               label="Platforms"
@@ -141,26 +141,26 @@ function RecapHighlightCard({
   value,
   subtitle,
   slug,
-  badgeClass = "bg-pixel-teal text-pixel-blush",
+  badgeClass = "bg-ink text-surface",
   className = "",
 }) {
   const content = (
     <div
-      className={`group h-full bg-pixel-blush border border-pixel-teal rounded-2xl p-4 transition-all duration-300 hover:border-pixel-pink hover:shadow-md ${className}`}
+      className={`group h-full bg-surface border border-ink rounded-2xl p-4 transition-all duration-300 hover:border-gold hover:shadow-md ${className}`}
     >
       <div className="flex items-start justify-between gap-2 mb-3">
-        <span className="text-[0.7rem] leading-snug tracking-[0.06em] uppercase text-pixel-black/60">
+        <span className="text-[0.7rem] leading-snug tracking-[0.06em] uppercase text-ink/60">
           {label}
         </span>
         <span className={`shrink-0 w-7 h-7 rounded-full grid place-items-center ${badgeClass}`}>
           {icon}
         </span>
       </div>
-      <div className="font-display text-base sm:text-lg text-pixel-black tracking-tight leading-snug break-words line-clamp-2">
+      <div className="font-display text-base sm:text-lg text-ink tracking-tight leading-snug break-words line-clamp-2">
         {value}
       </div>
       {subtitle && (
-        <div className="text-sm text-pixel-black/60 mt-1 leading-tight break-words">
+        <div className="text-sm text-ink/60 mt-1 leading-tight break-words">
           {subtitle}
         </div>
       )}
@@ -181,9 +181,9 @@ function RecapHighlightCard({
 function MiniStat({ icon, label, value }) {
   return (
     <div className="flex flex-col items-center justify-center text-center px-3 py-4">
-      <span className="text-pixel-black/50 mb-1.5">{icon}</span>
-      <div className="font-display text-2xl text-pixel-black leading-none">{value}</div>
-      <div className="text-[0.65rem] font-bold uppercase tracking-[0.06em] text-pixel-black/50 mt-1">
+      <span className="text-ink/50 mb-1.5">{icon}</span>
+      <div className="font-display text-2xl text-ink leading-none">{value}</div>
+      <div className="text-[0.65rem] font-bold uppercase tracking-[0.06em] text-ink/50 mt-1">
         {label}
       </div>
     </div>

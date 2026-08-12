@@ -43,7 +43,7 @@ function useTwitchLive(handle) {
 
 const navLink = ({ isActive }) =>
   `relative py-2 text-[0.8rem] font-semibold uppercase tracking-[0.06em] transition-colors ${
-    isActive ? "text-pixel-black" : "text-pixel-black/60 hover:text-pixel-black"
+    isActive ? "text-ink" : "text-ink/60 hover:text-ink"
   }`;
 
 export const Navbar = () => {
@@ -53,11 +53,11 @@ export const Navbar = () => {
   const live = useTwitchLive(handle);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-pixel-mint/95 border-b border-pixel-black/10">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-crimson/95 border-b border-ink/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
         <Link to="/" className="flex items-center gap-2 shrink-0 mr-2">
-          <span className="display-heading text-xl text-pixel-black tracking-tight">
-            {creator.name}<span className="text-pixel-pink">.</span>
+          <span className="display-heading text-xl text-ink tracking-tight">
+            {creator.name}<span className="text-gold">.</span>
           </span>
         </Link>
 
@@ -67,7 +67,7 @@ export const Navbar = () => {
               {({ isActive }) => (
                 <>
                   {l.label}
-                  {isActive && <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 rounded-full bg-pixel-pink" />}
+                  {isActive && <span className="absolute -bottom-0.5 left-0 right-0 h-0.5 rounded-full bg-gold" />}
                 </>
               )}
             </NavLink>
@@ -78,26 +78,26 @@ export const Navbar = () => {
           {live?.isLive && (
             <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer"
               className="pill pill-live h-8 px-3 rounded-full text-[0.75rem] uppercase tracking-[0.06em]">
-              <span className="w-2 h-2 rounded-full bg-pixel-forest" /> Live
+              <span className="w-2 h-2 rounded-full bg-scarlet" /> Live
             </a>
           )}
           {user && (
             <div className="hidden md:flex items-center gap-3">
               <Link to="/admin" className="pill pill-gold h-8 px-4 rounded-lg text-[0.7rem] uppercase tracking-[0.06em]">Admin</Link>
               <button onClick={logout} aria-label="Log out"
-                className="w-8 h-8 grid place-items-center rounded-lg border border-pixel-black/10 text-pixel-black hover:bg-pixel-blush/60 transition-colors">
+                className="w-8 h-8 grid place-items-center rounded-lg border border-ink/10 text-ink hover:bg-surface/60 transition-colors">
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
           )}
-          <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-pixel-black" aria-label="Toggle menu">
+          <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-ink" aria-label="Toggle menu">
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
       {open && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-pixel-mint pt-20 px-6 overflow-y-auto">
+        <div className="lg:hidden fixed inset-0 z-40 bg-crimson pt-20 px-6 overflow-y-auto">
           <div className="flex flex-col items-start gap-3">
             {links.map((l) => (
               <NavLink key={l.to} to={l.to} onClick={() => setOpen(false)} end={l.to === "/"}
@@ -109,7 +109,7 @@ export const Navbar = () => {
             ))}
           </div>
           {user && (
-            <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-pixel-black/10">
+            <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-ink/10">
               <Link to="/admin" onClick={() => setOpen(false)} className="pill pill-gold h-11 px-6 rounded-lg text-sm">Admin</Link>
               <button onClick={() => { logout(); setOpen(false); }} className="pill pill-outline h-11 px-6 rounded-lg text-sm">Log out</button>
             </div>

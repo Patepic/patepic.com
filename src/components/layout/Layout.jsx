@@ -9,7 +9,7 @@ export const Layout = () => {
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-pixel-white">
+    <div className="relative min-h-screen flex flex-col bg-surface">
       <Navbar />
       <main className="flex-1 relative z-10 pt-16">
         <Outlet />

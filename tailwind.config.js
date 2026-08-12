@@ -20,24 +20,17 @@ module.exports = {
         sans: ['"Inter"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Token names kept as-is (pixel-forest/teal/mint/pink/blush/black/white)
-        // so every existing Tailwind class site needs zero edits — only the
-        // hex values changed, per the dark-theme brand palette below
-        // (~55% #17151A / 20% #A51F36 / 12% #C93646 / 8% #C89A4B / 5% #F2E8E3):
-        //   pixel-forest -> primary action red      (#C93646)
-        //   pixel-teal   -> hairline borders/cream   (#F2E8E3, light-on-dark)
-        //   pixel-mint   -> card/section fill        (#A51F36 dark crimson)
-        //   pixel-pink   -> accent/CTA gold          (#C89A4B)
-        //   pixel-blush  -> page background          (#17151A, dominant)
-        //   pixel-black  -> ink/text                 (#F2E8E3, INVERTED: light text on dark bg)
-        //   pixel-white  -> surface/card background  (#17151A, INVERTED: dark surface)
-        'pixel-forest': '#C93646',
-        'pixel-teal': '#F2E8E3',
-        'pixel-mint': '#A51F36',
-        'pixel-pink': '#C89A4B',
-        'pixel-blush': '#17151A',
-        'pixel-black': '#F2E8E3',
-        'pixel-white': '#17151A',
+        // 5 named colors, one per brand hex — dark theme:
+        //   surface  #17151A  near-black, ~55%, page/card background
+        //   crimson  #A51F36  dark red,   ~20%, section/card fills
+        //   scarlet  #C93646  bright red, ~12%, primary action color
+        //   gold     #C89A4B  gold,        ~8%, accent/CTA color
+        //   ink      #F2E8E3  cream,       ~5%, text + hairline borders
+        surface: '#17151A',
+        crimson: '#A51F36',
+        scarlet: '#C93646',
+        gold: '#C89A4B',
+        ink: '#F2E8E3',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
@@ -58,10 +51,9 @@ module.exports = {
       boxShadow: {
         // Shadows stay near-black regardless of theme (elevation shadows are
         // conventionally dark even on dark surfaces), using #17151A's rgb.
-        'pixel-sm': '0 1px 2px 0 rgba(23, 21, 26, 0.35)',
-        pixel: '0 6px 20px -6px rgba(23, 21, 26, 0.5)',
-        'pixel-lg': '0 16px 40px -12px rgba(23, 21, 26, 0.6)',
-        'pixel-pink': '0 6px 20px -6px rgba(23, 21, 26, 0.5)',
+        'soft-sm': '0 1px 2px 0 rgba(23, 21, 26, 0.35)',
+        soft: '0 6px 20px -6px rgba(23, 21, 26, 0.5)',
+        'soft-lg': '0 16px 40px -12px rgba(23, 21, 26, 0.6)',
       },
       keyframes: {
         'accordion-down': { from: { height: '0' }, to: { height: 'var(--radix-accordion-content-height)' } },

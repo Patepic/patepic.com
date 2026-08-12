@@ -21,24 +21,18 @@ body {
 }
 
 /* ---------------------------------------------------------------
-   Palette tokens — dark theme: ~55% near-black (#17151A) as the
-   dominant surface, ~20% dark crimson (#A51F36) for card/section
-   fills, ~12% red (#C93646) as the primary action color, ~8% gold
-   (#C89A4B) as accent, ~5% cream (#F2E8E3) as text/light accents.
-   Ink and surface roles are inverted from a light theme: pixel-black
-   is now the light ink color (text-on-dark), pixel-white is now the
-   dark surface color. Hover-darkening uses a brightness() filter
-   rather than a second hex per color, so the palette stays limited
-   to exactly these 5 hex values.
+   Palette tokens — dark theme, 5 named colors covering every use:
+     --surface  #17151A  near-black, ~55%, page/card background
+     --crimson  #A51F36  dark red,   ~20%, section/card fills
+     --scarlet  #C93646  bright red, ~12%, primary action color
+     --gold     #C89A4B  gold,        ~8%, accent/CTA color
+     --ink      #F2E8E3  cream,       ~5%, text + hairline borders
    --------------------------------------------------------------- */
 :root {
-  --pixel-forest: #C93646;
-  --pixel-teal: #F2E8E3;
-  --pixel-mint: #A51F36;
-  --pixel-pink: #C89A4B;
-  --pixel-blush: #17151A;
-  --pixel-black: #F2E8E3;
-  --pixel-white: #17151A;
+  --surface: #17151A;
+  --crimson: #A51F36;
+  --scarlet: #C93646;
+  --gold: #C89A4B;
   --ink: #F2E8E3;
   --ink-muted: rgba(242, 232, 227, 0.65);
 
@@ -76,27 +70,30 @@ body {
 }
 
 .pill-ember {
-  background: var(--pixel-forest);
-  color: var(--pixel-black);
+  background: var(--scarlet);
+  color: var(--ink);
 }
 .pill-ember:hover { filter: brightness(1.15); box-shadow: 0 6px 20px -6px rgba(23, 21, 26, 0.6); }
 
 .pill-gold {
-  background: var(--pixel-pink);
-  color: var(--pixel-white);
+  background: var(--gold);
+  color: var(--surface);
 }
 .pill-gold:hover { filter: brightness(1.1); box-shadow: 0 6px 20px -6px rgba(23, 21, 26, 0.55); }
 
+/* Outline buttons use the neutral ink color rather than the brand red,
+   so they stay legible sitting on colored surfaces like the footer
+   (dark crimson) — an accent-colored border is enough to read as a button. */
 .pill-outline {
   background: transparent;
-  color: var(--pixel-forest);
-  border-color: rgba(242, 232, 227, 0.18);
+  color: var(--ink);
+  border-color: rgba(242, 232, 227, 0.3);
 }
-.pill-outline:hover { background: rgba(201, 54, 70, 0.1); border-color: rgba(242, 232, 227, 0.3); }
+.pill-outline:hover { background: rgba(242, 232, 227, 0.08); border-color: rgba(242, 232, 227, 0.45); }
 
 .pill-live {
   background: rgba(200, 154, 75, 0.18);
-  color: var(--pixel-pink);
+  color: var(--gold);
   border-color: rgba(242, 232, 227, 0.14);
 }
 .pill-live:hover { background: rgba(200, 154, 75, 0.28); }
@@ -136,8 +133,8 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.03em;
   line-height: 1.4;
-  color: var(--pixel-black);
-  background: var(--pixel-forest);
+  color: var(--ink);
+  background: var(--scarlet);
   border: 1px solid rgba(242, 232, 227, 0.1);
   border-radius: 10px;
   padding: 0.6rem 1rem;
@@ -154,7 +151,7 @@ body {
 /* White reading surface — hairline border, soft shadow, no inset
    double-border. */
 .panel-framed {
-  background: var(--pixel-white);
+  background: var(--surface);
   border: 1px solid rgba(242, 232, 227, 0.1);
   box-shadow: 0 1px 2px 0 rgba(23, 21, 26, 0.35);
 }
@@ -206,8 +203,8 @@ body {
   border-radius: 9999px;
   display: grid;
   place-items: center;
-  background: var(--pixel-forest);
-  color: var(--pixel-black);
+  background: var(--scarlet);
+  color: var(--ink);
   box-shadow: 0 6px 20px -6px rgba(23, 21, 26, 0.45);
   opacity: 0;
   transform: translateY(8px);
@@ -224,7 +221,7 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid var(--pixel-pink);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
 

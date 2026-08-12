@@ -58,11 +58,11 @@ export default function Reviews() {
 
   return (
     <div>
-      <div className="relative bg-pixel-blush pb-20 md:pb-28">
+      <div className="relative bg-surface pb-20 md:pb-28">
         <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 lg:pt-14 text-center">
           <Kicker>Every finished playthrough</Kicker>
-          <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-pixel-black">Reviews</h1>
-          <p className="mt-5 mx-auto max-w-xl text-sm sm:text-base leading-relaxed text-pixel-black/70">
+          <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-ink">Reviews</h1>
+          <p className="mt-5 mx-auto max-w-xl text-sm sm:text-base leading-relaxed text-ink/70">
             Every finished playthrough, written up in full. Filter by platform, genre or score range —
             sorted newest first unless you say otherwise.
           </p>
@@ -73,13 +73,13 @@ export default function Reviews() {
           <div className="panel-framed rounded-2xl p-5 sm:p-7">
             <div className="relative flex flex-col md:flex-row gap-3">
               <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-pixel-black" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-ink" />
                 <Input placeholder="Search by title, platform, or genre…" value={query} onChange={(e) => setQuery(e.target.value)}
-                  className="pl-11 h-12 bg-pixel-white border-pixel-teal text-pixel-black placeholder:text-pixel-black/40" />
+                  className="pl-11 h-12 bg-surface border-ink text-ink placeholder:text-ink/40" />
               </div>
               <Select value={sort} onValueChange={setSort}>
-                <SelectTrigger className="md:w-56 h-12 bg-pixel-white border-pixel-teal text-pixel-black"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-pixel-white border-pixel-teal">
+                <SelectTrigger className="md:w-56 h-12 bg-surface border-ink text-ink"><SelectValue /></SelectTrigger>
+                <SelectContent className="bg-surface border-ink">
                   <SelectItem value="recent">Newest first</SelectItem>
                   <SelectItem value="oldest">Oldest first</SelectItem>
                   <SelectItem value="score-desc">Highest score</SelectItem>
@@ -90,13 +90,13 @@ export default function Reviews() {
               <button onClick={() => setMobileFilters(!mobileFilters)}
                 className="md:hidden pill pill-outline h-12 px-5 text-sm">
                 <SlidersHorizontal className="w-4 h-4" /> Filters
-                {activeCount > 0 && <span className="ml-1 px-2 py-0.5 rounded-full bg-pixel-forest text-pixel-black text-sm">{activeCount}</span>}
+                {activeCount > 0 && <span className="ml-1 px-2 py-0.5 rounded-full bg-scarlet text-ink text-sm">{activeCount}</span>}
               </button>
             </div>
 
             <div className={`relative mt-6 grid grid-cols-1 sm:grid-cols-3 gap-6 ${mobileFilters ? "grid" : "hidden md:grid"}`}>
               <div>
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-pixel-black mb-3">Verdict</p>
+                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-ink mb-3">Verdict</p>
                 <div className="flex gap-3 flex-wrap">
                   {[
                     { value: "all", label: "All" },
@@ -111,27 +111,27 @@ export default function Reviews() {
                 </div>
               </div>
               <div>
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-pixel-black mb-3">Platform</p>
+                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-ink mb-3">Platform</p>
                 <Select value={selectedPlatforms[0] ?? "all"} onValueChange={(v) => setSelectedPlatforms(v === "all" ? [] : [v])}>
-                  <SelectTrigger className="w-full bg-pixel-white border-pixel-teal text-pixel-black"><SelectValue placeholder="All platforms" /></SelectTrigger>
-                  <SelectContent className="bg-pixel-white border-pixel-teal">
+                  <SelectTrigger className="w-full bg-surface border-ink text-ink"><SelectValue placeholder="All platforms" /></SelectTrigger>
+                  <SelectContent className="bg-surface border-ink">
                     <SelectItem value="all">All platforms</SelectItem>
                     {PLATFORMS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div>
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-pixel-black mb-3">Genre</p>
+                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-ink mb-3">Genre</p>
                 <Select value={selectedGenres[0] ?? "all"} onValueChange={(v) => setSelectedGenres(v === "all" ? [] : [v])}>
-                  <SelectTrigger className="w-full bg-pixel-white border-pixel-teal text-pixel-black"><SelectValue placeholder="All genres" /></SelectTrigger>
-                  <SelectContent className="bg-pixel-white border-pixel-teal">
+                  <SelectTrigger className="w-full bg-surface border-ink text-ink"><SelectValue placeholder="All genres" /></SelectTrigger>
+                  <SelectContent className="bg-surface border-ink">
                     <SelectItem value="all">All genres</SelectItem>
                     {GENRES.map((g) => <SelectItem key={g} value={g}>{g}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="sm:col-span-2">
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-pixel-black mb-3">Score: {scoreRange[0]} – {scoreRange[1]}</p>
+                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-ink mb-3">Score: {scoreRange[0]} – {scoreRange[1]}</p>
                 <Slider min={1} max={10} step={1} value={scoreRange} onValueChange={setScoreRange} />
               </div>
               <div className="flex items-end">
@@ -147,7 +147,7 @@ export default function Reviews() {
 
         {/* ── Listings (event-card layout) ── */}
         <section className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 lg:mt-16">
-          <div className="mb-6 text-sm font-bold uppercase tracking-[0.06em] text-pixel-black">
+          <div className="mb-6 text-sm font-bold uppercase tracking-[0.06em] text-ink">
             {loading ? <Skeleton className="h-4 w-48" /> : (
               <>Showing {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length} reviews</>
             )}
@@ -159,8 +159,8 @@ export default function Reviews() {
             </div>
           ) : filtered.length === 0 ? (
             <div className="panel-framed rounded-2xl p-12 text-center">
-              <p className="display-heading text-2xl text-pixel-black mb-2">No reviews match those filters.</p>
-              <p className="text-sm text-pixel-black/70">Try widening the score range or clearing filters.</p>
+              <p className="display-heading text-2xl text-ink mb-2">No reviews match those filters.</p>
+              <p className="text-sm text-ink/70">Try widening the score range or clearing filters.</p>
             </div>
           ) : (
             <>
@@ -176,10 +176,10 @@ export default function Reviews() {
                     {Array.from({ length: totalPages }, (_, i) => i + 1).filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
                       .reduce((acc, p, idx, arr) => { if (idx > 0 && p - arr[idx - 1] > 1) acc.push("…"); acc.push(p); return acc; }, [])
                       .map((p, i) => p === "…" ? (
-                        <span key={`e-${i}`} className="h-9 w-9 flex items-center justify-center text-sm text-pixel-black">…</span>
+                        <span key={`e-${i}`} className="h-9 w-9 flex items-center justify-center text-sm text-ink">…</span>
                       ) : (
                         <button key={p} onClick={() => setPage(p)}
-                          className={`h-9 w-9 rounded-full text-sm font-bold transition-colors ${page === p ? "bg-pixel-forest text-pixel-black" : "bg-pixel-mint border border-pixel-black/10 text-pixel-black"}`}>{p}</button>
+                          className={`h-9 w-9 rounded-full text-sm font-bold transition-colors ${page === p ? "bg-scarlet text-ink" : "bg-crimson border border-ink/10 text-ink"}`}>{p}</button>
                       ))}
                   </div>
                   <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}

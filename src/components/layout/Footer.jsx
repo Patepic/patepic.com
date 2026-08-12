@@ -12,7 +12,7 @@ const navLinks = [
 
 export const Footer = () => {
   return (
-    <footer className="relative mt-16 bg-pixel-mint border-t border-pixel-black/10">
+    <footer className="relative mt-16 bg-crimson border-t border-ink/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
@@ -26,22 +26,22 @@ export const Footer = () => {
           <div className="flex items-center gap-2">
             <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer" data-testid="footer-twitch"
               aria-label="Twitch"
-              className="w-8 h-8 grid place-items-center rounded-lg bg-pixel-forest text-pixel-black hover:bg-pixel-teal hover:text-pixel-white transition-colors">
+              className="w-8 h-8 grid place-items-center rounded-lg bg-scarlet text-ink hover:bg-ink hover:text-surface transition-colors">
               <Twitch className="w-4 h-4" />
             </a>
             <a href={creator.youtube.url} target="_blank" rel="noopener noreferrer" data-testid="footer-youtube"
               aria-label="YouTube"
-              className="w-8 h-8 grid place-items-center rounded-lg bg-pixel-forest text-pixel-black hover:bg-pixel-teal hover:text-pixel-white transition-colors">
+              className="w-8 h-8 grid place-items-center rounded-lg bg-scarlet text-ink hover:bg-ink hover:text-surface transition-colors">
               <Youtube className="w-4 h-4" />
             </a>
             <a href="mailto:contact@patepic.com" aria-label="Email"
-              className="w-8 h-8 grid place-items-center rounded-lg bg-pixel-forest text-pixel-black hover:bg-pixel-teal hover:text-pixel-white transition-colors">
+              className="w-8 h-8 grid place-items-center rounded-lg bg-scarlet text-ink hover:bg-ink hover:text-surface transition-colors">
               <Mail className="w-4 h-4" />
             </a>
           </div>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-pixel-black/10 flex flex-wrap items-center justify-between gap-2 text-sm text-pixel-black/60">
+        <div className="mt-6 pt-4 border-t border-ink/10 flex flex-wrap items-center justify-between gap-2 text-sm text-ink/60">
           <span>Copyright © {new Date().getFullYear()} {creator.name}</span>
           <span>{creator.tagline}</span>
         </div>

@@ -9,13 +9,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-pixel-forest text-pixel-black filter hover:brightness-90",
-        accent: "bg-pixel-pink text-pixel-white filter hover:brightness-90",
+        default: "bg-scarlet text-ink filter hover:brightness-90",
+        accent: "bg-gold text-surface filter hover:brightness-90",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-pixel-black/10 text-pixel-forest hover:bg-pixel-forest/[0.06]",
-        secondary: "bg-pixel-blush text-pixel-forest hover:bg-pixel-blush/70",
-        ghost: "text-pixel-black hover:bg-pixel-black/[0.05]",
-        link: "text-pixel-forest underline-offset-4 hover:underline",
+        outline: "border border-ink/10 text-scarlet hover:bg-scarlet/[0.06]",
+        secondary: "bg-surface text-scarlet hover:bg-surface/70",
+        ghost: "text-ink hover:bg-ink/[0.05]",
+        link: "text-scarlet underline-offset-4 hover:underline",
       },
       size: {
         xs: "h-7 px-3 text-xs rounded-md",

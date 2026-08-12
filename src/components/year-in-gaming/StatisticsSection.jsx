@@ -102,19 +102,19 @@ export function StatisticsSection({ data }) {
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       {/* Divider */}
       <div className="flex items-center gap-6 mb-12">
-        <div className="flex-1 h-px bg-pixel-mint" />
-        <Trophy className="w-5 h-5 text-pixel-black" />
-        <div className="flex-1 h-px bg-pixel-mint" />
+        <div className="flex-1 h-px bg-crimson" />
+        <Trophy className="w-5 h-5 text-ink" />
+        <div className="flex-1 h-px bg-crimson" />
       </div>
 
       <div className="mb-12">
-        <p className="text-sm tracking-[0.06em] uppercase text-pixel-black mb-3">
+        <p className="text-sm tracking-[0.06em] uppercase text-ink mb-3">
           By the numbers
         </p>
-        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-pixel-black tracking-tight">
+        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight">
           Gaming Statistics
         </h2>
-        <p className="mt-4 text-pixel-black max-w-2xl">
+        <p className="mt-4 text-ink max-w-2xl">
           Every stat, carefully calculated from my 2026 reviews.
         </p>
       </div>
@@ -131,33 +131,33 @@ export function StatisticsSection({ data }) {
 function StatCard({ icon, label, value, subtitle, slug, accent = "amber" }) {
   const accentMap = {
     // Accent keys are kept for call-site compatibility; every value is warm.
-    amber: { border: "border-pixel-black/10 hover:border-pixel-black/20", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
-    emerald: { border: "border-pixel-black/10 hover:border-pixel-black/20", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
-    rose: { border: "border-pixel-pink ", bg: "bg-pixel-pink", text: "text-pixel-black", icon: "text-pixel-black" },
-    blue: { border: "border-pixel-black/10 hover:border-pixel-black/20", bg: "bg-pixel-mint", text: "text-pixel-black", icon: "text-pixel-black" },
-    purple: { border: "border-pixel-pink ", bg: "bg-pixel-pink/40", text: "text-pixel-black", icon: "text-pixel-black" },
-    stone: { border: "border-pixel-teal ", bg: "bg-pixel-blush", text: "text-pixel-black", icon: "text-pixel-black" },
+    amber: { border: "border-ink/10 hover:border-ink/20", bg: "bg-crimson", text: "text-ink", icon: "text-ink" },
+    emerald: { border: "border-ink/10 hover:border-ink/20", bg: "bg-crimson", text: "text-ink", icon: "text-ink" },
+    rose: { border: "border-gold ", bg: "bg-gold", text: "text-ink", icon: "text-ink" },
+    blue: { border: "border-ink/10 hover:border-ink/20", bg: "bg-crimson", text: "text-ink", icon: "text-ink" },
+    purple: { border: "border-gold ", bg: "bg-gold/40", text: "text-ink", icon: "text-ink" },
+    stone: { border: "border-ink ", bg: "bg-surface", text: "text-ink", icon: "text-ink" },
   };
 
   const colors = accentMap[accent] || accentMap.amber;
 
   const content = (
     <div
-      className={`bg-pixel-blush border ${colors.border} rounded-2xl p-5 transition-all duration-300 hover:shadow-md group h-full`}
+      className={`bg-surface border ${colors.border} rounded-2xl p-5 transition-all duration-300 hover:shadow-md group h-full`}
     >
       <div className="flex items-start justify-between gap-3 mb-3">
-        <span className="text-[0.75rem] leading-snug tracking-[0.06em] uppercase text-pixel-black">
+        <span className="text-[0.75rem] leading-snug tracking-[0.06em] uppercase text-ink">
           {label}
         </span>
         <span className={`shrink-0 ${colors.icon} group-hover:scale-110 transition-transform`}>
           {icon}
         </span>
       </div>
-      <div className="font-display text-base text-pixel-black tracking-tight leading-snug break-words">
+      <div className="font-display text-base text-ink tracking-tight leading-snug break-words">
         {value}
       </div>
       {subtitle && (
-        <div className="text-sm text-pixel-black mt-1.5 leading-tight break-words">
+        <div className="text-sm text-ink mt-1.5 leading-tight break-words">
           {subtitle}
         </div>
       )}

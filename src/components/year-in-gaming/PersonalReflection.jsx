@@ -44,14 +44,14 @@ export function PersonalReflection() {
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-14 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-pixel-black text-[0.7rem] font-bold uppercase tracking-[0.06em] mb-5">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-ink text-[0.7rem] font-bold uppercase tracking-[0.06em] mb-5">
             <Trophy className="w-3.5 h-3.5" />
             Achievements Unlocked
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-pixel-black tracking-tight">
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight">
             My Year in Gaming
           </h2>
-          <p className="mt-4 text-pixel-black max-w-lg mx-auto">
+          <p className="mt-4 text-ink max-w-lg mx-auto">
             Five reflections, unlocked the way this year actually played out.
           </p>
         </div>
@@ -62,29 +62,29 @@ export function PersonalReflection() {
             return (
               <div
                 key={entry.title}
-                className="group relative flex items-center gap-4 sm:gap-5 rounded-2xl bg-pixel-forest px-4 sm:px-6 py-4 sm:py-5"
+                className="group relative flex items-center gap-4 sm:gap-5 rounded-2xl bg-scarlet px-4 sm:px-6 py-4 sm:py-5"
               >
                 <div
-                  className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl grid place-items-center bg-pixel-mint"
+                  className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl grid place-items-center bg-crimson"
                 >
                   <Icon className="w-6 h-6 sm:w-7 sm:h-7" strokeWidth={2.25} />
                 </div>
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.06em] text-pixel-black/80">
+                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.06em] text-ink/80">
                       Achievement Unlocked
                     </p>
                     <span
-                      className="text-[0.6rem] font-bold uppercase tracking-[0.06em] px-2 py-0.5 rounded-full border text-pixel-pink"
+                      className="text-[0.6rem] font-bold uppercase tracking-[0.06em] px-2 py-0.5 rounded-full border text-gold"
                     >
                       {entry.rarity}
                     </span>
                   </div>
-                  <h3 className="mt-1 font-display text-base sm:text-lg text-pixel-black tracking-tight">
+                  <h3 className="mt-1 font-display text-base sm:text-lg text-ink tracking-tight">
                     {entry.title}
                   </h3>
-                  <p className="mt-1.5 text-sm text-pixel-black/80 leading-relaxed">
+                  <p className="mt-1.5 text-sm text-ink/80 leading-relaxed">
                     {entry.placeholder}
                   </p>
                 </div>
