@@ -13,7 +13,7 @@ export function ReviewListing({ review }) {
 
   return (
     <div data-testid={`review-card-${review.slug}`}
-      className="group relative rounded-lg border border-ink/10 bg-crimson p-4 sm:p-5 flex items-center gap-4 transition-colors">
+      className="group relative rounded-lg border border-off-white/10 bg-crimson p-4 sm:p-5 flex items-center gap-4 transition-colors">
       {cover && (
         <Link to={`/reviews/${review.slug}`} className="sticker-frame shrink-0 rounded-md overflow-hidden w-20 h-20 sm:w-24 sm:h-24 bg-crimson">
           <img src={cover} alt={review.title} loading="lazy" className="w-full h-full object-cover" />
@@ -21,19 +21,19 @@ export function ReviewListing({ review }) {
       )}
 
       <div className="min-w-0 flex-1">
-        <Link to={`/reviews/${review.slug}`} className="font-display font-bold text-base sm:text-xl text-ink leading-normal block">
+        <Link to={`/reviews/${review.slug}`} className="font-display font-bold text-base sm:text-xl text-off-white leading-normal block">
           {review.title}
         </Link>
-        <div className="mt-1.5 flex items-center gap-1.5 text-sm font-medium text-ink/80">
+        <div className="mt-1.5 flex items-center gap-1.5 text-sm font-medium text-off-white/80">
           {review.platform && (
-            <span className="w-5 h-5 rounded-full bg-surface border border-ink/10 text-ink grid place-items-center shrink-0">
+            <span className="w-5 h-5 rounded-full bg-surface border border-off-white/10 text-off-white grid place-items-center shrink-0">
               <Gamepad2 className="w-3 h-3" />
             </span>
           )}
           {[review.date, review.platform].filter(Boolean).join(" · ")}
         </div>
         {genres.length > 0 && (
-          <div className="mt-1.5 text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-ink/50">
+          <div className="mt-1.5 text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-off-white/50">
             {genres.slice(0, 3).join(" / ")}
           </div>
         )}

@@ -7,11 +7,11 @@ const tierMeta = {
   "★": { chip: "bg-gold text-surface", label: "Favorite" },
   "S+": { chip: "bg-gold text-surface", label: "Masterpiece" },
   "S": { chip: "bg-gold text-surface", label: "Elite" },
-  "A": { chip: "bg-crimson text-ink", label: "Excellent" },
-  "B": { chip: "bg-crimson text-ink", label: "Great" },
-  "C": { chip: "bg-scarlet text-ink", label: "Above Average" },
-  "D": { chip: "bg-scarlet text-ink", label: "Below Average" },
-  "F": { chip: "bg-scarlet text-ink", label: "Avoid" },
+  "A": { chip: "bg-crimson text-off-white", label: "Excellent" },
+  "B": { chip: "bg-crimson text-off-white", label: "Great" },
+  "C": { chip: "bg-scarlet text-off-white", label: "Above Average" },
+  "D": { chip: "bg-scarlet text-off-white", label: "Below Average" },
+  "F": { chip: "bg-scarlet text-off-white", label: "Avoid" },
 };
 
 const TIERS = ["★", "S+", "S", "A", "B", "C", "D", "F"];
@@ -44,10 +44,10 @@ export default function TierList() {
         <div className="panel-framed rounded-2xl px-4 py-12 sm:px-10 lg:px-14 lg:py-16">
           <div className="relative text-center">
             <Kicker>Where everything landed</Kicker>
-            <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-ink">Tier List</h1>
-            <p className="mt-5 mx-auto max-w-xl text-sm sm:text-base leading-relaxed text-ink/70">
+            <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-off-white">Tier List</h1>
+            <p className="mt-5 mx-auto max-w-xl text-sm sm:text-base leading-relaxed text-off-white/70">
               Sorted by tier, not by score. A 5 can still land in F —
-              {" "}<Link to="/guidelines" className="underline decoration-gold decoration-2 underline-offset-4 font-bold text-ink">read the guidelines</Link>{" "}
+              {" "}<Link to="/guidelines" className="underline decoration-gold decoration-2 underline-offset-4 font-bold text-off-white">read the guidelines</Link>{" "}
               if that surprises you.
             </p>
           </div>
@@ -64,33 +64,33 @@ export default function TierList() {
                     </PillHeading>
                   </div>
 
-                  <div className="mt-5 rounded-xl border border-ink/10 bg-surface/70 p-4 sm:p-5 min-h-[104px]">
+                  <div className="mt-5 rounded-xl border border-off-white/10 bg-surface/70 p-4 sm:p-5 min-h-[104px]">
                     <div className="flex items-center justify-between mb-4">
                       <span className={`inline-flex items-center h-6 px-3 rounded-full text-[0.75rem] font-extrabold uppercase tracking-[0.06em] ${meta.chip}`}>
                         Tier {t}
                       </span>
                       {!loading && (
-                        <span className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-ink">
+                        <span className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-off-white">
                           {grouped[t].length} {grouped[t].length === 1 ? "title" : "titles"}
                         </span>
                       )}
                     </div>
 
                     {loading ? <SkeletonTierCards count={3} /> : grouped[t].length === 0 ? (
-                      <div className="grid place-items-center py-6 display-heading text-sm text-ink/45">Nothing here yet.</div>
+                      <div className="grid place-items-center py-6 display-heading text-sm text-off-white/45">Nothing here yet.</div>
                     ) : (
                       <div className="flex flex-wrap gap-3">
                         {grouped[t].map((r) => {
                           const cover = r.cover_url?.startsWith("http") ? r.cover_url : `https://${r.cover_url}`;
                           return (
                             <Link key={r.slug} to={`/reviews/${r.slug}`}
-                              className="group flex items-start gap-3 bg-crimson border border-ink/10 hover:border-gold rounded-lg p-2 w-full sm:w-[calc(50%-6px)] lg:w-[calc(33.333%-8px)] transition-colors">
+                              className="group flex items-start gap-3 bg-crimson border border-off-white/10 hover:border-gold rounded-lg p-2 w-full sm:w-[calc(50%-6px)] lg:w-[calc(33.333%-8px)] transition-colors">
                               <div className="sticker-frame w-14 h-14 overflow-hidden shrink-0 bg-crimson rounded-md">
                                 <img src={cover} alt={r.title} loading="lazy" className="w-full h-full object-cover" />
                               </div>
                               <div className="min-w-0">
-                                <div className="font-display font-bold text-base text-ink leading-normal">{r.title}</div>
-                                <div className="text-sm font-bold text-ink/70 mt-1">{r.platform} · {r.rating}</div>
+                                <div className="font-display font-bold text-base text-off-white leading-normal">{r.title}</div>
+                                <div className="text-sm font-bold text-off-white/70 mt-1">{r.platform} · {r.rating}</div>
                               </div>
                             </Link>
                           );

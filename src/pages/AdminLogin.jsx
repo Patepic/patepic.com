@@ -37,25 +37,25 @@ export default function AdminLogin() {
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
           <div className="inline-grid place-items-center w-12 h-12 rounded-full bg-scarlet mb-4">
-            <Lock className="w-5 h-5 text-gold" />
+            <Lock className="w-5 h-5 text-off-white" />
           </div>
-          <h1 className="display-heading text-4xl text-ink">Admin sign in</h1>
-          <p className="text-sm text-ink/70 mt-2">Only the writer gets in past this point.</p>
+          <h1 className="display-heading text-4xl text-off-white">Admin sign in</h1>
+          <p className="text-sm text-off-white/70 mt-2">Only the writer gets in past this point.</p>
         </div>
 
         <form onSubmit={submit} className="panel-framed rounded-2xl p-7">
           <div className="relative mb-5">
-            <Label htmlFor="email" className="text-[0.8rem] tracking-[0.06em] uppercase font-bold text-ink">Email</Label>
+            <Label htmlFor="email" className="text-[0.8rem] tracking-[0.06em] uppercase font-bold text-off-white">Email</Label>
             <Input id="email" type="email" required autoComplete="username" value={email}
               onChange={(e) => setEmail(e.target.value)} data-testid="admin-email-input" placeholder="Email"
-              className="mt-2 h-12 bg-surface border-ink text-ink" />
+              className="mt-2 h-12 bg-surface border-off-white text-off-white" />
           </div>
 
           <div className="relative mb-7">
-            <Label htmlFor="password" className="text-[0.8rem] tracking-[0.06em] uppercase font-bold text-ink">Password</Label>
+            <Label htmlFor="password" className="text-[0.8rem] tracking-[0.06em] uppercase font-bold text-off-white">Password</Label>
             <Input id="password" type="password" required autoComplete="current-password" value={password}
               onChange={(e) => setPassword(e.target.value)} data-testid="admin-password-input" placeholder="Password"
-              className="mt-2 h-12 bg-surface border-ink text-ink" />
+              className="mt-2 h-12 bg-surface border-off-white text-off-white" />
           </div>
 
           <button type="submit" disabled={submitting} data-testid="admin-login-submit"

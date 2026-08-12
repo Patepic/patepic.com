@@ -12,7 +12,7 @@ function AboutContent() {
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="label-chip text-lg sm:text-xl">Who is {creator.name}?</h1>
 
-          <div className="mt-8 space-y-5 text-sm sm:text-[0.95rem] leading-[1.75] text-ink/85 text-left">
+          <div className="mt-8 space-y-5 text-sm sm:text-[0.95rem] leading-[1.75] text-off-white/85 text-left">
             <p>
               {creator.name} is a <span className="hl">game reviewer, streamer and VTuber</span> — an owl sorcerer of
               time with strong opinions about difficulty spikes. Reviewer by day, VTuber by night, and the two feed
@@ -44,7 +44,7 @@ function AboutContent() {
           </div>
 
           <div className="mt-14">
-            <p className="text-sm font-bold uppercase tracking-[0.06em] text-ink mb-4">Follow me on socials!</p>
+            <p className="text-sm font-bold uppercase tracking-[0.06em] text-off-white mb-4">Follow me on socials!</p>
             <div className="flex justify-center"><SocialRow /></div>
           </div>
         </div>
@@ -106,30 +106,30 @@ function AboutContent() {
 function WatchCard({ href, eyebrow, title, body, Icon }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer"
-      className="group bg-crimson border border-ink/10 shadow-soft-sm hover:shadow-soft transition-shadow rounded-xl p-7">
+      className="group bg-crimson border border-off-white/10 shadow-soft-sm hover:shadow-soft transition-shadow rounded-xl p-7">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-12 h-12 grid place-items-center bg-scarlet text-gold rounded-lg">
+        <div className="w-12 h-12 grid place-items-center bg-scarlet text-off-white rounded-lg">
           <Icon className="w-5 h-5" />
         </div>
         <div>
-          <div className="text-[0.75rem] font-bold tracking-[0.06em] uppercase text-ink">{eyebrow}</div>
-          <div className="display-hero text-xl text-ink">{title}</div>
+          <div className="text-[0.75rem] font-bold tracking-[0.06em] uppercase text-off-white">{eyebrow}</div>
+          <div className="display-hero text-xl text-off-white">{title}</div>
         </div>
-        <ArrowUpRight className="w-4 h-4 ml-auto text-ink group-hover:text-gold transition-colors" />
+        <ArrowUpRight className="w-4 h-4 ml-auto text-off-white group-hover:text-gold transition-colors" />
       </div>
-      <p className="text-sm leading-relaxed text-ink/70">{body}</p>
+      <p className="text-sm leading-relaxed text-off-white/70">{body}</p>
     </a>
   );
 }
 
 function ProfileRow({ label, value }) {
   return (
-    <div className="flex items-baseline py-4 border-b border-ink">
-      <span className="w-2/5 pr-4 text-sm font-extrabold text-ink">{label}</span>
-      <span className="w-3/5 pl-4 text-sm text-ink/80 leading-relaxed">
+    <div className="flex items-baseline py-4 border-b border-off-white">
+      <span className="w-2/5 pr-4 text-sm font-extrabold text-off-white">{label}</span>
+      <span className="w-3/5 pl-4 text-sm text-off-white/80 leading-relaxed">
         {Array.isArray(value) ? (
           <ul className="space-y-2">
-            {value.map((item) => <li key={item.title} className="ml-4 list-disc"><span className="font-extrabold text-ink">{item.title}</span> - {item.desc}</li>)}
+            {value.map((item) => <li key={item.title} className="ml-4 list-disc"><span className="font-extrabold text-off-white">{item.title}</span> - {item.desc}</li>)}
           </ul>
         ) : value}
       </span>

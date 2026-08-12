@@ -44,14 +44,14 @@ export function PersonalReflection() {
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-14 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-ink text-[0.7rem] font-bold uppercase tracking-[0.06em] mb-5">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-off-white text-[0.7rem] font-bold uppercase tracking-[0.06em] mb-5">
             <Trophy className="w-3.5 h-3.5" />
             Achievements Unlocked
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight">
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-off-white tracking-tight">
             My Year in Gaming
           </h2>
-          <p className="mt-4 text-ink max-w-lg mx-auto">
+          <p className="mt-4 text-off-white max-w-lg mx-auto">
             Five reflections, unlocked the way this year actually played out.
           </p>
         </div>
@@ -72,19 +72,19 @@ export function PersonalReflection() {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.06em] text-ink/80">
+                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.06em] text-off-white/80">
                       Achievement Unlocked
                     </p>
                     <span
-                      className="text-[0.6rem] font-bold uppercase tracking-[0.06em] px-2 py-0.5 rounded-full border text-gold"
+                      className="text-[0.6rem] font-bold uppercase tracking-[0.06em] px-2 py-0.5 rounded-full border text-off-white"
                     >
                       {entry.rarity}
                     </span>
                   </div>
-                  <h3 className="mt-1 font-display text-base sm:text-lg text-ink tracking-tight">
+                  <h3 className="mt-1 font-display text-base sm:text-lg text-off-white tracking-tight">
                     {entry.title}
                   </h3>
-                  <p className="mt-1.5 text-sm text-ink/80 leading-relaxed">
+                  <p className="mt-1.5 text-sm text-off-white/80 leading-relaxed">
                     {entry.placeholder}
                   </p>
                 </div>

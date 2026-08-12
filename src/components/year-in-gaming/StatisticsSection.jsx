@@ -103,18 +103,18 @@ export function StatisticsSection({ data }) {
       {/* Divider */}
       <div className="flex items-center gap-6 mb-12">
         <div className="flex-1 h-px bg-crimson" />
-        <Trophy className="w-5 h-5 text-ink" />
+        <Trophy className="w-5 h-5 text-off-white" />
         <div className="flex-1 h-px bg-crimson" />
       </div>
 
       <div className="mb-12">
-        <p className="text-sm tracking-[0.06em] uppercase text-ink mb-3">
+        <p className="text-sm tracking-[0.06em] uppercase text-off-white mb-3">
           By the numbers
         </p>
-        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight">
+        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-off-white tracking-tight">
           Gaming Statistics
         </h2>
-        <p className="mt-4 text-ink max-w-2xl">
+        <p className="mt-4 text-off-white max-w-2xl">
           Every stat, carefully calculated from my 2026 reviews.
         </p>
       </div>
@@ -131,12 +131,12 @@ export function StatisticsSection({ data }) {
 function StatCard({ icon, label, value, subtitle, slug, accent = "amber" }) {
   const accentMap = {
     // Accent keys are kept for call-site compatibility; every value is warm.
-    amber: { border: "border-ink/10 hover:border-ink/20", bg: "bg-crimson", text: "text-ink", icon: "text-ink" },
-    emerald: { border: "border-ink/10 hover:border-ink/20", bg: "bg-crimson", text: "text-ink", icon: "text-ink" },
-    rose: { border: "border-gold ", bg: "bg-gold", text: "text-ink", icon: "text-ink" },
-    blue: { border: "border-ink/10 hover:border-ink/20", bg: "bg-crimson", text: "text-ink", icon: "text-ink" },
-    purple: { border: "border-gold ", bg: "bg-gold/40", text: "text-ink", icon: "text-ink" },
-    stone: { border: "border-ink ", bg: "bg-surface", text: "text-ink", icon: "text-ink" },
+    amber: { border: "border-off-white/10 hover:border-off-white/20", bg: "bg-crimson", text: "text-off-white", icon: "text-off-white" },
+    emerald: { border: "border-off-white/10 hover:border-off-white/20", bg: "bg-crimson", text: "text-off-white", icon: "text-off-white" },
+    rose: { border: "border-gold ", bg: "bg-gold", text: "text-off-white", icon: "text-off-white" },
+    blue: { border: "border-off-white/10 hover:border-off-white/20", bg: "bg-crimson", text: "text-off-white", icon: "text-off-white" },
+    purple: { border: "border-gold ", bg: "bg-gold/40", text: "text-off-white", icon: "text-off-white" },
+    stone: { border: "border-off-white ", bg: "bg-surface", text: "text-off-white", icon: "text-off-white" },
   };
 
   const colors = accentMap[accent] || accentMap.amber;
@@ -146,18 +146,18 @@ function StatCard({ icon, label, value, subtitle, slug, accent = "amber" }) {
       className={`bg-surface border ${colors.border} rounded-2xl p-5 transition-all duration-300 hover:shadow-md group h-full`}
     >
       <div className="flex items-start justify-between gap-3 mb-3">
-        <span className="text-[0.75rem] leading-snug tracking-[0.06em] uppercase text-ink">
+        <span className="text-[0.75rem] leading-snug tracking-[0.06em] uppercase text-off-white">
           {label}
         </span>
         <span className={`shrink-0 ${colors.icon} group-hover:scale-110 transition-transform`}>
           {icon}
         </span>
       </div>
-      <div className="font-display text-base text-ink tracking-tight leading-snug break-words">
+      <div className="font-display text-base text-off-white tracking-tight leading-snug break-words">
         {value}
       </div>
       {subtitle && (
-        <div className="text-sm text-ink mt-1.5 leading-tight break-words">
+        <div className="text-sm text-off-white mt-1.5 leading-tight break-words">
           {subtitle}
         </div>
       )}

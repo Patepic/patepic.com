@@ -12,20 +12,20 @@ export function SeriesMarathon({ seriesMarathons }) {
       {/* Divider */}
       <div className="flex items-center gap-6 mb-12">
         <div className="flex-1 h-px bg-crimson" />
-        <Layers className="w-5 h-5 text-ink" />
+        <Layers className="w-5 h-5 text-off-white" />
         <div className="flex-1 h-px bg-crimson" />
       </div>
 
       <div className="mb-12">
-        <p className="text-sm tracking-[0.06em] uppercase text-ink mb-3">
+        <p className="text-sm tracking-[0.06em] uppercase text-off-white mb-3">
           Series marathons
         </p>
-        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ink tracking-tight">
+        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-off-white tracking-tight">
           Franchise Deep Dives
         </h2>
-        <p className="mt-4 text-ink max-w-2xl">
+        <p className="mt-4 text-off-white max-w-2xl">
           When I find a series I love, I really commit. These are the franchises
-          where I played <strong className="text-ink">5 or more</strong> games in 2026.
+          where I played <strong className="text-off-white">5 or more</strong> games in 2026.
         </p>
       </div>
 
@@ -34,14 +34,14 @@ export function SeriesMarathon({ seriesMarathons }) {
           <div key={series} className="group">
             {/* Series header */}
             <div className="flex items-center gap-4 mb-6">
-              <div className="h-10 w-10 rounded-xl bg-crimson border border-ink flex items-center justify-center shrink-0">
-                <Layers className="w-5 h-5 text-ink" />
+              <div className="h-10 w-10 rounded-xl bg-crimson border border-off-white flex items-center justify-center shrink-0">
+                <Layers className="w-5 h-5 text-off-white" />
               </div>
               <div>
-                <h3 className="font-display text-xl lg:text-2xl text-ink tracking-tight group-hover:text-gold transition-colors">
+                <h3 className="font-display text-xl lg:text-2xl text-off-white tracking-tight group-hover:text-gold transition-colors">
                   {series}
                 </h3>
-                <p className="text-sm text-ink mt-0.5">
+                <p className="text-sm text-off-white mt-0.5">
                   {count} games played this year
                 </p>
               </div>
@@ -68,7 +68,7 @@ export function SeriesMarathon({ seriesMarathons }) {
                       to={`/reviews/${game.slug}`}
                       className="flex-shrink-0 w-[280px] sm:w-[300px] snap-start group/card"
                     >
-                      <div className="bg-surface border border-ink rounded-2xl overflow-hidden  hover:shadow-lg transition-all duration-300 h-full">
+                      <div className="bg-surface border border-off-white rounded-2xl overflow-hidden  hover:shadow-lg transition-all duration-300 h-full">
                         <div className="relative aspect-[16/9] overflow-hidden">
                           <img
                             src={cover}
@@ -76,19 +76,19 @@ export function SeriesMarathon({ seriesMarathons }) {
                             loading="lazy"
                             className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-off-white/40 via-transparent to-transparent" />
                           <div className="absolute bottom-2 left-2">
-                            <div className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-surface text-sm font-bold text-ink">
-                              <Star className="w-3 h-3 text-ink" />
+                            <div className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-surface text-sm font-bold text-off-white">
+                              <Star className="w-3 h-3 text-off-white" />
                               {game.rating}
                             </div>
                           </div>
                         </div>
                         <div className="p-4">
-                          <h4 className="font-display text-sm text-ink group-hover/card:text-gold transition-colors leading-snug">
+                          <h4 className="font-display text-sm text-off-white group-hover/card:text-gold transition-colors leading-snug">
                             {game.title}
                           </h4>
-                          <div className="flex items-center gap-2 mt-2 text-[0.75rem] uppercase tracking-wider text-ink flex-wrap">
+                          <div className="flex items-center gap-2 mt-2 text-[0.75rem] uppercase tracking-wider text-off-white flex-wrap">
                             {game.platform && (
                               <span className="inline-flex items-center gap-1">
                                 <Gamepad2 className="w-3 h-3" />
@@ -99,7 +99,7 @@ export function SeriesMarathon({ seriesMarathons }) {
                               <span key={g}>{g}</span>
                             ))}
                           </div>
-                          <div className="text-[0.75rem] text-ink mt-2">
+                          <div className="text-[0.75rem] text-off-white mt-2">
                             {game.date}
                           </div>
                         </div>

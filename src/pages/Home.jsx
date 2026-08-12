@@ -28,19 +28,19 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <StickerBadge icon={Feather} className="w-14 h-14 lg:w-16 lg:h-16" />
               <div>
-                <Kicker tone="text-ink">Hello, I&apos;m</Kicker>
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-ink/60">
+                <Kicker tone="text-off-white">Hello, I&apos;m</Kicker>
+                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-off-white/60">
                   Owl Sorcerer of Time
                 </p>
               </div>
             </div>
-            <h1 className="display-hero mt-4 text-3xl sm:text-4xl lg:text-6xl text-ink">
+            <h1 className="display-hero mt-4 text-3xl sm:text-4xl lg:text-6xl text-off-white">
               {creator.name}<span className="text-gold">.</span>
             </h1>
-            <p className="display-heading mt-5 text-xl sm:text-2xl lg:text-3xl text-ink">
+            <p className="display-heading mt-5 text-xl sm:text-2xl lg:text-3xl text-off-white">
               Reviewer, Streamer, VTuber
             </p>
-            <p className="mt-8 max-w-lg text-sm sm:text-base leading-relaxed text-ink/70">
+            <p className="mt-8 max-w-lg text-sm sm:text-base leading-relaxed text-off-white/70">
               Long-form reviews from someone who finishes every game before saying a word about it.
               Catch the playthrough live, then read the verdict after the credits roll.
             </p>
@@ -66,7 +66,7 @@ export default function Home() {
         <div className="relative max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="label-chip text-lg sm:text-xl">Meet {creator.name}</div>
 
-          <p className="mt-8 text-sm sm:text-base leading-[1.75] text-ink/85">
+          <p className="mt-8 text-sm sm:text-base leading-[1.75] text-off-white/85">
             <span className="hl">Reviewer by day, VTuber by night</span> — the two feed each other. Nothing gets
             scored until the credits roll, and the same playthrough shows up here as a long-form review and on
             stream as full-length chaos.
@@ -79,7 +79,7 @@ export default function Home() {
           </div>
 
           <div className="mt-14">
-            <p className="text-sm font-bold uppercase tracking-[0.06em] text-ink mb-4">Follow me on socials!</p>
+            <p className="text-sm font-bold uppercase tracking-[0.06em] text-off-white mb-4">Follow me on socials!</p>
             <div className="flex justify-center"><SocialRow /></div>
           </div>
         </div>
@@ -90,8 +90,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
             {loading ? Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className={`bg-crimson border border-ink/10 shadow-soft-sm rounded-2xl p-5 ${["md:col-span-2", "md:col-span-2", "md:col-span-3", "md:col-span-5"][i]}`}>
-                <div className="animate-pulse bg-ink/10 h-8 w-12 rounded-lg" />
+              <div key={i} className={`bg-crimson border border-off-white/10 shadow-soft-sm rounded-2xl p-5 ${["md:col-span-2", "md:col-span-2", "md:col-span-3", "md:col-span-5"][i]}`}>
+                <div className="animate-pulse bg-off-white/10 h-8 w-12 rounded-lg" />
               </div>
             )) : (
               <>
@@ -99,13 +99,13 @@ export default function Home() {
                 <StatCard className="md:col-span-2 animate-reveal delay-2" label="Average score" value={averageScore} icon={<Star className="w-4 h-4" />} testId="stat-average-score" />
                 <StatCard className="md:col-span-3 animate-reveal delay-3" label="Top platform" value={topPlatform} icon={<Gamepad2 className="w-4 h-4" />} testId="stat-top-platform" />
                 {goldStandard && (
-                  <Link to={`/reviews/${goldStandard.slug}`} data-testid="stat-gold-standard" className="md:col-span-5 bg-crimson border border-ink/10 shadow-soft-sm rounded-2xl p-5 animate-reveal delay-4 hover:border-ink transition-colors">
+                  <Link to={`/reviews/${goldStandard.slug}`} data-testid="stat-gold-standard" className="md:col-span-5 bg-crimson border border-off-white/10 shadow-soft-sm rounded-2xl p-5 animate-reveal delay-4 hover:border-off-white transition-colors">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-bold uppercase tracking-[0.06em] text-ink">Gold standard</span>
+                      <span className="text-sm font-bold uppercase tracking-[0.06em] text-off-white">Gold standard</span>
                       <Trophy className="w-4 h-4 text-gold" />
                     </div>
-                    <div className="display-hero text-2xl text-ink">{goldStandard.title}</div>
-                    <div className="text-sm font-bold text-ink/60 mt-1">Scored {goldStandard.rating} / 10</div>
+                    <div className="display-hero text-2xl text-off-white">{goldStandard.title}</div>
+                    <div className="text-sm font-bold text-off-white/60 mt-1">Scored {goldStandard.rating} / 10</div>
                   </Link>
                 )}
               </>
@@ -143,7 +143,7 @@ export default function Home() {
             <div className="relative">
               <div className="magazine-rule mb-5"><span>The {creator.name} Method</span></div>
               <SectionTitle>No score until the credits roll.</SectionTitle>
-              <p className="mt-6 leading-relaxed text-sm sm:text-base text-ink/70">
+              <p className="mt-6 leading-relaxed text-sm sm:text-base text-off-white/70">
                 Every score comes from a finished playthrough. What you read is what I actually think.
               </p>
               <div className="mt-9 flex gap-3 flex-wrap justify-center">
@@ -159,21 +159,21 @@ export default function Home() {
 }
 
 const StatCard = ({ label, value, icon, className = "", testId }) => (
-  <div data-testid={testId} className={`bg-crimson border border-ink/10 shadow-soft-sm rounded-2xl p-5 ${className}`}>
+  <div data-testid={testId} className={`bg-crimson border border-off-white/10 shadow-soft-sm rounded-2xl p-5 ${className}`}>
     <div className="flex items-start justify-between gap-3 mb-3">
-      <span className="text-sm font-bold uppercase tracking-[0.06em] text-ink">{label}</span>
+      <span className="text-sm font-bold uppercase tracking-[0.06em] text-off-white">{label}</span>
       <span className="text-gold">{icon}</span>
     </div>
-    <div className="display-hero text-3xl text-ink break-words">{value}</div>
+    <div className="display-hero text-3xl text-off-white break-words">{value}</div>
   </div>
 );
 
 const HomeDataState = ({ title, compact = false }) => (
-  <div className={compact ? "bg-crimson border border-ink/10 shadow-soft-sm rounded-2xl p-10 text-center" : "min-h-[70vh] grid place-items-center px-4 bg-surface"}>
+  <div className={compact ? "bg-crimson border border-off-white/10 shadow-soft-sm rounded-2xl p-10 text-center" : "min-h-[70vh] grid place-items-center px-4 bg-surface"}>
     <div className="max-w-md text-center">
-      <p className="text-sm font-bold uppercase tracking-[0.06em] text-ink">Reviews unavailable</p>
-      <h1 className="display-hero mt-3 text-3xl text-ink">{title}</h1>
-      <p className="mt-3 text-sm font-semibold text-ink/70">Check the API connection and database, then refresh.</p>
+      <p className="text-sm font-bold uppercase tracking-[0.06em] text-off-white">Reviews unavailable</p>
+      <h1 className="display-hero mt-3 text-3xl text-off-white">{title}</h1>
+      <p className="mt-3 text-sm font-semibold text-off-white/70">Check the API connection and database, then refresh.</p>
     </div>
   </div>
 );

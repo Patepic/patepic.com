@@ -19,7 +19,7 @@ export const SocialRow = ({ className = "", size = "w-10 h-10" }) => {
           rel="noopener noreferrer"
           aria-label={label}
           data-testid={`social-${label.toLowerCase()}`}
-          className={`${size} rounded-lg bg-scarlet text-ink hover:bg-ink hover:text-surface grid place-items-center transition-colors`}
+          className={`${size} rounded-lg bg-scarlet text-off-white hover:bg-off-white hover:text-surface grid place-items-center transition-colors`}
         >
           <Icon className="w-4 h-4" />
         </a>
@@ -30,7 +30,7 @@ export const SocialRow = ({ className = "", size = "w-10 h-10" }) => {
 
 /** Large bold section title, centred like the reference sections. */
 export const SectionTitle = ({ children, className = "", as: Tag = "h2" }) => (
-  <Tag className={`display-heading text-3xl sm:text-4xl lg:text-5xl text-ink ${className}`}>
+  <Tag className={`display-heading text-3xl sm:text-4xl lg:text-5xl text-off-white ${className}`}>
     {children}
   </Tag>
 );
@@ -56,7 +56,7 @@ export const Kicker = ({ children, className = "", tone = "text-scarlet" }) => (
 export const StickerBadge = ({ icon: Icon, className = "" }) => (
   <div
     aria-hidden="true"
-    className={`sticker-frame w-14 h-14 rounded-full bg-scarlet text-gold grid place-items-center ${className}`}
+    className={`sticker-frame w-14 h-14 rounded-full bg-scarlet text-off-white grid place-items-center ${className}`}
   >
     <Icon className="w-6 h-6" />
   </div>

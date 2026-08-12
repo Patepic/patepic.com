@@ -20,17 +20,11 @@ module.exports = {
         sans: ['"Inter"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // 5 named colors, one per brand hex — dark theme:
-        //   surface  #17151A  near-black, ~55%, page/card background
-        //   crimson  #A51F36  dark red,   ~20%, section/card fills
-        //   scarlet  #C93646  bright red, ~12%, primary action color
-        //   gold     #C89A4B  gold,        ~8%, accent/CTA color
-        //   ink      #F2E8E3  cream,       ~5%, text + hairline borders
         surface: '#17151A',
         crimson: '#A51F36',
         scarlet: '#C93646',
         gold: '#C89A4B',
-        ink: '#F2E8E3',
+        'off-white': '#F2E8E3',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },

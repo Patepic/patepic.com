@@ -70,10 +70,10 @@ export function MonthlyTimeline({ monthlyGames }) {
     <div className="relative bg-surface pb-20 md:pb-28">
       <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 lg:pt-14 text-center">
         <Kicker>Month by month</Kicker>
-        <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-ink">
+        <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-off-white">
           A Journey Through 2026
         </h1>
-        <p className="mt-5 mx-auto max-w-xl text-sm sm:text-base leading-relaxed text-ink/70">
+        <p className="mt-5 mx-auto max-w-xl text-sm sm:text-base leading-relaxed text-off-white/70">
           Every game I played, month by month — the full trail from January
           to December.
         </p>
@@ -92,12 +92,12 @@ export function MonthlyTimeline({ monthlyGames }) {
           return (
             <div key={toText(monthKey, "month")} className="mb-8 lg:mb-10">
               <div className="mb-3 flex items-center gap-3">
-                <CalendarDays className="w-3.5 h-3.5 text-ink shrink-0" />
-                <p className="text-sm font-bold uppercase tracking-[0.06em] text-ink whitespace-nowrap">
+                <CalendarDays className="w-3.5 h-3.5 text-off-white shrink-0" />
+                <p className="text-sm font-bold uppercase tracking-[0.06em] text-off-white whitespace-nowrap">
                   {monthLabel}
                 </p>
                 <div className="flex-1 h-px bg-scarlet" />
-                <span className="text-sm text-ink/60 whitespace-nowrap">
+                <span className="text-sm text-off-white/60 whitespace-nowrap">
                   {games.length} {games.length === 1 ? "game" : "games"}
                 </span>
               </div>
@@ -115,7 +115,7 @@ export function MonthlyTimeline({ monthlyGames }) {
                       key={slug}
                       to={`/reviews/${slug}`}
                       data-testid={`review-card-${slug}`}
-                      className="group relative rounded-xl border border-ink/10 bg-crimson overflow-hidden transition-colors"
+                      className="group relative rounded-xl border border-off-white/10 bg-crimson overflow-hidden transition-colors"
                     >
                       <div className="relative aspect-square overflow-hidden bg-crimson">
                         <img
@@ -124,18 +124,18 @@ export function MonthlyTimeline({ monthlyGames }) {
                           loading="lazy"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-off-white/40 via-transparent to-transparent" />
                         <div className="absolute top-1 right-1 inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-gold text-surface text-[0.7rem] font-display font-bold">
                           <Star className="w-2.5 h-2.5" />
                           {rating}
                         </div>
                       </div>
                       <div className="p-2">
-                        <p className="font-display font-bold text-[0.75rem] text-ink leading-snug line-clamp-2">
+                        <p className="font-display font-bold text-[0.75rem] text-off-white leading-snug line-clamp-2">
                           {title}
                         </p>
                         {platform && (
-                          <div className="mt-1 flex items-center gap-1 text-[0.65rem] font-bold uppercase tracking-wider text-ink/60">
+                          <div className="mt-1 flex items-center gap-1 text-[0.65rem] font-bold uppercase tracking-wider text-off-white/60">
                             <Gamepad2 className="w-2.5 h-2.5 shrink-0" />
                             <span className="truncate">{platform}</span>
                           </div>

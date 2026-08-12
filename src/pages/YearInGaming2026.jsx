@@ -17,13 +17,13 @@ export default function YearInGaming2026() {
     return (
       <div className="min-h-[70vh] grid place-items-center px-4">
         <div className="max-w-md text-center">
-          <p className="text-sm tracking-[0.06em] uppercase text-ink">
+          <p className="text-sm tracking-[0.06em] uppercase text-off-white">
             Data unavailable
           </p>
-          <h1 className="font-display mt-3 text-3xl text-ink">
+          <h1 className="font-display mt-3 text-3xl text-off-white">
             Could not load reviews
           </h1>
-          <p className="mt-3 text-sm text-ink">
+          <p className="mt-3 text-sm text-off-white">
             Check the API connection and database, then refresh.
           </p>
         </div>
@@ -39,17 +39,17 @@ export default function YearInGaming2026() {
     return (
       <div className="min-h-[70vh] grid place-items-center px-4">
         <div className="max-w-md text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-crimson border border-ink/10 text-sm tracking-[0.06em] uppercase text-ink mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-crimson border border-off-white/10 text-sm tracking-[0.06em] uppercase text-off-white mb-6">
             <Snowflake className="w-3 h-3" /> Year in Gaming
           </div>
-          <h1 className="font-display mt-3 text-4xl text-ink tracking-tight">
+          <h1 className="font-display mt-3 text-4xl text-off-white tracking-tight">
             No 2026 Reviews Yet
           </h1>
-          <p className="mt-4 text-ink leading-relaxed">
+          <p className="mt-4 text-off-white leading-relaxed">
             The year is still unfolding. Reviews with a 2026 date will
             automatically appear here as they're published.
           </p>
-          <div className="mt-8 flex items-center justify-center gap-3 text-ink">
+          <div className="mt-8 flex items-center justify-center gap-3 text-off-white">
             <Gamepad2 className="w-5 h-5" />
             <span className="text-sm">Check back soon for the story of 2026</span>
           </div>
@@ -69,19 +69,19 @@ export default function YearInGaming2026() {
 
       {/* Footer CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-crimson via-surface to-crimson border border-ink p-10 lg:p-16 text-center shadow-soft">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-crimson via-surface to-crimson border border-off-white p-10 lg:p-16 text-center shadow-soft">
           <div className="relative max-w-2xl mx-auto">
-            <h2 className="font-display text-3xl lg:text-4xl text-ink tracking-tight">
+            <h2 className="font-display text-3xl lg:text-4xl text-off-white tracking-tight">
               Thanks for reading
             </h2>
-            <p className="mt-5 text-ink leading-relaxed max-w-lg mx-auto">
+            <p className="mt-5 text-off-white leading-relaxed max-w-lg mx-auto">
               Every review on this page represents a completed journey. Here's
               to another year of great games.
             </p>
-            <div className="mt-8 inline-flex items-center gap-2 text-ink">
+            <div className="mt-8 inline-flex items-center gap-2 text-off-white">
               <Snowflake className="w-5 h-5" />
               <span className="font-display text-lg tracking-tight">
-                Patepic<span className="text-ink">.</span>
+                Patepic<span className="text-off-white">.</span>
               </span>
             </div>
           </div>

@@ -43,7 +43,7 @@ function useTwitchLive(handle) {
 
 const navLink = ({ isActive }) =>
   `relative py-2 text-[0.8rem] font-semibold uppercase tracking-[0.06em] transition-colors ${
-    isActive ? "text-ink" : "text-ink/60 hover:text-ink"
+    isActive ? "text-off-white" : "text-off-white/60 hover:text-off-white"
   }`;
 
 export const Navbar = () => {
@@ -53,10 +53,10 @@ export const Navbar = () => {
   const live = useTwitchLive(handle);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-crimson/95 border-b border-ink/10">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-crimson/95 border-b border-off-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
         <Link to="/" className="flex items-center gap-2 shrink-0 mr-2">
-          <span className="display-heading text-xl text-ink tracking-tight">
+          <span className="display-heading text-xl text-off-white tracking-tight">
             {creator.name}<span className="text-gold">.</span>
           </span>
         </Link>
@@ -85,12 +85,12 @@ export const Navbar = () => {
             <div className="hidden md:flex items-center gap-3">
               <Link to="/admin" className="pill pill-gold h-8 px-4 rounded-lg text-[0.7rem] uppercase tracking-[0.06em]">Admin</Link>
               <button onClick={logout} aria-label="Log out"
-                className="w-8 h-8 grid place-items-center rounded-lg border border-ink/10 text-ink hover:bg-surface/60 transition-colors">
+                className="w-8 h-8 grid place-items-center rounded-lg border border-off-white/10 text-off-white hover:bg-surface/60 transition-colors">
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
           )}
-          <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-ink" aria-label="Toggle menu">
+          <button onClick={() => setOpen(!open)} className="lg:hidden p-2 text-off-white" aria-label="Toggle menu">
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
@@ -109,7 +109,7 @@ export const Navbar = () => {
             ))}
           </div>
           {user && (
-            <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-ink/10">
+            <div className="flex flex-col gap-3 mt-6 pt-6 border-t border-off-white/10">
               <Link to="/admin" onClick={() => setOpen(false)} className="pill pill-gold h-11 px-6 rounded-lg text-sm">Admin</Link>
               <button onClick={() => { logout(); setOpen(false); }} className="pill pill-outline h-11 px-6 rounded-lg text-sm">Log out</button>
             </div>

@@ -4,13 +4,13 @@
 
 **Goal:** Replace patepic.com's retro/pixel-art visual language (Press Start 2P + VT323, forced-square corners, hard offset shadows, scanline/dither textures, sticker frames) with a modern editorial style, using Inter and the existing color palette unchanged.
 
-**Architecture:** Bottom-up rollout. Fix shared tokens and CSS custom classes first (Tasks 1–2) so the majority of the visual change happens automatically, with zero JSX edits, everywhere those tokens/classes are used. Task 3 is a single mechanical, project-wide find/replace pass (text-ink color, border weight, label tracking) — safe because every substitution is a 1:1 string rename with no ambiguity. Tasks 4–12 restyle the UI primitives, layout shell, and shared card component that everything else depends on. Tasks 13+ verify each page/section against the new system and handle the handful of bespoke, non-mechanical items each one has (documented per task).
+**Architecture:** Bottom-up rollout. Fix shared tokens and CSS custom classes first (Tasks 1–2) so the majority of the visual change happens automatically, with zero JSX edits, everywhere those tokens/classes are used. Task 3 is a single mechanical, project-wide find/replace pass (text-off-white color, border weight, label tracking) — safe because every substitution is a 1:1 string rename with no ambiguity. Tasks 4–12 restyle the UI primitives, layout shell, and shared card component that everything else depends on. Tasks 13+ verify each page/section against the new system and handle the handful of bespoke, non-mechanical items each one has (documented per task).
 
 **Tech Stack:** React 19, Vite, Tailwind CSS v3.4 (JIT), Radix UI primitives, class-variance-authority, lucide-react icons.
 
 ## Global Constraints
 
-- No new colors. Only these hex values may appear: `#2e7058` (pixel-forest), `#7fbcbf` (pixel-teal), `#a8e6cf` (pixel-mint), `#f7a1c4` (pixel-pink), `#ffdde6` (pixel-blush), `#181411`/`#121212` (pixel-black — reconcile to `#181411`, see Task 1), `#f7f4ef`/`#fff5f8` (pixel-white — reconcile to `#f7f4ef`, see Task 1), `#c1272d` (pre-existing destructive/error-state red, already hardcoded in `tailwind.config.js` `colors.destructive` before this redesign — not a named `pixel-*` token but kept as-is, confirmed with the user during Task 1 review), `#1f4d3d` and `#f07eae` (pre-existing darker hover-shade variants of pixel-forest/pixel-pink, already defined as `--pixel-forest-dark`/`--pixel-pink-dark` in the original `src/index.css` before this redesign — kept as-is, adjudicated during Task 2 review). Muted/reduced-emphasis text should use an opacity variant of an approved color (e.g. `rgba(24, 20, 17, 0.65)` for muted ink), never a new literal hex — this is how `--ink-muted` was corrected during Task 2's fix round after the reviewer caught a newly-invented `#4a4038`.
+- No new colors. Only these hex values may appear: `#2e7058` (pixel-forest), `#7fbcbf` (pixel-teal), `#a8e6cf` (pixel-mint), `#f7a1c4` (pixel-pink), `#ffdde6` (pixel-blush), `#181411`/`#121212` (pixel-black — reconcile to `#181411`, see Task 1), `#f7f4ef`/`#fff5f8` (pixel-white — reconcile to `#f7f4ef`, see Task 1), `#c1272d` (pre-existing destructive/error-state red, already hardcoded in `tailwind.config.js` `colors.destructive` before this redesign — not a named `pixel-*` token but kept as-is, confirmed with the user during Task 1 review), `#1f4d3d` and `#f07eae` (pre-existing darker hover-shade variants of pixel-forest/pixel-pink, already defined as `--pixel-forest-dark`/`--pixel-pink-dark` in the original `src/index.css` before this redesign — kept as-is, adjudicated during Task 2 review). Muted/reduced-emphasis text should use an opacity variant of an approved color (e.g. `rgba(24, 20, 17, 0.65)` for muted ink), never a new literal hex — this is how `--off-white-muted` was corrected during Task 2's fix round after the reviewer caught a newly-invented `#4a4038`.
 - Typeface: Inter everywhere (headings, body, UI, scores). No second display font.
 - Radius scale: `6px` (sm/DEFAULT/md), `10px` (lg/xl/2xl — the "card" radius), `16px` (3xl — large panels/hero art), `9999px` (full — true pills/avatars only).
 - Borders: 1px hairline, low-opacity black tint (`border-pixel-black/10`) as the default; no 2–4px solid-black borders anywhere.
@@ -188,8 +188,8 @@ body {
   --pixel-blush: #ffdde6;
   --pixel-black: #181411;
   --pixel-white: #f7f4ef;
-  --ink: #181411;
-  --ink-muted: #4a4038;
+  --off-white: #181411;
+  --off-white-muted: #4a4038;
 
   /* shadcn-primitive semantic tokens — HSL triplets (no hsl() wrapper),
      converted from the hex palette above so bg-background/text-foreground/
@@ -309,7 +309,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ink-muted);
+  color: var(--off-white-muted);
 }
 
 @keyframes reveal-up {

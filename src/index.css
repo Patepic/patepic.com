@@ -26,15 +26,15 @@ body {
      --crimson  #A51F36  dark red,   ~20%, section/card fills
      --scarlet  #C93646  bright red, ~12%, primary action color
      --gold     #C89A4B  gold,        ~8%, accent/CTA color
-     --ink      #F2E8E3  cream,       ~5%, text + hairline borders
+     --off-white      #F2E8E3  cream,       ~5%, text + hairline borders
    --------------------------------------------------------------- */
 :root {
   --surface: #17151A;
   --crimson: #A51F36;
   --scarlet: #C93646;
   --gold: #C89A4B;
-  --ink: #F2E8E3;
-  --ink-muted: rgba(242, 232, 227, 0.65);
+  --off-white: #F2E8E3;
+  --off-white-muted: rgba(242, 232, 227, 0.65);
 
   /* shadcn-primitive semantic tokens — HSL triplets (no hsl() wrapper),
      converted from the hex palette above so bg-background/text-foreground/
@@ -71,7 +71,7 @@ body {
 
 .pill-ember {
   background: var(--scarlet);
-  color: var(--ink);
+  color: var(--off-white);
 }
 .pill-ember:hover { filter: brightness(1.15); box-shadow: 0 6px 20px -6px rgba(23, 21, 26, 0.6); }
 
@@ -86,7 +86,7 @@ body {
    (dark crimson) — an accent-colored border is enough to read as a button. */
 .pill-outline {
   background: transparent;
-  color: var(--ink);
+  color: var(--off-white);
   border-color: rgba(242, 232, 227, 0.3);
 }
 .pill-outline:hover { background: rgba(242, 232, 227, 0.08); border-color: rgba(242, 232, 227, 0.45); }
@@ -133,7 +133,7 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.03em;
   line-height: 1.4;
-  color: var(--ink);
+  color: var(--off-white);
   background: var(--scarlet);
   border: 1px solid rgba(242, 232, 227, 0.1);
   border-radius: 10px;
@@ -175,7 +175,7 @@ body {
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ink-muted);
+  color: var(--off-white-muted);
 }
 
 @keyframes reveal-up {
@@ -204,7 +204,7 @@ body {
   display: grid;
   place-items: center;
   background: var(--scarlet);
-  color: var(--ink);
+  color: var(--off-white);
   box-shadow: 0 6px 20px -6px rgba(23, 21, 26, 0.45);
   opacity: 0;
   transform: translateY(8px);
