@@ -12,6 +12,8 @@ import {
   Search,
   RefreshCw,
   ArrowUpRight,
+  Clock,
+  Trophy,
 } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
@@ -50,6 +52,24 @@ import {
   errorMessage,
 } from "../lib/api";
 
+const AWARD_OPTIONS = [
+  "Game of the Year",
+  "Best Game Direction",
+  "Best Narrative",
+  "Best Art Direction",
+  "Best Soundtrack",
+  "Hidden Gem",
+  "Biggest Surprise",
+  "Biggest Disappointment",
+  "Most Innovative",
+  "Best Replayability",
+  "Best Boss Fights",
+  "Series Standout",
+  "Best Gameplay",
+  "Most Fun",
+  "Best Ending",
+];
+
 const blank = {
   title: "",
   platform: "",
@@ -64,6 +84,8 @@ const blank = {
   pros: [""],
   cons: [""],
   isFeatured: false,
+  playTime: "",
+  awards: [],
 };
 
 export default function Admin() {
@@ -169,13 +191,13 @@ const paginated = useMemo(() => {
     >
       <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
         <div>
-          <p className="text-xs tracking-[0.06em] uppercase text-sky-700 mb-2">
+          <p className="text-xs tracking-[0.06em] uppercase text-gold mb-2">
             Control room
           </p>
-          <h1 className="font-display text-3xl sm:text-4xl text-slate-900 tracking-tight">
+          <h1 className="font-display text-3xl sm:text-4xl text-off-white tracking-tight">
             Reviews dashboard
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-off-white/60 mt-1">
             {loading
               ? "Loading…"
               : `${reviews.length} reviews in the database.`}
@@ -185,14 +207,14 @@ const paginated = useMemo(() => {
           <button
             onClick={load}
             data-testid="admin-refresh"
-            className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white border border-slate-200 hover:border-sky-300 text-sm text-slate-700"
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-surface border border-off-white/15 hover:border-gold text-sm text-off-white/80"
           >
             <RefreshCw className="w-4 h-4" /> Refresh
           </button>
           <button
             onClick={() => setEditing({ ...blank })}
             data-testid="admin-new-review"
-            className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-slate-900 text-white hover:bg-slate-700 text-sm font-medium"
+            className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-scarlet text-off-white filter hover:brightness-90 text-sm font-medium"
           >
             <Plus className="w-4 h-4" /> New review
           </button>
@@ -200,19 +222,19 @@ const paginated = useMemo(() => {
       </div>
 
       <div className="relative mb-6">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-off-white/40" />
         <Input
           placeholder="Filter by title…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           data-testid="admin-filter-input"
-          className="pl-11 h-11 bg-white border-slate-200"
+          className="pl-11 h-11 bg-surface border-off-white/15 text-off-white"
         />
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+      <div className="rounded-2xl border border-off-white/15 bg-surface overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-slate-500 text-xs tracking-[0.06em] uppercase">
+          <thead className="bg-crimson/20 text-off-white/60 text-xs tracking-[0.06em] uppercase">
             <tr>
               <th className="text-left px-5 py-3 font-medium">
                 <button
@@ -224,7 +246,7 @@ const paginated = useMemo(() => {
                     return "title-asc";
                   })
                 }
-                  className="hover:text-slate-900"
+                  className="hover:text-off-white"
                 >
                   TITLE
                   {sort === "title-asc" && " ↑"}
@@ -247,7 +269,7 @@ const paginated = useMemo(() => {
                       return "rating-desc";
                     })
                   }
-                  className="hover:text-slate-900"
+                  className="hover:text-off-white"
                 >
                   RATING
                   {sort === "rating-desc" && " ↓"}
@@ -260,13 +282,13 @@ const paginated = useMemo(() => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={5} className="py-10 text-center text-slate-400">
+                <td colSpan={5} className="py-10 text-center text-off-white/40">
                   Loading…
                 </td>
               </tr>
             ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-10 text-center text-slate-400">
+                <td colSpan={5} className="py-10 text-center text-off-white/40">
                   No reviews match.
                 </td>
               </tr>
@@ -275,7 +297,7 @@ const paginated = useMemo(() => {
                 <tr
                   key={r.slug}
                   data-testid={`admin-row-${r.slug}`}
-                  className="border-t border-slate-100 hover:bg-sky-50/40"
+                  className="border-t border-off-white/10 hover:bg-crimson/10"
                 >
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
@@ -283,30 +305,30 @@ const paginated = useMemo(() => {
                         <img
                           src={r.cover_url.startsWith("http") ? r.cover_url : `https://${r.cover_url}`}
                           alt=""
-                          className="w-10 h-10 rounded-md object-cover bg-slate-100"
+                          className="w-10 h-10 rounded-md object-cover bg-crimson/20"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-md bg-slate-100 grid place-items-center text-slate-400">
+                        <div className="w-10 h-10 rounded-md bg-crimson/20 grid place-items-center text-off-white/40">
                           <ImageIcon className="w-4 h-4" />
                         </div>
                       )}
                       <div>
-                        <div className="font-display text-slate-900 flex items-center gap-2">
+                        <div className="font-display text-off-white flex items-center gap-2">
                           {r.title}
                           {r.isFeatured && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-100 text-amber-700 border border-amber-200">
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gold/20 text-gold border border-gold/30">
                               ★ Gold
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-slate-400">{Array.isArray(r.genre) ? r.genre.join(" · ") : r.genre}</div>
+                        <div className="text-xs text-off-white/40">{Array.isArray(r.genre) ? r.genre.join(" · ") : r.genre}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-5 py-3 text-slate-600 hidden sm:table-cell">
+                  <td className="px-5 py-3 text-off-white/70 hidden sm:table-cell">
                     {r.platform}
                   </td>
-                  <td className="px-5 py-3 text-slate-600 hidden md:table-cell">
+                  <td className="px-5 py-3 text-off-white/70 hidden md:table-cell">
                     {{
                       remake: "Remake",
                       remaster: "Remaster",
@@ -315,7 +337,7 @@ const paginated = useMemo(() => {
                     }[r.contentType] || "Original"}
                   </td>
                   <td className="px-5 py-3">
-                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-sky-100 text-sky-800 border border-sky-200">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-gold/20 text-gold border border-gold/30">
                       {r.rating}
                     </span>
                   </td>
@@ -326,7 +348,7 @@ const paginated = useMemo(() => {
                         title="View review"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-slate-100 text-slate-500"
+                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-off-white/10 text-off-white/60"
                       >
                         <ArrowUpRight className="w-4 h-4" />
                       </Link>
@@ -334,7 +356,7 @@ const paginated = useMemo(() => {
                         onClick={() => setEditing(r)}
                         title="Edit review"
                         data-testid={`admin-edit-${r.slug}`}
-                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-sky-100 text-sky-700"
+                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-gold/10 text-gold"
                       >
                         <Pencil className="w-4 h-4" />
                       </button>
@@ -342,7 +364,7 @@ const paginated = useMemo(() => {
                         onClick={() => setDeleting(r)}
                         title="Delete review"
                         data-testid={`admin-delete-${r.slug}`}
-                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-rose-100 text-rose-600"
+                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-scarlet/10 text-scarlet"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -359,12 +381,12 @@ const paginated = useMemo(() => {
         <button
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page === 1}
-          className="px-4 h-9 rounded-full border border-slate-200 text-sm disabled:opacity-40"
+          className="px-4 h-9 rounded-full border border-off-white/15 text-off-white/70 text-sm disabled:opacity-40"
         >
           Prev
         </button>
 
-        <div className="text-sm text-slate-500">
+        <div className="text-sm text-off-white/60">
           Page {page} of {Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))}
         </div>
 
@@ -375,7 +397,7 @@ const paginated = useMemo(() => {
             )
           }
           disabled={page >= Math.ceil(filtered.length / PAGE_SIZE)}
-          className="px-4 h-9 rounded-full border border-slate-200 text-sm disabled:opacity-40"
+          className="px-4 h-9 rounded-full border border-off-white/15 text-off-white/70 text-sm disabled:opacity-40"
         >
           Next
         </button>
@@ -393,12 +415,12 @@ const paginated = useMemo(() => {
         open={!!deleting}
         onOpenChange={(o) => !o && setDeleting(null)}
       >
-        <AlertDialogContent className="bg-white border-slate-200">
+        <AlertDialogContent className="bg-surface border-off-white/15">
           <AlertDialogHeader>
-            <AlertDialogTitle className="font-display">
+            <AlertDialogTitle className="font-display text-off-white">
               Delete this review?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-slate-500">
+            <AlertDialogDescription className="text-off-white/60">
               "{deleting?.title}" will be permanently removed. This can't be
               undone.
             </AlertDialogDescription>
@@ -410,7 +432,7 @@ const paginated = useMemo(() => {
             <AlertDialogAction
               data-testid="admin-delete-confirm"
               onClick={handleDelete}
-              className="bg-rose-600 text-white hover:bg-rose-500"
+              className="bg-scarlet text-off-white filter hover:brightness-90"
             >
               Delete
             </AlertDialogAction>
@@ -428,21 +450,37 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+  const [showCreateConfirm, setShowCreateConfirm] = useState(false);
   const fileInput = useRef(null);
+  const initialSnapshot = useRef("");
 
   useEffect(() => {
     if (review) {
-      setForm({
+      const hydrated = {
         ...blank,
         ...review,
         isFeatured: !!review.isFeatured,
         pros: review.pros?.length ? review.pros : [""],
         cons: review.cons?.length ? review.cons : [""],
-      });
+        awards: review.awards?.length ? review.awards : [],
+      };
+      setForm(hydrated);
+      initialSnapshot.current = JSON.stringify(hydrated);
     }
   }, [review]);
 
   if (!isOpen) return null;
+
+  const isDirty = () => JSON.stringify(form) !== initialSnapshot.current;
+
+  const requestClose = () => {
+    if (isDirty()) {
+      setShowCloseConfirm(true);
+    } else {
+      onClose();
+    }
+  };
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
   const setListItem = (key, i, v) =>
@@ -454,6 +492,8 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
     setForm((f) => ({ ...f, [key]: [...f[key], ""] }));
   const removeListItem = (key, i) =>
     setForm((f) => ({ ...f, [key]: f[key].filter((_, idx) => idx !== i) }));
+
+  const hideAwardsAndPlaytime = form.date.includes("2025");
 
   const canSubmit = isEdit || (
     !!form.title.trim() &&
@@ -485,19 +525,20 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
     }
   };
 
-  const submit = async (e) => {
-    e.preventDefault();
+  const doSave = async () => {
+    setShowCreateConfirm(false);
     setSaving(true);
     const payload = {
       ...form,
-      isFeatured: form.isFeatured, 
+      isFeatured: form.isFeatured,
       pros: form.pros.map((s) => s.trim()).filter(Boolean),
       cons: form.cons.map((s) => s.trim()).filter(Boolean),
       recommended: form.recommended || null,
       contentType: form.contentType || null,
+      playTime: form.playTime?.trim ? form.playTime.trim() : form.playTime,
+      awards: (form.awards || []).filter(Boolean),
     };
     try {
-      console.log("SAVING", payload);
       if (isEdit) {
         await adminUpdateReview(review.slug, payload);
         toast.success("Review updated");
@@ -513,14 +554,26 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
     }
   };
 
+  const submit = (e) => {
+    e.preventDefault();
+    if (!isEdit) {
+      setShowCreateConfirm(true);
+      return;
+    }
+    doSave();
+  };
+
+  const usedAwards = (excludeIndex) =>
+    form.awards.filter((a, i) => i !== excludeIndex && a);
+
   return (
-    <Dialog open={isOpen} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="bg-white border-slate-200 max-w-3xl max-h-[90vh] overflow-y-auto">
+    <Dialog open={isOpen} onOpenChange={(o) => !o && requestClose()}>
+      <DialogContent className="bg-surface border-off-white/15 max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-display text-2xl">
+          <DialogTitle className="font-display text-2xl text-off-white">
             {isEdit ? `Edit · ${review.title}` : "New review"}
           </DialogTitle>
-          <DialogDescription className="text-slate-500">
+          <DialogDescription className="text-off-white/60">
             Recommended and Content Type are dropdowns. All other fields are
             free text.
           </DialogDescription>
@@ -528,11 +581,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
         <form onSubmit={submit} className="space-y-5 mt-2">
           <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
+            <Label className="text-xs tracking-[0.06em] uppercase text-gold">
               Image
             </Label>
             <div className="mt-2 flex gap-4 items-start">
-              <div className="w-28 h-28 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden grid place-items-center text-slate-400 flex-shrink-0">
+              <div className="w-28 h-28 rounded-xl bg-crimson/20 border border-off-white/15 overflow-hidden grid place-items-center text-off-white/40 flex-shrink-0">
                 {form.cover_url ? (
                   <img
                     src={form.cover_url.startsWith("http") ? form.cover_url : `https://${form.cover_url}`}
@@ -548,7 +601,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                   type="button"
                   onClick={() => fileInput.current?.click()}
                   disabled={uploading}
-                  className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-sky-600 text-white hover:bg-sky-500 disabled:opacity-60 text-sm"
+                  className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-scarlet text-off-white filter hover:brightness-90 disabled:opacity-60 text-sm"
                 >
                   <Upload className="w-4 h-4" />
                   {uploading ? `Uploading ${uploadProgress}%` : "Upload image"}
@@ -564,7 +617,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                   placeholder="…or paste an image URL"
                   value={form.cover_url}
                   onChange={(e) => set("cover_url", e.target.value)}
-                  className="h-10 bg-white border-slate-200"
+                  className="h-10 bg-surface border-off-white/15 text-off-white"
                 />
               </div>
             </div>
@@ -594,7 +647,6 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             onChange={(i, v) => setListItem("genre", i, v)}
             onAdd={() => addListItem("genre")}
             onRemove={(i) => removeListItem("genre", i)}
-            color="sky"
             testId="admin-genre"
           />
 
@@ -615,56 +667,95 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             />
           </div>
 
-          <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
-              Recommended
-            </Label>
+          {!hideAwardsAndPlaytime && (
+            <div>
+              <Label className="text-xs tracking-[0.06em] uppercase text-gold flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5" /> Play Time
+              </Label>
+              <Input
+                value={form.playTime || ""}
+                onChange={(e) => set("playTime", e.target.value)}
+                data-testid="admin-field-playtime"
+                placeholder="e.g. 24 hours"
+                className="mt-2 h-10 bg-surface border-off-white/15 text-off-white"
+              />
+            </div>
+          )}
+
+          {!hideAwardsAndPlaytime && (
+            <AwardsEditor
+              items={form.awards}
+              onChange={(i, v) => setListItem("awards", i, v)}
+              onAdd={() => addListItem("awards")}
+              onRemove={(i) => removeListItem("awards", i)}
+              usedAwards={usedAwards}
+            />
+          )}
+
+          <ClearableField label="Recommended">
             <Select
               value={form.recommended ?? ""}
               onValueChange={(v) => set("recommended", v)}
             >
               <SelectTrigger
                 data-testid="admin-field-recommended"
-                className="mt-2 h-10 bg-white border-slate-200"
+                className="h-10 bg-surface border-off-white/15 text-off-white"
               >
                 <SelectValue placeholder="Select…" />
               </SelectTrigger>
-              <SelectContent className="bg-white">
+              <SelectContent className="bg-surface border-off-white/15 text-off-white">
                 <SelectItem value="yes">Yes</SelectItem>
                 <SelectItem value="no">No</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+            {!!form.recommended && (
+              <button
+                type="button"
+                onClick={() => set("recommended", "")}
+                aria-label="Clear recommended"
+                className="w-10 h-10 shrink-0 grid place-items-center rounded-full text-off-white/50 hover:bg-off-white/10 hover:text-off-white"
+              >
+                <XIcon className="w-4 h-4" />
+              </button>
+            )}
+          </ClearableField>
 
-          <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
-              Content Type
-            </Label>
+          <ClearableField label="Content Type">
             <Select
               value={form.contentType ?? ""}
               onValueChange={(v) => set("contentType", v)}
             >
               <SelectTrigger
                 data-testid="admin-field-contentType"
-                className="mt-2 h-10 bg-white border-slate-200"
+                className="h-10 bg-surface border-off-white/15 text-off-white"
               >
                 <SelectValue placeholder="Select…" />
               </SelectTrigger>
-              <SelectContent className="bg-white">
+              <SelectContent className="bg-surface border-off-white/15 text-off-white">
                 <SelectItem value="remake">Remake</SelectItem>
                 <SelectItem value="remaster">Remaster</SelectItem>
                 <SelectItem value="show">Enhanced</SelectItem>
                 <SelectItem value="dlc">DLC</SelectItem>
               </SelectContent>
             </Select>
-          </div>
+            {!!form.contentType && (
+              <button
+                type="button"
+                onClick={() => set("contentType", "")}
+                aria-label="Clear content type"
+                className="w-10 h-10 shrink-0 grid place-items-center rounded-full text-off-white/50 hover:bg-off-white/10 hover:text-off-white"
+              >
+                <XIcon className="w-4 h-4" />
+              </button>
+            )}
+          </ClearableField>
 
-          <div className="flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50">
+          <div className="flex items-center justify-between p-4 rounded-xl border border-off-white/15 bg-crimson/10">
             <div>
-              <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
+              <Label className="text-xs tracking-[0.06em] uppercase text-gold">
                 Gold Standard
               </Label>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-off-white/60 mt-0.5">
                 Pin this as the featured game on the homepage
               </p>
             </div>
@@ -673,11 +764,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               data-testid="admin-field-isFeatured"
               onClick={() => set("isFeatured", !form.isFeatured)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                form.isFeatured ? "bg-sky-600" : "bg-slate-200"
+                form.isFeatured ? "bg-scarlet" : "bg-off-white/15"
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+                className={`inline-block h-4 w-4 transform rounded-full bg-off-white shadow transition-transform ${
                   form.isFeatured ? "translate-x-6" : "translate-x-1"
                 }`}
               />
@@ -685,7 +776,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           </div>
 
           <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
+            <Label className="text-xs tracking-[0.06em] uppercase text-gold">
               Summary *
             </Label>
             <Input
@@ -693,7 +784,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               onChange={(e) => set("summary", e.target.value)}
               data-testid="admin-field-summary"
               placeholder="One sentence summary..."
-              className="mt-2 h-10 bg-white border-slate-200"
+              className="mt-2 h-10 bg-surface border-off-white/15 text-off-white"
             />
           </div>
 
@@ -704,7 +795,6 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             onChange={(i, v) => setListItem("pros", i, v)}
             onAdd={() => addListItem("pros")}
             onRemove={(i) => removeListItem("pros", i)}
-            color="emerald"
             testId="admin-pros"
           />
 
@@ -715,12 +805,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             onChange={(i, v) => setListItem("cons", i, v)}
             onAdd={() => addListItem("cons")}
             onRemove={(i) => removeListItem("cons", i)}
-            color="rose"
             testId="admin-cons"
           />
 
           <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
+            <Label className="text-xs tracking-[0.06em] uppercase text-gold">
               Review Body (Markdown) *
             </Label>
             <Textarea
@@ -729,9 +818,9 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               onChange={(e) => set("body", e.target.value)}
               data-testid="admin-field-body"
               placeholder="Write your review here."
-              className="mt-2 bg-white border-slate-200 resize-y text-sm font-mono"
+              className="mt-2 bg-surface border-off-white/15 text-off-white resize-y text-sm font-mono"
             />
-            <p className="mt-2 text-xs text-slate-500">
+            <p className="mt-2 text-xs text-off-white/60">
               Supports Markdown headings, lists, links, bold, italics,
               blockquotes, and code blocks.
             </p>
@@ -740,8 +829,8 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           <DialogFooter className="pt-4">
             <button
               type="button"
-              onClick={onClose}
-              className="px-5 h-10 rounded-full bg-white border border-slate-200 hover:bg-slate-50 text-sm text-slate-700"
+              onClick={requestClose}
+              className="px-5 h-10 rounded-full bg-surface border border-off-white/15 hover:bg-off-white/5 text-sm text-off-white/80"
             >
               Cancel
             </button>
@@ -749,11 +838,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               type="submit"
               data-testid="admin-save-review"
               disabled={saving || !canSubmit}
-              className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-slate-900 text-white hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium"
+              className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-scarlet text-off-white filter hover:brightness-90 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium"
             >
               {saving ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                  <span className="w-3.5 h-3.5 border-2 border-off-white/40 border-t-off-white rounded-full animate-spin" />
                   Saving…
                 </>
               ) : (
@@ -766,13 +855,71 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           </DialogFooter>
         </form>
       </DialogContent>
+
+      <AlertDialog open={showCloseConfirm} onOpenChange={setShowCloseConfirm}>
+        <AlertDialogContent className="bg-surface border-off-white/15">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-display text-off-white">
+              Discard unsaved changes?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-off-white/60">
+              You have unsaved changes on this review. Closing now will lose
+              them.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep editing</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                setShowCloseConfirm(false);
+                onClose();
+              }}
+              className="bg-scarlet text-off-white filter hover:brightness-90"
+            >
+              Discard changes
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={showCreateConfirm} onOpenChange={setShowCreateConfirm}>
+        <AlertDialogContent className="bg-surface border-off-white/15">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-display text-off-white">
+              Create this review?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-off-white/60">
+              "{form.title || "Untitled"}" will be published to the site.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Go back</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={doSave}
+              className="bg-scarlet text-off-white filter hover:brightness-90"
+            >
+              Create review
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 }
 
+/** Label + control row with room for a trailing clear button. */
+const ClearableField = ({ label, children }) => (
+  <div>
+    <Label className="text-xs tracking-[0.06em] uppercase text-gold">
+      {label}
+    </Label>
+    <div className="mt-2 flex items-center gap-2">{children}</div>
+  </div>
+);
+
 const FieldText = ({ label, value, onChange, required, testId }) => (
   <div>
-    <Label className="text-xs tracking-[0.06em] uppercase text-sky-700">
+    <Label className="text-xs tracking-[0.06em] uppercase text-gold">
       {label}
       {required ? " *" : ""}
     </Label>
@@ -781,7 +928,7 @@ const FieldText = ({ label, value, onChange, required, testId }) => (
       required={required}
       onChange={(e) => onChange(e.target.value)}
       data-testid={testId}
-      className="mt-2 h-10 bg-white border-slate-200"
+      className="mt-2 h-10 bg-surface border-off-white/15 text-off-white"
     />
   </div>
 );
@@ -792,19 +939,18 @@ const ListEditor = ({
   onChange,
   onAdd,
   onRemove,
-  color,
   required,
   testId,
 }) => (
   <div data-testid={testId}>
     <div className="flex items-center justify-between mb-2">
-      <Label className={`text-xs tracking-[0.06em] uppercase text-${color}-700`}>
+      <Label className="text-xs tracking-[0.06em] uppercase text-gold">
         {label}{required ? " *" : ""}
       </Label>
       <button
         type="button"
         onClick={onAdd}
-        className="text-xs text-sky-700 hover:text-sky-900 inline-flex items-center gap-1"
+        className="text-xs text-gold hover:text-off-white inline-flex items-center gap-1"
       >
         <Plus className="w-3 h-3" /> Add
       </button>
@@ -815,14 +961,15 @@ const ListEditor = ({
           <Input
             value={it}
             onChange={(e) => onChange(i, e.target.value)}
-            className="h-10 bg-white border-slate-200"
+            className="h-10 bg-surface border-off-white/15 text-off-white"
             placeholder={`${label} item`}
           />
           {items.length > 1 && (
             <button
               type="button"
               onClick={() => onRemove(i)}
-              className="w-9 h-9 grid place-items-center rounded-full text-slate-400 hover:bg-slate-100"
+              aria-label={`Remove ${label} item`}
+              className="w-9 h-9 grid place-items-center rounded-full text-off-white/50 hover:bg-off-white/10 hover:text-off-white"
             >
               <XIcon className="w-4 h-4" />
             </button>
@@ -830,5 +977,65 @@ const ListEditor = ({
         </div>
       ))}
     </div>
+  </div>
+);
+
+/** Array editor for Game Awards — each row is a dropdown (not free text),
+    already-picked awards are excluded from the other rows' options, and
+    every row can be cleared with the X button so a stray click never
+    permanently sticks an award onto the review. */
+const AwardsEditor = ({ items, onChange, onAdd, onRemove, usedAwards }) => (
+  <div data-testid="admin-awards">
+    <div className="flex items-center justify-between mb-2">
+      <Label className="text-xs tracking-[0.06em] uppercase text-gold flex items-center gap-1.5">
+        <Trophy className="w-3.5 h-3.5" /> Game Awards
+      </Label>
+      <button
+        type="button"
+        onClick={onAdd}
+        data-testid="admin-awards-add"
+        className="text-xs text-gold hover:text-off-white inline-flex items-center gap-1"
+      >
+        <Plus className="w-3 h-3" /> Add award
+      </button>
+    </div>
+    {items.length === 0 ? (
+      <p className="text-xs text-off-white/50">No awards added.</p>
+    ) : (
+      <div className="space-y-2">
+        {items.map((value, i) => {
+          const taken = new Set(usedAwards(i));
+          return (
+            <div key={i} className="flex items-center gap-2">
+              <Select value={value || ""} onValueChange={(v) => onChange(i, v)}>
+                <SelectTrigger
+                  data-testid={`admin-awards-select-${i}`}
+                  className="h-10 bg-surface border-off-white/15 text-off-white"
+                >
+                  <SelectValue placeholder="Select an award…" />
+                </SelectTrigger>
+                <SelectContent className="bg-surface border-off-white/15 text-off-white">
+                  {AWARD_OPTIONS.filter((opt) => opt === value || !taken.has(opt)).map(
+                    (opt) => (
+                      <SelectItem key={opt} value={opt}>
+                        {opt}
+                      </SelectItem>
+                    ),
+                  )}
+                </SelectContent>
+              </Select>
+              <button
+                type="button"
+                onClick={() => onRemove(i)}
+                aria-label="Remove award"
+                className="w-9 h-9 shrink-0 grid place-items-center rounded-full text-off-white/50 hover:bg-off-white/10 hover:text-off-white"
+              >
+                <XIcon className="w-4 h-4" />
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    )}
   </div>
 );
