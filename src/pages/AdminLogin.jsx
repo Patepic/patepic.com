@@ -6,8 +6,10 @@ import { Label } from "../components/ui/label";
 import { useAuth } from "../context/AuthContext";
 import { errorMessage } from "../lib/api";
 import { toast } from "sonner";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export default function AdminLogin() {
+  usePageTitle("Admin sign in");
   const { user, login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -36,32 +38,29 @@ export default function AdminLogin() {
     <div data-testid="admin-login-page" className="min-h-[80vh] grid place-items-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <div className="inline-grid place-items-center w-12 h-12 rounded-full bg-scarlet mb-4">
-            <Lock className="w-5 h-5 text-off-white" />
-          </div>
-          <h1 className="display-heading text-4xl text-off-white">Admin sign in</h1>
-          <p className="text-sm text-off-white/70 mt-2">Only the writer gets in past this point.</p>
+          <h1 className="display-hero text-4xl text-void">Admin sign in</h1>
+          <p className="text-sm text-void/80 mt-2">Admin access only.</p>
         </div>
 
-        <form onSubmit={submit} className="panel-framed rounded-2xl p-7">
+        <form onSubmit={submit} className="panel-framed p-7">
           <div className="relative mb-5">
-            <Label htmlFor="email" className="text-[0.8rem] tracking-[0.06em] uppercase font-bold text-off-white">Email</Label>
+            <Label htmlFor="email" className="eyebrow !text-[0.6rem] text-void">Email</Label>
             <Input id="email" type="email" required autoComplete="username" value={email}
               onChange={(e) => setEmail(e.target.value)} data-testid="admin-email-input" placeholder="Email"
-              className="mt-2 h-12 bg-surface border-off-white text-off-white" />
+              className="mt-2 h-12 bg-bone border-hairline text-void" />
           </div>
 
           <div className="relative mb-7">
-            <Label htmlFor="password" className="text-[0.8rem] tracking-[0.06em] uppercase font-bold text-off-white">Password</Label>
+            <Label htmlFor="password" className="eyebrow !text-[0.6rem] text-void">Password</Label>
             <Input id="password" type="password" required autoComplete="current-password" value={password}
               onChange={(e) => setPassword(e.target.value)} data-testid="admin-password-input" placeholder="Password"
-              className="mt-2 h-12 bg-surface border-off-white text-off-white" />
+              className="mt-2 h-12 bg-bone border-hairline text-void" />
           </div>
 
           <button type="submit" disabled={submitting} data-testid="admin-login-submit"
-            className="relative w-full pill pill-ember h-12 px-8 text-sm disabled:opacity-60">
+            className="relative w-full pill pill-jade h-12 px-8 text-sm disabled:opacity-60">
             {submitting ? (
-              <><span className="w-4 h-4 rounded-full border-2 border-surface/40 border-t-surface animate-spin" /> Signing in…</>
+              <><span className="w-4 h-4 rounded-full border-2 border-bone/30 border-t-bone animate-spin" /> Signing in…</>
             ) : (
               <><LogIn className="w-4 h-4" /> Sign in</>
             )}

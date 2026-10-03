@@ -1,15 +1,18 @@
 import { Link } from "react-router-dom";
-import { SectionTitle, Kicker } from "../components/ui/decor";
+import { Gamepad2, Trophy } from "lucide-react";
+import { Wordmark, CapsuleButton } from "../components/ui/decor";
+import { getTierColor, getRarity } from "../lib/tier";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 const tiers = [
-  { tier: "★", label: "Favorite", chip: "bg-gold text-surface", desc: "Personal favorite. Not always the best, but the one that stuck with me the most." },
-  { tier: "S+", label: "Masterpiece", chip: "bg-gold text-surface", desc: "Everything I expected and more. A flawless experience that I can't stop thinking about." },
-  { tier: "S", label: "Elite", chip: "bg-gold text-surface", desc: "Exceptional from beginning to end. A few minor flaws exist, but they never get in the way." },
-  { tier: "A", label: "Excellent", chip: "bg-crimson text-off-white", desc: "Easy to recommend. Consistently engaging with only a handful of flaws." },
-  { tier: "B", label: "Great", chip: "bg-crimson text-off-white", desc: "A strong experience that delivers on its promises. Some noticeable flaws hold it back." },
-  { tier: "C", label: "Above Average", chip: "bg-scarlet text-off-white", desc: "Moments of brilliance surrounded by too much filler." },
-  { tier: "D", label: "Below Average", chip: "bg-scarlet text-off-white", desc: "The vision was there. Almost nothing else was." },
-  { tier: "F", label: "Avoid", chip: "bg-scarlet text-off-white", desc: "Either scored 3 or below, or it's a game I can't recommend regardless of the score." },
+  { tier: "★", label: "Favorite", desc: "Personal favorite. Not always the best, but the one that stuck with me the most." },
+  { tier: "S+", label: "Masterpiece", desc: "Everything I expected and more. A flawless experience that I can't stop thinking about." },
+  { tier: "S", label: "Elite", desc: "Exceptional from beginning to end. A few minor flaws exist, but they never get in the way." },
+  { tier: "A", label: "Excellent", desc: "Easy to recommend. Consistently engaging with only a handful of flaws." },
+  { tier: "B", label: "Great", desc: "A strong experience that delivers on its promises. Some noticeable flaws hold it back." },
+  { tier: "C", label: "Above Average", desc: "Moments of brilliance surrounded by too much filler." },
+  { tier: "D", label: "Below Average", desc: "The vision was there. Almost nothing else was." },
+  { tier: "F", label: "Avoid", desc: "Either scored 3 or below, or a game I can't recommend regardless of the score." },
 ];
 
 const principles = [
@@ -18,65 +21,65 @@ const principles = [
   { title: "I review the game I played", body: "Bugs at launch count. Day one patches I had access to also count." },
   { title: "Ignore the crowd", body: "I do not adjust scores to match others. If I disliked a beloved game I will tell you exactly why." },
   { title: "Genre over hype", body: "A great RPG and a great FPS are not competing for the same score." },
+  { title: "The tier is the verdict", body: "The score rates the game. The tier says whether I think you should play it, which is why a 5 can still land in F." },
 ];
 
 export default function Guidelines() {
+  usePageTitle("Guidelines");
   return (
     <div>
-      <div className="relative bg-surface pb-20 md:pb-28 overflow-hidden">
-        <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 lg:pt-14 text-center">
-          <Kicker>How I score</Kicker>
-          <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-off-white">Guidelines</h1>
-          <p className="mt-5 mx-auto max-w-2xl text-sm sm:text-base leading-relaxed text-off-white/70">
-            A score tells you how good the game is. The tier tells you whether I think you should play it.
-          </p>
-        </section>
-
-        {/* Tier rows as bordered rounded cards */}
-        <section className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 lg:mt-16">
-          <div className="space-y-4">
-            {tiers.map((t) => (
-              <div key={t.tier}
-                className="rounded-2xl border border-off-white/10 bg-crimson p-4 sm:p-5 flex items-center gap-4 sm:gap-6 hover:border-off-white transition-colors">
-                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full grid place-items-center shrink-0 font-display font-bold text-2xl ${t.chip}`}>
-                  {t.tier}
-                </div>
-                <div className="min-w-0">
-                  <div className="display-hero text-xl sm:text-2xl text-off-white">{t.label}</div>
-                  <p className="mt-1 text-sm sm:text-sm leading-relaxed text-off-white/70">{t.desc}</p>
-                </div>
-              </div>
-            ))}
+      <div className="relative pb-20 md:pb-28">
+        <section className="relative pt-12 lg:pt-16">
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <Wordmark text="Guidelines" tag="how I score" className="wordmark text-5xl sm:text-7xl lg:text-8xl text-void" tagClassName="text-void/50" />
+            <p className="mt-5 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed text-ink">
+              A score tells you how good the game is. The tier tells you whether I think you should play it.
+              Each tier below carries a short note on what that ranking means to me. Spot a tier on a review and
+              look it up here.
+            </p>
           </div>
         </section>
 
-        {/* House rules */}
-        <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 lg:mt-28">
-          <div className="magazine-rule mb-6"><span>House rules</span></div>
-          <SectionTitle>Five things I never compromise on.</SectionTitle>
+        <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 lg:mt-16">
+          <Wordmark text="The tiers" className="wordmark text-4xl sm:text-5xl text-void" />
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {principles.map((p, i) => (
-              <div key={p.title} className="relative overflow-hidden panel-framed rounded-2xl p-7">
-                <div className="display-hero text-7xl absolute top-1 right-4 select-none pointer-events-none text-gold/25">
-                  {(i + 1).toString().padStart(2, "0")}
+            {tiers.map(({ tier, label, desc }) => {
+              const rarity = getRarity(tier);
+              return (
+                <div key={tier} className="dex-panel flex flex-col" style={{ "--tier-color": getTierColor(tier) }}>
+                  <div className="flex items-center gap-3">
+                    <span className="tier-stamp">{tier}</span>
+                    <h3 className="dex-title !mb-0">{label}</h3>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed text-void/85">{desc}</p>
+                  <div className={`rarity-${rarity.tone} mt-auto pt-4 flex justify-end`}>
+                    <span className="pc-rarity !text-base" aria-hidden="true">{rarity.symbol.repeat(rarity.stars)}</span>
+                  </div>
                 </div>
-                <h3 className="relative display-hero text-xl text-off-white mb-3">{p.title}</h3>
-                <p className="relative text-sm leading-relaxed text-off-white/70">{p.body}</p>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 lg:mt-28">
+          <Wordmark text="The principles" className="wordmark text-4xl sm:text-5xl text-void" />
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {principles.map((principle) => (
+              <div key={principle.title} className="dex-panel">
+                <h3 className="dex-title">{principle.title}</h3>
+                <p className="text-sm leading-relaxed text-void/85">{principle.body}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 text-center">
-          <div className="pt-12 border-t border-off-white">
-            <p className="accent-serif text-2xl lg:text-3xl leading-relaxed text-off-white">
-              &ldquo;The score gets you in the door. The review tells you if you should stay.&rdquo;
-            </p>
-            <div className="magazine-rule mt-6 max-w-xs mx-auto"><span>the only rule that matters</span></div>
-            <div className="mt-9 flex flex-wrap gap-3 justify-center">
-              <Link to="/tier-list" className="pill pill-ember h-12 px-7 text-sm">See the tier list</Link>
-              <Link to="/reviews" className="pill pill-outline h-12 px-7 text-sm">Browse reviews</Link>
-            </div>
+          <p className="text-2xl lg:text-3xl leading-relaxed text-void/85 italic">
+            &ldquo;The score gets you in the door. The review tells you if you should stay.&rdquo;
+          </p>
+          <div className="mt-9 flex flex-wrap gap-4 justify-center">
+            <CapsuleButton as={Link} to="/tier-list" icon={Trophy} className="!bg-mint !border-mint">See the tier list</CapsuleButton>
+            <CapsuleButton as={Link} to="/reviews" icon={Gamepad2} className="!bg-transparent !border-void/25">Browse reviews</CapsuleButton>
           </div>
         </section>
       </div>

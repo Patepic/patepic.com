@@ -1,4 +1,3 @@
-"""Auth helpers: bcrypt password hashing + JWT issuance / verification."""
 import os
 import bcrypt
 import jwt
@@ -7,7 +6,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 JWT_ALGORITHM = "HS256"
-ACCESS_TOKEN_TTL_HOURS = 24  # single-admin site: long-lived sessions are fine
+ACCESS_TOKEN_TTL_HOURS = 24
 
 
 def hash_password(password: str) -> str:

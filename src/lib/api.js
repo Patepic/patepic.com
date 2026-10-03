@@ -86,6 +86,36 @@ export const adminUploadImage = async (file, onProgress) => {
   return data;
 };
 
+export const adminDiscardUpload = async (url) => {
+  const { data } = await api.delete("/admin/upload", { params: { url } });
+  return data;
+};
+
+export const fetchRecentVideos = async () => {
+  const { data } = await api.get("/youtube/recent");
+  return data;
+};
+
+export const fetchNowPlaying = async () => {
+  const { data } = await api.get("/now-playing");
+  return data || null;
+};
+
+export const adminGetNowPlaying = async () => {
+  const { data } = await api.get("/admin/now-playing");
+  return data || null;
+};
+
+export const adminSetNowPlaying = async (payload) => {
+  const { data } = await api.put("/admin/now-playing", payload);
+  return data;
+};
+
+export const adminClearNowPlaying = async () => {
+  const { data } = await api.delete("/admin/now-playing");
+  return data;
+};
+
 export const sendContact = async (payload) => {
   const { data } = await api.post("/contact", payload);
   return data;

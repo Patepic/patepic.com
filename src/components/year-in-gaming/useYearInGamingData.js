@@ -1,35 +1,27 @@
 import { useMemo } from "react";
+import { getYearFromDate, defaultYearInGamingYear } from "../../lib/year";
 
-/**
- * Extracts the series/franchise name from a review title.
- * Handles patterns like "Game Name: Subtitle", "Game Name - Subtitle", etc.
- */
 function extractSeries(title) {
   if (!title) return null;
   const cleaned = title.replace(/™|®|©/g, "").trim();
-  
+
   const colonMatch = cleaned.match(/^([^:]+?)(?:\s*:|\s*–|\s*—|\s*-\s)/);
   if (colonMatch) return colonMatch[1].trim();
-  
+
   const numberMatch = cleaned.match(/^(.+?)\s+#\d/);
   if (numberMatch) return numberMatch[1].trim();
-  
+
   const endNumberMatch = cleaned.match(/^(.+?)\s+\d+$/);
   if (endNumberMatch) return endNumberMatch[1].trim();
-  
+
   const theMatch = cleaned.match(/^(.+?),\s*The(?:\s|$)/i);
   if (theMatch) return theMatch[1].trim();
-  
+
   return null;
 }
 
-/**
- * Determines if a review's date falls within 2026.
- * Uses the review's `date` field exclusively.
- */
-function isReviewFrom2026(review) {
-  if (!review?.date) return false;
-  return review.date.includes("2026");
+function isReviewFromYear(review, year) {
+  return getYearFromDate(review?.date) === year;
 }
 
 function parseReviewDate(review) {
@@ -43,16 +35,14 @@ function getReviewMonth(review) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 
-/**
- * Calculates all statistics for the Year in Gaming 2026 page.
- */
-export function useYearInGamingData(reviews) {
+export function useYearInGamingData(reviews, year = defaultYearInGamingYear()) {
   return useMemo(() => {
-    const yearReviews = reviews.filter(isReviewFrom2026);
-    
+    const yearReviews = (reviews || []).filter((r) => isReviewFromYear(r, year));
+
     if (yearReviews.length === 0) {
       return {
         reviews: [],
+        year,
         totalReviews: 0,
         gamesPlayed: 0,
         gamesFinished: 0,
@@ -74,40 +64,32 @@ export function useYearInGamingData(reviews) {
         monthlyGames: {},
         genreCounts: {},
         platformCounts: {},
-        hasData: false,
       };
     }
 
-    // ── Basic Stats ──
     const totalReviews = yearReviews.length;
     const scores = yearReviews.map((r) => parseFloat(r.rating) || 0);
     const averageScore = scores.length
-      ? (scores.reduce((a, b) => a + b, 0) / scores.length)
+      ? scores.reduce((a, b) => a + b, 0) / scores.length
       : 0;
 
-    // ── Games Played / Finished (all reviews = finished games) ──
     const gamesPlayed = totalReviews;
-    const gamesFinished = totalReviews; // every review is a finished game
+    const gamesFinished = totalReviews;
 
-    // ── Highest / Lowest Rated ──
     const highestScore = Math.max(...scores);
     const lowestScore = Math.min(...scores);
-    
-    // Find all games with the highest score. If multiple, use isFeatured or first chronologically
+
     const highestScorers = yearReviews.filter(
       (r) => parseFloat(r.rating) === highestScore
     );
     const highestRated = highestScorers.find((r) => r.isFeatured) || highestScorers[0] || null;
-    
+
     const lowestRated = yearReviews.find(
       (r) => parseFloat(r.rating) === lowestScore
     ) || null;
 
-    // ── Game of the Year ──
-    // If GOTY is also the highest score, they should match
     const goty = yearReviews.find((r) => r.isFeatured) || highestRated;
 
-    // ── Platform Stats ──
     const platformCounts = {};
     yearReviews.forEach((r) => {
       if (r.platform) {
@@ -120,7 +102,6 @@ export function useYearInGamingData(reviews) {
     const favoritePlatform = platformEntries[0]?.[0] || null;
     const totalPlatformsPlayed = platformEntries.length;
 
-    // ── Genre Stats ──
     const genreCounts = {};
     yearReviews.forEach((r) => {
       const genres = Array.isArray(r.genre)
@@ -138,7 +119,6 @@ export function useYearInGamingData(reviews) {
     const mostPlayedGenre = genreEntries[0]?.[0] || null;
     const totalGenresPlayed = genreEntries.length;
 
-    // ── Series / Franchise Detection ──
     const seriesGroups = {};
     yearReviews.forEach((r) => {
       const series = extractSeries(r.title);
@@ -151,9 +131,7 @@ export function useYearInGamingData(reviews) {
       .filter(([, games]) => games.length >= 5)
       .map(([series, games]) => ({
         series,
-        games: games.sort(
-          (a, b) => parseReviewDate(a) - parseReviewDate(b)
-        ),
+        games: games.sort((a, b) => parseReviewDate(a) - parseReviewDate(b)),
         count: games.length,
       }))
       .sort((a, b) => b.count - a.count);
@@ -163,7 +141,6 @@ export function useYearInGamingData(reviews) {
     );
     const mostReviewedFranchise = franchiseEntries[0]?.[0] || null;
 
-    // ── Monthly Grouping ──
     const monthlyGroups = {};
     yearReviews.forEach((r) => {
       const month = getReviewMonth(r);
@@ -185,19 +162,16 @@ export function useYearInGamingData(reviews) {
       };
     });
 
-    // ── Completion Percentage ──
     const completionPercentage = totalReviews
       ? Math.round((gamesFinished / totalReviews) * 100)
       : 0;
 
-    // ── Oldest / Newest Game (by review date) ──
     const sortedByDate = [...yearReviews].sort(
       (a, b) => parseReviewDate(a) - parseReviewDate(b)
     );
     const oldestGame = sortedByDate[0] || null;
     const newestGame = sortedByDate[sortedByDate.length - 1] || null;
 
-    // ── Biggest Surprise / Disappointment ──
     const avgScore = averageScore;
     const biggestSurprise = yearReviews
       .filter((r) => parseFloat(r.rating) > avgScore + 1.5)
@@ -208,6 +182,7 @@ export function useYearInGamingData(reviews) {
 
     return {
       reviews: yearReviews,
+      year,
       totalReviews,
       gamesPlayed,
       gamesFinished,
@@ -233,5 +208,5 @@ export function useYearInGamingData(reviews) {
       platformEntries,
       hasData: true,
     };
-  }, [reviews]);
+  }, [reviews, year]);
 }

@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { Send, CheckCircle2, Twitch, Youtube, Mail } from "lucide-react";
+import { Send, CheckCircle2, Twitch, Youtube, ArrowUpRight } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Label } from "../components/ui/label";
 import { toast } from "sonner";
 import { sendContact, errorMessage } from "../lib/api";
 import { creator } from "../data/creator";
-import { StickerBadge } from "../components/ui/decor";
+import { Wordmark, CapsuleButton } from "../components/ui/decor";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 const MAX_MESSAGE = 200;
 const EMAIL = "contact@patepic.com";
 
 export default function Contact() {
+  usePageTitle("Contact");
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -42,20 +44,23 @@ export default function Contact() {
     try { const res = await sendContact(form); setSent(true); if (res?.dev_mode) toast.success("Message logged (Resend not configured)"); else toast.success("Message sent! I'll reply soon."); } catch (err) { toast.error(errorMessage(err)); } finally { setLoading(false); }
   };
 
+  const field = "mt-2 h-12 bg-bone border-void/20 text-void placeholder:text-void/45";
+  const fieldError = "text-sm font-semibold text-blush-deep mt-1.5";
+
   if (sent) {
     return (
-      <div className="relative bg-surface">
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="panel-framed rounded-2xl px-6 py-14 sm:px-12 text-center">
-            <div className="relative inline-grid place-items-center w-16 h-16 rounded-full mb-6 bg-scarlet">
-              <CheckCircle2 className="w-7 h-7 text-off-white" />
-            </div>
-            <h1 className="relative display-heading text-4xl sm:text-5xl text-off-white">Message received.</h1>
-            <p className="relative mt-4 max-w-md mx-auto text-sm sm:text-base leading-relaxed text-off-white/75">
-              Thanks, {form.name || "stranger"}. I read every message — replies usually go out within a week.
-            </p>
-            <button onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); }}
-              className="relative pill pill-ember h-11 px-6 text-sm mt-8">Send another</button>
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+        <div className="dex-panel text-center !py-12">
+          <span className="watch-tile-icon mx-auto mb-6" aria-hidden="true"><CheckCircle2 className="w-6 h-6" /></span>
+          <h1 className="wordmark text-4xl sm:text-5xl text-void">Message sent</h1>
+          <p className="mt-4 max-w-md mx-auto text-sm sm:text-base leading-relaxed text-void/75">
+            Thanks, {form.name || "stranger"}. I read every message. Replies usually go out within a week.
+          </p>
+          <div className="mt-8 flex justify-center">
+            <CapsuleButton as="button" type="button" icon={Send} className="!bg-mint !border-mint"
+              onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); }}>
+              Send another
+            </CapsuleButton>
           </div>
         </div>
       </div>
@@ -63,106 +68,94 @@ export default function Contact() {
   }
 
   return (
-    <div className="relative bg-surface">
-      <section className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8 md:pt-28">
-        {/* Envelope flap peeking out from behind the card — the letter is "inside" */}
-        <div aria-hidden="true" className="absolute left-1/2 -translate-x-1/2 top-3 lg:top-6 w-[88%] max-w-[520px] h-20 sm:h-24">
-          <div className="absolute inset-0 bg-gold rounded-t-2xl" style={{ clipPath: "polygon(0 100%, 50% 15%, 100% 100%)" }} />
-        </div>
-
-        {/* ── Cream bordered contact box ── */}
-        <div className="panel-framed relative z-10 rounded-2xl px-5 py-10 sm:px-10 lg:px-14 lg:py-14">
-          <div className="relative text-center">
-            <StickerBadge icon={Mail} className="mx-auto mb-4" />
-            <h1 className="display-heading text-5xl sm:text-6xl text-off-white">Contact</h1>
-            <a href={`mailto:${EMAIL}`}
-              className="inline-block mt-4 text-sm sm:text-base font-semibold text-off-white underline decoration-gold decoration-2 underline-offset-[6px] hover:decoration-scarlet">
-              {EMAIL}
-            </a>
-            <p className="mt-3 text-[0.7rem] font-extrabold uppercase tracking-[0.06em] text-off-white">
-              Business Inquiries ONLY
-            </p>
-          </div>
-
-          <form onSubmit={submit} className="relative mt-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <div>
-                <Label htmlFor="name" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-off-white">Name <span className="text-off-white">*</span></Label>
-                <Input id="name" value={form.name} onChange={(e) => update("name", e.target.value)} placeholder="Your name"
-                  className="mt-2 h-12 bg-surface border-off-white text-off-white placeholder:text-off-white/40" />
-                {errors.name && <p className="text-sm font-bold text-off-white mt-1.5">{errors.name}</p>}
-              </div>
-              <div>
-                <Label htmlFor="email" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-off-white">Email <span className="text-off-white">*</span></Label>
-                <Input id="email" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="you@example.com"
-                  className="mt-2 h-12 bg-surface border-off-white text-off-white placeholder:text-off-white/40" />
-                {errors.email && <p className="text-sm font-bold text-off-white mt-1.5">{errors.email}</p>}
-              </div>
-            </div>
-            <div className="mt-5">
-              <Label htmlFor="subject" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-off-white">Subject <span className="text-off-white">*</span></Label>
-              <Input id="subject" value={form.subject} onChange={(e) => update("subject", e.target.value)} placeholder="Business / partnerships / feedback"
-                className="mt-2 h-12 bg-surface border-off-white text-off-white placeholder:text-off-white/40" />
-              {errors.subject && <p className="text-sm font-bold text-off-white mt-1.5">{errors.subject}</p>}
-            </div>
-            <div className="mt-5">
-              <div className="flex items-center justify-between mb-2">
-                <Label htmlFor="message" className="text-[0.8rem] font-bold tracking-[0.06em] uppercase text-off-white">Message <span className="text-off-white">*</span></Label>
-                <span className={`text-sm font-bold tabular-nums px-2.5 py-0.5 rounded-full border ${charsOver ? "bg-scarlet border-off-white text-off-white" : "bg-surface border-off-white text-off-white/60"}`}>
-                  {form.message.length} / {MAX_MESSAGE}
-                </span>
-              </div>
-              <Textarea id="message" rows={7} value={form.message} onChange={(e) => update("message", e.target.value)} placeholder="Say what's on your mind…"
-                className="bg-surface border-off-white text-off-white placeholder:text-off-white/40 resize-none" />
-              {errors.message && <p className="text-sm font-bold text-off-white mt-1.5">{errors.message}</p>}
-            </div>
-            <button type="submit" disabled={loading || !allFilled}
-              className="mt-8 w-full pill pill-gold h-12 px-8 text-sm disabled:opacity-40">
-              {loading ? <><span className="w-4 h-4 rounded-full border-2 border-scarlet/30 border-t-scarlet animate-spin" /> Sending…</> : <><Send className="w-4 h-4" /> Send message</>}
-            </button>
-          </form>
-        </div>
+    <div className="relative">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 lg:pt-16 text-center">
+        <Wordmark text="Contact" tag="business and partnership inquiries" className="wordmark text-6xl sm:text-7xl lg:text-8xl text-void" tagClassName="text-void/50" />
+        <p className="mt-5 max-w-xl mx-auto text-sm sm:text-base leading-relaxed text-ink">
+          For sponsorships, review requests, collaborations and press. Use the form or email directly.
+        </p>
       </section>
 
-      {/* ── Channel blocks with golden pill buttons (the agent row in the reference) ── */}
-      <section className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          <ChannelBlock
-            wordmark={creator.twitch.handle}
-            sub="Live streams"
-            Icon={Twitch}
-            href={creator.twitch.url}
-            action={creator.twitch.handle}
-            caption="Stream Schedule"
-          />
-          <ChannelBlock
-            wordmark={creator.name}
-            sub="Video & VODs"
-            Icon={Youtube}
-            href={creator.youtube.url}
-            action={creator.youtube.handle}
-            caption="YouTube Channel"
-          />
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pb-16 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <form onSubmit={submit} noValidate className="lg:col-span-7 dex-panel !p-6 sm:!p-8">
+          <h2 className="dex-title">Send a message</h2>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <Label htmlFor="name" className="dex-label">Name</Label>
+              <Input id="name" value={form.name} onChange={(e) => update("name", e.target.value)} placeholder="Your name" className={field} />
+              {errors.name && <p className={fieldError}>{errors.name}</p>}
+            </div>
+            <div>
+              <Label htmlFor="email" className="dex-label">Email</Label>
+              <Input id="email" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="you@example.com" className={field} />
+              {errors.email && <p className={fieldError}>{errors.email}</p>}
+            </div>
+          </div>
+          <div className="mt-5">
+            <Label htmlFor="subject" className="dex-label">Subject</Label>
+            <Input id="subject" value={form.subject} onChange={(e) => update("subject", e.target.value)} placeholder="Sponsorship, review request, collaboration…" className={field} />
+            {errors.subject && <p className={fieldError}>{errors.subject}</p>}
+          </div>
+          <div className="mt-5">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="message" className="dex-label">Message</Label>
+              <span className={`text-xs font-semibold tabular-nums ${charsOver ? "text-blush-deep" : "text-void/55"}`}>
+                {form.message.length} / {MAX_MESSAGE}
+              </span>
+            </div>
+            <Textarea id="message" rows={7} value={form.message} onChange={(e) => update("message", e.target.value)} placeholder="What would you like to discuss?"
+              className="mt-2 bg-bone border-void/20 text-void placeholder:text-void/45 resize-none" />
+            {errors.message && <p className={fieldError}>{errors.message}</p>}
+          </div>
+          <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
+            <p className="text-xs text-void/55">All fields are required.</p>
+            <CapsuleButton as="button" type="submit" icon={Send} disabled={loading || !allFilled} className="!bg-mint !border-mint disabled:opacity-40 disabled:pointer-events-none">
+              {loading ? "Sending…" : "Send message"}
+            </CapsuleButton>
+          </div>
+        </form>
+
+        <div className="lg:col-span-5 space-y-8">
+          <div className="dex-panel">
+            <h2 className="dex-title">Direct</h2>
+            <dl>
+              <div className="dex-row">
+                <dt className="dex-label">Email</dt>
+                <dd>
+                  <a href={`mailto:${EMAIL}`} className="font-semibold text-void underline decoration-blush decoration-2 underline-offset-4 break-all">{EMAIL}</a>
+                </dd>
+              </div>
+              <div className="dex-row">
+                <dt className="dex-label">Reply time</dt>
+                <dd className="text-void">Usually within a week</dd>
+              </div>
+              <div className="dex-row">
+                <dt className="dex-label">Best for</dt>
+                <dd className="text-void">Sponsorships, review requests, collaborations, press</dd>
+              </div>
+            </dl>
+          </div>
+
+          <ChannelTile href={creator.twitch.url} color="#A58BF2" Icon={Twitch} title={`Twitch · ${creator.twitch.handle}`} body="Live streams and the schedule." />
+          <ChannelTile href={creator.youtube.url} color="#FF6F61" Icon={Youtube} title={`YouTube · ${creator.youtube.handle}`} body="The main channel." />
+          {creator.pixie.url && (
+            <ChannelTile href={creator.pixie.url} color="#E693B3" Icon={Youtube} title={`YouTube · ${creator.pixie.handle || creator.pixie.name}`} body="The second channel, with the newest videos." />
+          )}
         </div>
       </section>
     </div>
   );
 }
 
-function ChannelBlock({ wordmark, sub, Icon, href, action, caption }) {
+function ChannelTile({ href, color, Icon, title, body }) {
   return (
-    <div className="text-center">
-      <div className="inline-flex flex-col items-center">
-        <div className="w-16 h-16 grid place-items-center bg-gold text-surface border border-off-white/10 shadow-soft-sm rounded-lg">
-          <Icon className="w-7 h-7" />
-        </div>
-        <div className="display-hero mt-3 text-2xl text-off-white">{wordmark}</div>
-        <div className="text-[0.75rem] font-bold uppercase tracking-[0.06em] text-off-white mt-1">{sub}</div>
+    <a href={href} target="_blank" rel="noopener noreferrer" className="dex-panel watch-tile group" style={{ "--tier-color": color }}>
+      <span className="watch-tile-icon" aria-hidden="true"><Icon className="w-5 h-5" /></span>
+      <div className="min-w-0">
+        <div className="font-gothic font-bold text-lg text-void leading-tight">{title}</div>
+        <p className="mt-1 text-sm leading-relaxed text-void/75">{body}</p>
       </div>
-      <div className="mt-5">
-        <a href={href} target="_blank" rel="noopener noreferrer" className="pill pill-gold h-10 px-6 text-sm">{action}</a>
-        <p className="mt-2 text-[0.8rem] font-extrabold uppercase tracking-[0.06em] text-off-white/60">{caption}</p>
-      </div>
-    </div>
+      <ArrowUpRight className="w-5 h-5 shrink-0 ml-auto text-void/60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+    </a>
   );
 }

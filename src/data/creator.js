@@ -1,9 +1,5 @@
-import avatarUrl from "../assets/model.png";
-
-export const creator = {
+const base = {
   name: "Patepic",
-  tagline: "VTuber · Reviewer · Gremlin online",
-  avatarUrl,
 
   twitch: {
     handle: "Patepic",
@@ -11,7 +7,19 @@ export const creator = {
   },
 
   youtube: {
+    name: "Patepic",
     handle: "@patepic",
     url: "https://youtube.com/@patepic",
   },
+
+  pixie: {
+    name: "Pixie",
+    handle: "@pixie",
+    url: "https://www.youtube.com/@pixie",
+  },
+};
+
+export const creator = {
+  ...base,
+  youtubeChannels: [base.youtube, base.pixie].filter((c) => c.url),
 };

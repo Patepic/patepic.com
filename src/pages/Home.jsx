@@ -1,156 +1,188 @@
 import { Link } from "react-router-dom";
 import { useReviews } from "../hooks/useReviews";
+import { useRecentVideos } from "../hooks/useRecentVideos";
+import { useNowPlaying } from "../hooks/useNowPlaying";
 import { creator } from "../data/creator";
-import { ReviewListing } from "../components/ReviewListing";
-import { HomeDataSkeleton } from "../components/ui/skeleton";
-import { SocialRow, SectionTitle, Kicker, StickerBadge } from "../components/ui/decor";
-import { ArrowUpRight, Star, Gamepad2, Trophy, Twitch, Feather } from "lucide-react";
+import { ReviewCard } from "../components/ReviewCard";
+import { NowPlayingCard } from "../components/NowPlayingCard";
+import { HeroVideo, VideoCard } from "../components/VideoCard";
+import { CreatorCard } from "../components/CreatorCard";
+import { Wordmark, CapsuleButton, SocialRow, WaveDivider, ChipBackdrop, PokerChip } from "../components/ui/decor";
+import { HomeDataSkeleton, SkeletonReviewCard, SkeletonVideoCard } from "../components/ui/skeleton";
+import { ArrowUpRight, ArrowDown, Gamepad2, BookOpen, Twitch, Youtube, Mail, Play, Sparkle, Trophy } from "lucide-react";
 import { useMemo } from "react";
+import { usePageTitle } from "../hooks/usePageTitle";
+
+const HERO_SPARKLES = [
+  ["hero-sparkle-1", true], ["hero-sparkle-2", false], ["hero-sparkle-3", false],
+  ["hero-sparkle-4", false], ["hero-sparkle-5", true], ["hero-sparkle-6", false],
+];
 
 export default function Home() {
+  usePageTitle(null);
   const { reviews, loading, error } = useReviews();
-  if (error) return <HomeDataState title="Could not load reviews" />;
-
-  const totalReviews = reviews.length;
-  const averageScore = totalReviews ? (reviews.reduce((s, r) => s + (parseFloat(r.rating) || 0), 0) / totalReviews).toFixed(1) : "—";
-  const platformCounts = reviews.reduce((acc, r) => { if (r.platform) acc[r.platform] = (acc[r.platform] || 0) + 1; return acc; }, {});
-  const topPlatform = Object.entries(platformCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
+  const { latest: latestVideo, recent: recentVideos, channelUrl: videoChannelUrl, loading: videosLoading } = useRecentVideos();
   const highestScore = reviews.length ? Math.max(...reviews.map((r) => parseFloat(r.rating) || 0)) : 0;
   const goldStandard = reviews.find((r) => r.isFeatured) || reviews.filter((r) => !Number.isNaN(parseFloat(r.rating))).find((r) => parseFloat(r.rating) === highestScore);
-  const recent = useMemo(() => [...reviews].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5), [reviews]);
+  const recent = useMemo(
+    () => [...reviews].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).filter((r) => r.slug !== goldStandard?.slug).slice(0, 3),
+    [reviews, goldStandard],
+  );
+  const nowPlayingRaw = useNowPlaying();
+  const sameTitle = (a, b) => a.toLowerCase().replace(/[^a-z0-9]+/g, "") === b.toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const nowPlaying = nowPlayingRaw && !reviews.some((r) => sameTitle(r.title || "", nowPlayingRaw.title)) ? nowPlayingRaw : null;
+  const latestRow = nowPlaying ? recent.slice(0, 2) : recent;
+  if (error) return <HomeDataState title="Could not load reviews" />;
+
 
   return (
     <div>
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="max-w-2xl animate-reveal">
-            <div className="flex items-center gap-4">
-              <StickerBadge icon={Feather} className="w-14 h-14 lg:w-16 lg:h-16" />
-              <div>
-                <Kicker tone="text-off-white">Hello, I&apos;m</Kicker>
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-off-white/60">
-                  Owl Sorcerer of Time
-                </p>
-              </div>
-            </div>
-            <h1 className="display-hero mt-4 text-3xl sm:text-4xl lg:text-6xl text-off-white">
-              {creator.name}<span className="text-gold">.</span>
-            </h1>
-            <p className="display-heading mt-5 text-xl sm:text-2xl lg:text-3xl text-off-white">
-              Reviewer, Streamer, VTuber
-            </p>
-            <p className="mt-8 max-w-lg text-sm sm:text-base leading-relaxed text-off-white/70">
-              Long-form reviews from someone who finishes every game before saying a word about it.
-              Catch the playthrough live, then read the verdict after the credits roll.
-            </p>
+      <section className="hero relative overflow-x-clip">
+        <PokerChip className="hero-chip" />
 
-            <div className="mt-10 flex flex-wrap gap-3">
-              <Link to="/reviews" className="pill pill-gold h-12 px-7 text-sm">
-                Browse the catalogue <ArrowUpRight className="w-4 h-4" />
-              </Link>
-              <Link to="/guidelines" className="pill pill-outline h-12 px-7 text-sm">How I score</Link>
-              {creator.isLive && (
-                <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer" className="pill pill-live h-12 px-7 text-sm">
-                  <span className="w-2.5 h-2.5 rounded-full bg-scarlet" />
-                  <Twitch className="w-4 h-4" /> Live now · {creator.liveGame}
-                </a>
+        <ul className="hero-socials hero-socials-l">
+          <li><a href={creator.twitch.url} target="_blank" rel="noopener noreferrer" aria-label={`Twitch: ${creator.twitch.handle}`}><Twitch aria-hidden="true" /> <span className="hero-social-label">{creator.twitch.handle}</span></a></li>
+          {creator.youtubeChannels.map((c) => (
+            <li key={c.url}><a href={c.url} target="_blank" rel="noopener noreferrer" aria-label={`YouTube: ${c.name}`} title={`YouTube: ${c.name}`}><Youtube aria-hidden="true" /> <span className="hero-social-label">{c.handle || c.name}</span></a></li>
+          ))}
+        </ul>
+        <ul className="hero-socials hero-socials-r">
+          <li><a href="mailto:contact@patepic.com" aria-label="Email contact@patepic.com"><span className="hero-social-label">contact@patepic.com</span> <Mail aria-hidden="true" /></a></li>
+          <li><Link to="/reviews" aria-label="All reviews"><span className="hero-social-label">All reviews</span> <Gamepad2 aria-hidden="true" /></Link></li>
+        </ul>
+
+        <div className="relative z-[1] flex flex-col items-center text-center px-4 pt-14 md:pt-20">
+          <div className="relative">
+            {HERO_SPARKLES.map(([cls, pink], i) => (
+              <Sparkle key={i} aria-hidden="true" className={`hero-sparkle ${cls} ${pink ? "text-blush fill-blush" : "text-void"}`} />
+            ))}
+            <h1 className="wordmark hero-name text-void">{creator.name}</h1>
+          </div>
+          <p className="hero-tagline">Reviewer · Streamer · VTuber</p>
+
+          <a href={creator.pixie.url} target="_blank" rel="noopener noreferrer" className="hero-cta mt-8">
+            <span className="hero-cta-bg" aria-hidden="true" />
+            <span className="hero-cta-icon" aria-hidden="true"><Play className="w-5 h-5" fill="currentColor" /></span>
+            <span className="hero-cta-label">Watch on Pixie</span>
+          </a>
+        </div>
+
+        <div className="relative z-[1] flex justify-center px-4 mt-12 pb-16">
+          <CreatorCard reviews={reviews} loading={loading} className="w-full max-w-[21rem] -rotate-2" />
+        </div>
+
+        <span className="hero-arrow hero-arrow-l" aria-hidden="true"><ArrowDown /></span>
+        <span className="hero-arrow hero-arrow-r" aria-hidden="true"><ArrowDown /></span>
+      </section>
+
+      {(videosLoading || latestVideo) && (
+        <>
+          <div className="mb-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="max-w-md mx-auto">
+              <Wordmark
+                text="Latest Video"
+                className="wordmark text-4xl sm:text-5xl text-void"
+              />
+              <p className="mt-2 text-sm text-void/50">The newest upload from {creator.pixie.url ? "the Pixie channel" : "the channel"}.</p>
+            </div>
+          </div>
+
+          <section className="relative py-8 md:py-10 bg-[var(--void)] overflow-x-clip">
+            <WaveDivider color="var(--void)" position="top" mirror />
+
+            <div className="watch-row">
+              <div className="watch-gutter py-20" aria-hidden="true"><span /><span /></div>
+              <div className="watch-video relative isolate">
+                <ChipBackdrop className="card-chips" />
+                {latestVideo ? <HeroVideo video={latestVideo} className="w-full" /> : <SkeletonVideoCard size="lg" />}
+              </div>
+              <div className="watch-gutter py-20" aria-hidden="true"><span /><span /></div>
+            </div>
+
+            <WaveDivider color="var(--void)" position="bottom" flip />
+          </section>
+        </>
+      )}
+
+      {(videosLoading || recentVideos.length > 0) && (
+        <section className="relative pt-16 pb-4" data-testid="recent-videos">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-end justify-between mb-10 gap-4 flex-wrap">
+              <Wordmark text="More Videos" className="wordmark text-4xl sm:text-5xl text-void" />
+              <a href={videoChannelUrl || creator.youtube.url} target="_blank" rel="noopener noreferrer" className="pill pill-outline h-10 px-5 text-sm">
+                See all videos <ArrowUpRight className="w-4 h-4" />
+              </a>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {videosLoading
+                ? Array.from({ length: 6 }, (_, i) => <SkeletonVideoCard key={i} />)
+                : recentVideos.map((video) => <VideoCard key={video.id} video={video} />)}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="relative py-16 md:py-24" data-testid="featured-review">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between mb-10 gap-4 flex-wrap">
+            <Wordmark text="Featured" tag="top pick" className="wordmark text-4xl sm:text-5xl text-void" tagClassName="text-void/50" />
+            <Link to="/reviews" className="pill pill-outline h-10 px-5 text-sm">View all reviews <ArrowUpRight className="w-4 h-4" /></Link>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+            <div className="lg:col-span-4 max-w-xs mx-auto lg:mx-0 w-full">
+              {loading ? (
+                <SkeletonReviewCard size="lg" />
+              ) : goldStandard ? (
+                <ReviewCard review={goldStandard} size="lg" />
+              ) : null}
+            </div>
+
+            <div className="lg:col-span-8">
+              <p className="eyebrow !text-[0.6rem] mb-4">Latest reviews</p>
+              {loading ? (
+                <HomeDataSkeleton />
+              ) : recent[0] || nowPlaying ? (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {nowPlaying && (
+                    <div className="animate-reveal">
+                      <NowPlayingCard game={nowPlaying} />
+                    </div>
+                  )}
+                  {latestRow.map((r, i) => (
+                    <div key={r.slug} className="animate-reveal" style={{ animationDelay: `${0.1 * (i + (nowPlaying ? 1 : 0))}s` }}>
+                      <ReviewCard review={r} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-void/60">Nothing's been judged yet.</p>
               )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Short teaser — the full bio lives on /about, this is just the hook ── */}
-      <section className="relative pb-16 md:pb-24">
-        <div className="relative max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="label-chip text-lg sm:text-xl">Meet {creator.name}</div>
-
-          <p className="mt-8 text-sm sm:text-base leading-[1.75] text-off-white/85">
-            <span className="hl">Reviewer by day, VTuber by night</span> — the two feed each other. Nothing gets
-            scored until the credits roll, and the same playthrough shows up here as a long-form review and on
-            stream as full-length chaos.
+      <section className="relative py-20 md:py-28">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Wordmark
+            text="My Approach"
+            tag="no shortcuts"
+            className="wordmark text-4xl sm:text-6xl text-void"
+            tagClassName="text-void/60"
+          />
+          <p className="mt-7 mx-auto max-w-xl leading-relaxed text-sm sm:text-base text-ink">
+            Every review is graded off a full playthrough. What you read is the actual verdict, with no
+            early calls and no crowd-pleasing scores.
           </p>
-
-          <div className="mt-8 flex justify-center">
-            <Link to="/about" className="pill pill-ember h-11 px-6 text-sm">
-              Meet the full {creator.name} <ArrowUpRight className="w-4 h-4" />
-            </Link>
+          <div className="mt-9 flex gap-4 flex-wrap justify-center">
+            <CapsuleButton as={Link} to="/guidelines" icon={BookOpen} className="!bg-transparent !text-void !border-void/25">Read the guidelines</CapsuleButton>
+            <CapsuleButton as={Link} to="/contact" icon={Trophy} className="!bg-mint !border-mint !text-void">Get in touch</CapsuleButton>
           </div>
 
-          <div className="mt-14">
-            <p className="text-sm font-bold uppercase tracking-[0.06em] text-off-white mb-4">Follow me on socials!</p>
-            <div className="flex justify-center"><SocialRow /></div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Stats ── */}
-      <section className="relative bg-surface py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-6">
-            {loading ? Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className={`bg-crimson border border-off-white/10 shadow-soft-sm rounded-2xl p-5 ${["md:col-span-2", "md:col-span-2", "md:col-span-3", "md:col-span-5"][i]}`}>
-                <div className="animate-pulse bg-off-white/10 h-8 w-12 rounded-lg" />
-              </div>
-            )) : (
-              <>
-                <StatCard className="md:col-span-2 animate-reveal delay-1" label="Reviews" value={String(totalReviews).padStart(2, "0")} icon={<Feather className="w-4 h-4" />} testId="stat-total-reviews" />
-                <StatCard className="md:col-span-2 animate-reveal delay-2" label="Average score" value={averageScore} icon={<Star className="w-4 h-4" />} testId="stat-average-score" />
-                <StatCard className="md:col-span-3 animate-reveal delay-3" label="Top platform" value={topPlatform} icon={<Gamepad2 className="w-4 h-4" />} testId="stat-top-platform" />
-                {goldStandard && (
-                  <Link to={`/reviews/${goldStandard.slug}`} data-testid="stat-gold-standard" className="md:col-span-5 bg-crimson border border-off-white/10 shadow-soft-sm rounded-2xl p-5 animate-reveal delay-4 hover:border-off-white transition-colors">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-bold uppercase tracking-[0.06em] text-off-white">Gold standard</span>
-                      <Trophy className="w-4 h-4 text-gold" />
-                    </div>
-                    <div className="display-hero text-2xl text-off-white">{goldStandard.title}</div>
-                    <div className="text-sm font-bold text-off-white/60 mt-1">Scored {goldStandard.rating} / 10</div>
-                  </Link>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Latest reviews ── */}
-      <section className="relative bg-surface pb-16 md:pb-24" data-testid="recent-reviews">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-10 gap-4 flex-wrap">
-            <div>
-              <div className="magazine-rule mb-4"><span>Latest reviews</span></div>
-              <SectionTitle>The verdict is in.</SectionTitle>
-            </div>
-            <Link to="/reviews" className="pill pill-outline h-10 px-5 text-sm">View all <ArrowUpRight className="w-4 h-4" /></Link>
-          </div>
-          {loading ? <HomeDataSkeleton /> : recent[0] ? (
-            <div className="space-y-4">
-              {recent.map((r, i) => (
-                <div key={r.slug} className="animate-reveal" style={{ animationDelay: `${0.1 * i}s` }}>
-                  <ReviewListing review={r} />
-                </div>
-              ))}
-            </div>
-          ) : <HomeDataState title="No reviews found yet" compact />}
-        </div>
-      </section>
-
-      {/* ── Method band ── */}
-      <section className="relative pb-16 md:pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="max-w-2xl mx-auto panel-framed rounded-2xl px-6 py-12 sm:px-12 lg:py-16">
-            <div className="relative">
-              <div className="magazine-rule mb-5"><span>The {creator.name} Method</span></div>
-              <SectionTitle>No score until the credits roll.</SectionTitle>
-              <p className="mt-6 leading-relaxed text-sm sm:text-base text-off-white/70">
-                Every score comes from a finished playthrough. What you read is what I actually think.
-              </p>
-              <div className="mt-9 flex gap-3 flex-wrap justify-center">
-                <Link to="/guidelines" className="pill pill-outline h-12 px-6 text-sm">Read the scoring guide</Link>
-                <Link to="/contact" className="pill pill-gold h-12 px-6 text-sm">Get in touch</Link>
-              </div>
-            </div>
+          <div className="mt-14 flex justify-center">
+            <SocialRow />
           </div>
         </div>
       </section>
@@ -158,22 +190,17 @@ export default function Home() {
   );
 }
 
-const StatCard = ({ label, value, icon, className = "", testId }) => (
-  <div data-testid={testId} className={`bg-crimson border border-off-white/10 shadow-soft-sm rounded-2xl p-5 ${className}`}>
-    <div className="flex items-start justify-between gap-3 mb-3">
-      <span className="text-sm font-bold uppercase tracking-[0.06em] text-off-white">{label}</span>
-      <span className="text-gold">{icon}</span>
-    </div>
-    <div className="display-hero text-3xl text-off-white break-words">{value}</div>
-  </div>
-);
-
-const HomeDataState = ({ title, compact = false }) => (
-  <div className={compact ? "bg-crimson border border-off-white/10 shadow-soft-sm rounded-2xl p-10 text-center" : "min-h-[70vh] grid place-items-center px-4 bg-surface"}>
+const HomeDataState = ({
+  title,
+  subtitle = "Check the API connection and database, then refresh.",
+  eyebrow = "Reviews unavailable",
+  compact = false,
+}) => (
+  <div className={compact ? "border border-hairline bg-bone p-10 text-center" : "min-h-[70vh] grid place-items-center px-4"}>
     <div className="max-w-md text-center">
-      <p className="text-sm font-bold uppercase tracking-[0.06em] text-off-white">Reviews unavailable</p>
-      <h1 className="display-hero mt-3 text-3xl text-off-white">{title}</h1>
-      <p className="mt-3 text-sm font-semibold text-off-white/70">Check the API connection and database, then refresh.</p>
+      <p className="eyebrow">{eyebrow}</p>
+      <h1 className="display-hero mt-3 text-3xl text-void">{title}</h1>
+      <p className="mt-3 text-sm font-semibold text-void/80">{subtitle}</p>
     </div>
   </div>
 );

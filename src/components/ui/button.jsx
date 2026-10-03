@@ -1,21 +1,17 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
-
-import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold tracking-[0.01em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-scarlet text-off-white filter hover:brightness-90",
-        accent: "bg-gold text-surface filter hover:brightness-90",
+        default: "bg-jade text-mint filter hover:brightness-90",
+        accent: "bg-blush text-void filter hover:brightness-90",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-off-white/10 text-scarlet hover:bg-scarlet/[0.06]",
-        secondary: "bg-surface text-scarlet hover:bg-surface/70",
-        ghost: "text-off-white hover:bg-off-white/[0.05]",
-        link: "text-scarlet underline-offset-4 hover:underline",
+        outline: "border border-void/10 text-jade hover:bg-jade/[0.06]",
+        secondary: "bg-bone text-jade border border-hairline hover:bg-void/[0.06]",
+        ghost: "text-void hover:bg-void/[0.06]",
+        link: "text-jade underline-offset-4 hover:underline",
       },
       size: {
         xs: "h-7 px-3 text-xs rounded-md",
@@ -32,18 +28,4 @@ const buttonVariants = cva(
   },
 );
 
-const Button = React.forwardRef(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
-  },
-);
-Button.displayName = "Button";
-
-export { Button, buttonVariants };
+export { buttonVariants };

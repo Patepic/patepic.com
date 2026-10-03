@@ -1,20 +1,22 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Skeleton, SkeletonReviewListing } from "../components/ui/skeleton";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal, X, Diamond } from "lucide-react";
 import { Input } from "../components/ui/input";
-import { Slider } from "../components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Kicker } from "../components/ui/decor";
-import { ReviewListing } from "../components/ReviewListing";
+import { MascotNote, SetInfoBanner, Wordmark } from "../components/ui/decor";
+import { ReviewCard } from "../components/ReviewCard";
 import { fetchReviews } from "../lib/api";
+import { TIERS, getTier, getTierColor, getTierLabel } from "../lib/tier";
+import { ReviewsDataSkeleton } from "../components/ui/skeleton";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export default function Reviews() {
+  usePageTitle("Reviews");
   const [allReviews, setAllReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
-  const [scoreRange, setScoreRange] = useState([1, 10]);
+  const [selectedTiers, setSelectedTiers] = useState([]);
   const [sort, setSort] = useState("recent");
   const [verdict, setVerdict] = useState("all");
   const [mobileFilters, setMobileFilters] = useState(false);
@@ -22,7 +24,7 @@ export default function Reviews() {
   const PAGE_SIZE = 12;
 
   useEffect(() => { fetchReviews().then((d) => setAllReviews(Array.isArray(d) ? d : (d?.items ?? []))).finally(() => setLoading(false)); }, []);
-  useEffect(() => { setPage(1); }, [query, selectedPlatforms, selectedGenres, scoreRange, sort, verdict]);
+  useEffect(() => { setPage(1); }, [query, selectedPlatforms, selectedGenres, selectedTiers, sort, verdict]);
 
   const PLATFORMS = useMemo(() => [...new Set(allReviews.map((r) => r.platform).filter(Boolean))].sort(), [allReviews]);
   const GENRES = useMemo(() => [...new Set(allReviews.flatMap((r) => Array.isArray(r.genre) ? r.genre : [r.genre]))].filter(Boolean).sort(), [allReviews]);
@@ -37,8 +39,7 @@ export default function Reviews() {
       if (q && !title.includes(q) && !platform.includes(q) && !genreText.includes(q)) return false;
       if (selectedPlatforms.length && !selectedPlatforms.includes(r.platform)) return false;
       if (selectedGenres.length && !genres.some((g) => selectedGenres.includes(g))) return false;
-      const rating = Number(r.rating || 0);
-      if (rating < scoreRange[0] || rating > scoreRange[1]) return false;
+      if (selectedTiers.length && !selectedTiers.includes(getTier(r.rating, r))) return false;
       if (verdict === "recommended" && r.recommended !== "yes") return false;
       if (verdict === "avoid" && r.recommended !== "no") return false;
       return true;
@@ -49,37 +50,50 @@ export default function Reviews() {
     if (sort === "score-asc") res = [...res].sort((a, b) => Number(a.rating || 0) - Number(b.rating || 0));
     if (sort === "a-z") res = [...res].sort((a, b) => a.title.localeCompare(b.title));
     return res;
-  }, [allReviews, query, selectedPlatforms, selectedGenres, scoreRange, sort, verdict]);
+  }, [allReviews, query, selectedPlatforms, selectedGenres, selectedTiers, sort, verdict]);
+
+  const latestReview = useMemo(() => [...allReviews].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))[0], [allReviews]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-  const clearAll = () => { setQuery(""); setSelectedPlatforms([]); setSelectedGenres([]); setScoreRange([1, 10]); setVerdict("all"); setPage(1); };
-  const activeCount = selectedPlatforms.length + selectedGenres.length + (scoreRange[0] !== 1 || scoreRange[1] !== 10 ? 1 : 0) + (query ? 1 : 0) + (verdict !== "all" ? 1 : 0);
+  const clearAll = () => { setQuery(""); setSelectedPlatforms([]); setSelectedGenres([]); setSelectedTiers([]); setVerdict("all"); setPage(1); };
+  const activeCount = selectedPlatforms.length + selectedGenres.length + (selectedTiers.length && selectedTiers.length < TIERS.length ? 1 : 0) + (query ? 1 : 0) + (verdict !== "all" ? 1 : 0);
 
   return (
     <div>
-      <div className="relative bg-surface pb-20 md:pb-28">
-        <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 lg:pt-14 text-center">
-          <Kicker>Every finished playthrough</Kicker>
-          <h1 className="display-heading -mt-1 text-5xl sm:text-6xl lg:text-7xl text-off-white">Reviews</h1>
-          <p className="mt-5 mx-auto max-w-xl text-sm sm:text-base leading-relaxed text-off-white/70">
-            Every finished playthrough, written up in full. Filter by platform, genre or score range —
-            sorted newest first unless you say otherwise.
-          </p>
+      <div className="relative pb-20 md:pb-28">
+        <section className="relative pt-12 lg:pt-16">
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <Wordmark text="Reviews" tag="every review" className="wordmark text-6xl sm:text-7xl lg:text-8xl text-void" tagClassName="text-void/50" />
+            <p className="mt-5 max-w-xl mx-auto text-sm sm:text-base leading-relaxed text-ink">
+              Every finished playthrough, written up in full. Sort by platform,
+              genre, or score range. Newest reviews show first unless you change the order.
+            </p>
+          </div>
         </section>
 
-        {/* ── Filter panel ── */}
-        <section className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
-          <div className="panel-framed rounded-2xl p-5 sm:p-7">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+          <SetInfoBanner
+            emblem={<Diamond className="w-5 h-5" />}
+            name="All Reviews"
+            stats={[
+              { label: "Reviews", value: loading ? "…" : allReviews.length },
+              { label: "Latest", value: loading ? "…" : (latestReview?.date || "N/A") },
+            ]}
+          />
+        </section>
+
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+          <div className="game-panel p-5 sm:p-7 corner-ticks">
             <div className="relative flex flex-col md:flex-row gap-3">
               <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-off-white" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-void/65" />
                 <Input placeholder="Search by title, platform, or genre…" value={query} onChange={(e) => setQuery(e.target.value)}
-                  className="pl-11 h-12 bg-surface border-off-white text-off-white placeholder:text-off-white/40" />
+                  className="pl-11 h-12 bg-bone border-hairline text-void placeholder:text-void/45" />
               </div>
               <Select value={sort} onValueChange={setSort}>
-                <SelectTrigger className="md:w-56 h-12 bg-surface border-off-white text-off-white"><SelectValue /></SelectTrigger>
-                <SelectContent className="bg-surface border-off-white">
+                <SelectTrigger className="md:w-56 h-12 bg-bone border-hairline text-void"><SelectValue /></SelectTrigger>
+                <SelectContent className="bg-bone border-hairline text-void">
                   <SelectItem value="recent">Newest first</SelectItem>
                   <SelectItem value="oldest">Oldest first</SelectItem>
                   <SelectItem value="score-desc">Highest score</SelectItem>
@@ -90,13 +104,13 @@ export default function Reviews() {
               <button onClick={() => setMobileFilters(!mobileFilters)}
                 className="md:hidden pill pill-outline h-12 px-5 text-sm">
                 <SlidersHorizontal className="w-4 h-4" /> Filters
-                {activeCount > 0 && <span className="ml-1 px-2 py-0.5 rounded-full bg-scarlet text-off-white text-sm">{activeCount}</span>}
+                {activeCount > 0 && <span className="ml-1 px-2 py-0.5 rounded-full bg-jade text-mint text-sm">{activeCount}</span>}
               </button>
             </div>
 
             <div className={`relative mt-6 grid grid-cols-1 sm:grid-cols-3 gap-6 ${mobileFilters ? "grid" : "hidden md:grid"}`}>
               <div>
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-off-white mb-3">Verdict</p>
+                <p className="eyebrow mb-3">Verdict</p>
                 <div className="flex gap-3 flex-wrap">
                   {[
                     { value: "all", label: "All" },
@@ -104,35 +118,57 @@ export default function Reviews() {
                     { value: "avoid", label: "✕ Avoid" },
                   ].map(({ value, label }) => (
                     <button key={value} onClick={() => setVerdict(value)}
-                      className={`pill h-8 px-3.5 text-[0.7rem] ${verdict === value ? "pill-ember" : "pill-outline"}`}>
+                      className={`pill h-8 px-3.5 text-[0.7rem] ${verdict === value ? "pill-jade" : "pill-outline"}`}>
                       {label}
                     </button>
                   ))}
                 </div>
               </div>
               <div>
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-off-white mb-3">Platform</p>
+                <p className="eyebrow mb-3">Platform</p>
                 <Select value={selectedPlatforms[0] ?? "all"} onValueChange={(v) => setSelectedPlatforms(v === "all" ? [] : [v])}>
-                  <SelectTrigger className="w-full bg-surface border-off-white text-off-white"><SelectValue placeholder="All platforms" /></SelectTrigger>
-                  <SelectContent className="bg-surface border-off-white">
+                  <SelectTrigger className="w-full bg-bone border-hairline text-void"><SelectValue placeholder="All platforms" /></SelectTrigger>
+                  <SelectContent className="bg-bone border-hairline text-void">
                     <SelectItem value="all">All platforms</SelectItem>
                     {PLATFORMS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div>
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-off-white mb-3">Genre</p>
+                <p className="eyebrow mb-3">Genre</p>
                 <Select value={selectedGenres[0] ?? "all"} onValueChange={(v) => setSelectedGenres(v === "all" ? [] : [v])}>
-                  <SelectTrigger className="w-full bg-surface border-off-white text-off-white"><SelectValue placeholder="All genres" /></SelectTrigger>
-                  <SelectContent className="bg-surface border-off-white">
+                  <SelectTrigger className="w-full bg-bone border-hairline text-void"><SelectValue placeholder="All genres" /></SelectTrigger>
+                  <SelectContent className="bg-bone border-hairline text-void">
                     <SelectItem value="all">All genres</SelectItem>
                     {GENRES.map((g) => <SelectItem key={g} value={g}>{g}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="sm:col-span-2">
-                <p className="text-[0.8rem] font-bold uppercase tracking-[0.06em] text-off-white mb-3">Score: {scoreRange[0]} – {scoreRange[1]}</p>
-                <Slider min={1} max={10} step={1} value={scoreRange} onValueChange={setScoreRange} />
+                <p className="eyebrow mb-3">
+                  Tier: {selectedTiers.length && selectedTiers.length < TIERS.length ? TIERS.filter((t) => selectedTiers.includes(t)).map(getTierLabel).join(", ") : "All"}
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                  {TIERS.map((tier) => {
+                    const on = selectedTiers.includes(tier);
+                    return (
+                      <button
+                        key={tier}
+                        type="button"
+                        onClick={() => setSelectedTiers((cur) => (on ? cur.filter((t) => t !== tier) : [...cur, tier]))}
+                        aria-pressed={on}
+                        aria-label={getTierLabel(tier)}
+                        title={getTierLabel(tier)}
+                        style={{ "--tier-color": getTierColor(tier) }}
+                        className={`h-9 min-w-9 px-2 rounded-full grid place-items-center text-[0.8rem] font-extrabold text-void border-2 transition-colors ${
+                          on ? "bg-[var(--tier-color)] border-void" : "bg-bone border-[var(--tier-color)] hover:bg-[color-mix(in_srgb,var(--tier-color)_30%,var(--bone))]"
+                        }`}
+                      >
+                        {tier}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
               <div className="flex items-end">
                 {activeCount > 0 && (
@@ -145,27 +181,25 @@ export default function Reviews() {
           </div>
         </section>
 
-        {/* ── Listings (event-card layout) ── */}
-        <section className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 lg:mt-16">
-          <div className="mb-6 text-sm font-bold uppercase tracking-[0.06em] text-off-white">
-            {loading ? <Skeleton className="h-4 w-48" /> : (
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 lg:mt-16">
+          <div className="mb-6 text-[0.72rem] font-bold uppercase tracking-[0.14em] text-ash">
+            {loading ? "Loading reviews…" : (
               <>Showing {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length} reviews</>
             )}
           </div>
 
           {loading ? (
-            <div className="space-y-4">
-              {Array.from({ length: 6 }).map((_, i) => (<SkeletonReviewListing key={i} />))}
-            </div>
+            <ReviewsDataSkeleton />
           ) : filtered.length === 0 ? (
-            <div className="panel-framed rounded-2xl p-12 text-center">
-              <p className="display-heading text-2xl text-off-white mb-2">No reviews match those filters.</p>
-              <p className="text-sm text-off-white/70">Try widening the score range or clearing filters.</p>
+            <div className="border border-hairline bg-bone p-12 text-center">
+              <p className="display-heading text-2xl text-void mb-2">No reviews match those filters.</p>
+              <p className="text-sm text-ink">Try widening the score range or clearing filters.</p>
+              <MascotNote className="mt-6 justify-center">Try changing or clearing the filters.</MascotNote>
             </div>
           ) : (
             <>
-              <div className="space-y-4">
-                {paginated.map((r) => <ReviewListing key={r.slug} review={r} />)}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {paginated.map((r) => <ReviewCard key={r.slug} review={r} />)}
               </div>
 
               {totalPages > 1 && (
@@ -176,10 +210,10 @@ export default function Reviews() {
                     {Array.from({ length: totalPages }, (_, i) => i + 1).filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
                       .reduce((acc, p, idx, arr) => { if (idx > 0 && p - arr[idx - 1] > 1) acc.push("…"); acc.push(p); return acc; }, [])
                       .map((p, i) => p === "…" ? (
-                        <span key={`e-${i}`} className="h-9 w-9 flex items-center justify-center text-sm text-off-white">…</span>
+                        <span key={`e-${i}`} className="h-9 w-9 flex items-center justify-center text-sm text-void">…</span>
                       ) : (
                         <button key={p} onClick={() => setPage(p)}
-                          className={`h-9 w-9 rounded-full text-sm font-bold transition-colors ${page === p ? "bg-scarlet text-off-white" : "bg-crimson border border-off-white/10 text-off-white"}`}>{p}</button>
+                          className={`h-9 w-9 rounded-md text-sm font-bold transition-colors ${page === p ? "bg-jade text-mint" : "bg-bone border border-hairline text-void"}`}>{p}</button>
                       ))}
                   </div>
                   <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}

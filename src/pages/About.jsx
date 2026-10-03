@@ -1,101 +1,157 @@
 import { Link } from "react-router-dom";
-import { Twitch, Youtube, ArrowUpRight } from "lucide-react";
+import { Twitch, Youtube, ArrowUpRight, Gamepad2, Code2, Trophy, PenLine, Heart, X as XIcon, Mail } from "lucide-react";
 import { creator } from "../data/creator";
-import { TwitchProvider } from "../context/TwitchContext";
-import { SocialRow, SectionTitle } from "../components/ui/decor";
+import { useReviews } from "../hooks/useReviews";
+import { CreatorCard } from "../components/CreatorCard";
+import { Wordmark, CapsuleButton } from "../components/ui/decor";
+import { usePageTitle } from "../hooks/usePageTitle";
 
-function AboutContent() {
+const PROFILE = [
+  { label: "Birthday", value: "October 24" },
+  { label: "Height", value: "168 cm" },
+  { label: "Oshi mark", value: "♠🐰" },
+  { label: "Debut", value: "TBH" },
+  { label: "Species", value: "Bunny" },
+  { label: "Based in", value: "The Final Table" },
+  { label: "Community", value: "The Crew" },
+];
+
+const HOBBIES = [
+  { Icon: Gamepad2, title: "Gaming", desc: "RPGs and adventure titles are the go-to." },
+  { Icon: PenLine, title: "Writing game reviews", desc: "Breaks games down after the credits roll." },
+  { Icon: Code2, title: "Coding", desc: "Tinkers with small projects and tools between streams." },
+  { Icon: Trophy, title: "Sports", desc: "Loves watching baseball and hockey." },
+];
+
+const LIKES = ["Coffee", "Baseball", "Hockey", "RPGs", "Fried / comfort food"];
+const DISLIKES = ["Slow internet", "Cold weather", "Brutal difficulty spikes"];
+
+export default function About() {
+  usePageTitle("About");
+  const { reviews, loading } = useReviews();
+
   return (
     <div>
-      {/* ── "Who is Patepic?" — the full bio (the homepage only teases this) ── */}
-      <section className="relative bg-surface py-20 md:py-28 overflow-hidden">
-        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="label-chip text-lg sm:text-xl">Who is {creator.name}?</h1>
+      <section className="relative pt-12 lg:pt-16 pb-16 md:pb-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-12 items-center">
+          <div className="lg:col-span-7">
+            <h1 className="leading-none">
+              <Wordmark
+                text={`About ${creator.name}`}
+                tag="the person behind the reviews"
+                className="wordmark text-5xl sm:text-6xl lg:text-7xl text-void"
+                tagClassName="text-void/55"
+              />
+            </h1>
 
-          <div className="mt-8 space-y-5 text-sm sm:text-[0.95rem] leading-[1.75] text-off-white/85 text-left">
-            <p>
-              {creator.name} is a <span className="hl">game reviewer, streamer and VTuber</span> — an owl sorcerer of
-              time with strong opinions about difficulty spikes. Reviewer by day, VTuber by night, and the two feed
-              each other: what gets played on stream gets written up here.
-            </p>
-            <p>
-              Every review is built on a <span className="hl">credits-rolling playthrough</span>. Nothing gets scored
-              early, nothing gets adjusted to match the crowd. If a beloved game did not land, the review says exactly
-              why — and if a quiet one did, it gets the same word count.
-            </p>
-            <p>
-              The written reviews are the main event: <span className="hl">long-form pieces</span> with pros, cons and
-              a score. The <span className="hl">tier list</span> is where they all settle, and the
-              <span className="hl"> scoring guidelines</span> explain why a 5 can still land in F.
-            </p>
-            <p>
-              Off the clock: coffee, baseball, hockey, RPGs, and small coding projects between streams.
-            </p>
+            <div className="mt-8 space-y-4 max-w-xl text-sm sm:text-base leading-relaxed text-ink">
+              <p>
+                {creator.name} is a <span className="hl">game reviewer, streamer and VTuber</span> with strong
+                opinions on games. Most reviews come from games played on stream, but not all of them. Some
+                games are better played off stream and are still worth reviewing, so they get written up here too.
+              </p>
+              <p>
+                Every review is built on a <span className="hl">credits-rolling playthrough</span>. Nothing gets
+                scored early, nothing gets adjusted to match the crowd. If a beloved game didn't land, the write-up
+                says exactly why. If a quiet one did, it gets the same word count.
+              </p>
+              <p>
+                The <Link to="/reviews" className="hl underline decoration-blush decoration-2 underline-offset-4">reviews</Link> are
+                the main event, the <Link to="/tier-list" className="hl underline decoration-blush decoration-2 underline-offset-4">tier list</Link> is
+                where they all settle, and the <Link to="/guidelines" className="hl underline decoration-blush decoration-2 underline-offset-4">guidelines</Link> explain
+                why a 5 can still land in F.
+              </p>
+            </div>
+
+            <div className="mt-9 flex flex-wrap gap-4">
+              <CapsuleButton href={creator.twitch.url} target="_blank" rel="noopener noreferrer" icon={Twitch} className="!bg-mint !border-mint">
+                Follow on Twitch
+              </CapsuleButton>
+              <CapsuleButton href={creator.youtube.url} target="_blank" rel="noopener noreferrer" icon={Youtube} className="!bg-transparent !border-void/25">
+                Subscribe
+              </CapsuleButton>
+              <CapsuleButton as={Link} to="/contact" icon={Mail} className="!bg-transparent !border-void/25">
+                Get in touch
+              </CapsuleButton>
+            </div>
           </div>
 
-          <div className="flex flex-wrap gap-3 justify-center pt-6">
-            <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer" className="pill pill-ember h-11 px-6 text-sm">
-              <Twitch className="w-4 h-4" /> Follow on Twitch
-            </a>
-            <a href={creator.youtube.url} target="_blank" rel="noopener noreferrer" className="pill pill-gold h-11 px-6 text-sm">
-              <Youtube className="w-4 h-4" /> Subscribe
-            </a>
-            <Link to="/contact" className="pill pill-outline h-11 px-6 text-sm">Get in touch</Link>
-          </div>
-
-          <div className="mt-14">
-            <p className="text-sm font-bold uppercase tracking-[0.06em] text-off-white mb-4">Follow me on socials!</p>
-            <div className="flex justify-center"><SocialRow /></div>
+          <div className="lg:col-span-5 flex flex-col items-center gap-4">
+            <CreatorCard reviews={reviews} loading={loading} className="w-full max-w-[21rem] rotate-2" />
+            <p className="text-xs text-void/50">Click the card to flip it.</p>
           </div>
         </div>
       </section>
 
-      {/* ── Profile ── */}
-      <section className="relative bg-surface py-16 md:py-24">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="magazine-rule mb-6"><span>The profile</span></div>
-          <SectionTitle>The frostborn owl, by the numbers.</SectionTitle>
+      <section className="relative pb-16 md:pb-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-5 dex-panel">
+            <h2 className="dex-title">Profile</h2>
+            <dl>
+              {PROFILE.map(({ label, value }) => (
+                <div key={label} className="dex-row">
+                  <dt className="dex-label">{label}</dt>
+                  <dd className="text-void">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
 
-          <div className="mt-10 panel-framed rounded-2xl p-6 sm:p-9 lg:p-12">
-            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-x-14">
-              <ProfileColumn rows={[
-                { label: "Birthday", value: "October 24" },
-                { label: "Height", value: "168 cm" },
-                { label: "Oshi Mark", value: "⌚🦉" },
-                { label: "Debut", value: "TBH" },
-                { label: "Species", value: "Owl Sorcerer of Time" },
-                { label: "Origin", value: "The Time Roulette" },
-                { label: "Fanbase", value: "Timekeepers" },
-              ]} />
-              <ProfileColumn rows={[
-                { label: "Hobbies", value: [{ title: "Gaming", desc: "RPGs and Adventure titles are the go-to." }, { title: "Coding", desc: "Tinkers with small projects and tools between streams." }, { title: "Sports", desc: "Loves watching baseball and hockey." }, { title: "Writing game reviews", desc: "Breaks down games they've played after the credits roll." }] },
-                { label: "Likes", value: "Coffee, Baseball, Hockey, RPGs, Fried/comfort food" },
-                { label: "Dislikes", value: "Slow internet, Cold weather, Brutal difficulty spikes" },
-              ]} />
+          <div className="lg:col-span-7 space-y-8">
+            <div className="dex-panel">
+              <h2 className="dex-title">Hobbies</h2>
+              <div className="creator-moves">
+                {HOBBIES.map(({ Icon, title, desc }) => (
+                  <div key={title} className="creator-move">
+                    <span className="creator-cost" aria-hidden="true"><Icon /></span>
+                    <div className="min-w-0">
+                      <div className="creator-move-name">{title}</div>
+                      <p className="creator-move-text !text-[0.8rem]">{desc}</p>
+                    </div>
+                    <span />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="dex-panel">
+              <h2 className="dex-title">Likes and dislikes</h2>
+              <div className="space-y-4">
+                <ChipRow Icon={Heart} label="Likes" items={LIKES} tone="like" />
+                <ChipRow Icon={XIcon} label="Dislikes" items={DISLIKES} tone="dislike" />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Where to watch ── */}
-      <section className="relative bg-surface pb-16 md:pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="magazine-rule mb-8"><span>Where to watch</span></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <section className="relative pb-20 md:pb-28">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Wordmark text="Where to watch" className="wordmark text-4xl sm:text-5xl text-void" />
+          <div className={`mt-10 grid grid-cols-1 gap-6 ${creator.pixie.url ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
             <WatchCard
               href={creator.twitch.url}
-              eyebrow="Live streams"
-              title={`Twitch · ${creator.twitch.handle}`}
-              body="Main stage. Long sessions, full playthroughs."
+              color="#A58BF2"
               Icon={Twitch}
+              title={`Twitch · ${creator.twitch.handle}`}
+              body="Long sessions and full playthroughs, live."
             />
             <WatchCard
               href={creator.youtube.url}
-              eyebrow="VODs & video essays"
-              title={`YouTube · ${creator.youtube.handle}`}
-              body="Edited recaps, written-review companion videos."
+              color="#FF6F61"
               Icon={Youtube}
+              title={`YouTube · ${creator.youtube.handle}`}
+              body="The main channel. No new uploads for now."
             />
+            {creator.pixie.url && (
+              <WatchCard
+                href={creator.pixie.url}
+                color="#E693B3"
+                Icon={Youtube}
+                title={`YouTube · ${creator.pixie.handle || creator.pixie.name}`}
+                body="The second channel, and where new videos are going up."
+              />
+            )}
           </div>
         </div>
       </section>
@@ -103,44 +159,28 @@ function AboutContent() {
   );
 }
 
-function WatchCard({ href, eyebrow, title, body, Icon }) {
+function ChipRow({ Icon, label, items, tone }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer"
-      className="group bg-crimson border border-off-white/10 shadow-soft-sm hover:shadow-soft transition-shadow rounded-xl p-7">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-12 h-12 grid place-items-center bg-scarlet text-off-white rounded-lg">
-          <Icon className="w-5 h-5" />
-        </div>
-        <div>
-          <div className="text-[0.75rem] font-bold tracking-[0.06em] uppercase text-off-white">{eyebrow}</div>
-          <div className="display-hero text-xl text-off-white">{title}</div>
-        </div>
-        <ArrowUpRight className="w-4 h-4 ml-auto text-off-white group-hover:text-gold transition-colors" />
-      </div>
-      <p className="text-sm leading-relaxed text-off-white/70">{body}</p>
-    </a>
-  );
-}
-
-function ProfileRow({ label, value }) {
-  return (
-    <div className="flex items-baseline py-4 border-b border-off-white">
-      <span className="w-2/5 pr-4 text-sm font-extrabold text-off-white">{label}</span>
-      <span className="w-3/5 pl-4 text-sm text-off-white/80 leading-relaxed">
-        {Array.isArray(value) ? (
-          <ul className="space-y-2">
-            {value.map((item) => <li key={item.title} className="ml-4 list-disc"><span className="font-extrabold text-off-white">{item.title}</span> - {item.desc}</li>)}
-          </ul>
-        ) : value}
-      </span>
+    <div>
+      <div className="dex-label flex items-center gap-1.5 mb-2"><Icon className="w-3.5 h-3.5" /> {label}</div>
+      <ul className="flex flex-wrap gap-2">
+        {items.map((item) => (
+          <li key={item} className={`dex-chip dex-chip-${tone}`}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-function ProfileColumn({ rows }) {
-  return <div>{rows.map((row) => <ProfileRow key={row.label} {...row} />)}</div>;
-}
-
-export default function About() {
-  return <TwitchProvider><AboutContent /></TwitchProvider>;
+function WatchCard({ href, color, Icon, title, body }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="dex-panel watch-tile group" style={{ "--tier-color": color }}>
+      <span className="watch-tile-icon" aria-hidden="true"><Icon className="w-5 h-5" /></span>
+      <div className="min-w-0">
+        <div className="font-gothic font-bold text-lg text-void leading-tight">{title}</div>
+        <p className="mt-1 text-sm leading-relaxed text-void/75">{body}</p>
+      </div>
+      <ArrowUpRight className="w-5 h-5 shrink-0 text-void/60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+    </a>
+  );
 }

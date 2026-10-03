@@ -14,6 +14,7 @@ import {
   ArrowUpRight,
   Clock,
   Trophy,
+  Hourglass,
 } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
@@ -49,8 +50,14 @@ import {
   adminUpdateReview,
   adminDeleteReview,
   adminUploadImage,
+  adminGetNowPlaying,
+  adminSetNowPlaying,
+  adminClearNowPlaying,
+  adminDiscardUpload,
   errorMessage,
 } from "../lib/api";
+import { AWARDS_START_YEAR, getYearFromDate } from "../lib/year";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 const AWARD_OPTIONS = [
   "Game of the Year",
@@ -89,6 +96,7 @@ const blank = {
 };
 
 export default function Admin() {
+  usePageTitle("Admin");
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -191,13 +199,10 @@ const paginated = useMemo(() => {
     >
       <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
         <div>
-          <p className="text-xs tracking-[0.06em] uppercase text-gold mb-2">
-            Control room
-          </p>
-          <h1 className="font-display text-3xl sm:text-4xl text-off-white tracking-tight">
+          <h1 className="font-display text-3xl sm:text-4xl text-void tracking-tight">
             Reviews dashboard
           </h1>
-          <p className="text-sm text-off-white/60 mt-1">
+          <p className="text-sm text-void/60 mt-1">
             {loading
               ? "Loading…"
               : `${reviews.length} reviews in the database.`}
@@ -207,34 +212,36 @@ const paginated = useMemo(() => {
           <button
             onClick={load}
             data-testid="admin-refresh"
-            className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-surface border border-off-white/15 hover:border-gold text-sm text-off-white/80"
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-bone border border-void/15 hover:border-blush text-sm text-void/80"
           >
             <RefreshCw className="w-4 h-4" /> Refresh
           </button>
           <button
             onClick={() => setEditing({ ...blank })}
             data-testid="admin-new-review"
-            className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-scarlet text-off-white filter hover:brightness-90 text-sm font-medium"
+            className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-jade text-mint filter hover:brightness-90 text-sm font-medium"
           >
             <Plus className="w-4 h-4" /> New review
           </button>
         </div>
       </div>
 
+      <NowPlayingPanel />
+
       <div className="relative mb-6">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-off-white/40" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-void/40" />
         <Input
           placeholder="Filter by title…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           data-testid="admin-filter-input"
-          className="pl-11 h-11 bg-surface border-off-white/15 text-off-white"
+          className="pl-11 h-11 bg-bone border-void/15 text-void"
         />
       </div>
 
-      <div className="rounded-2xl border border-off-white/15 bg-surface overflow-hidden">
+      <div className="rounded-2xl border border-void/15 bg-bone overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-crimson/20 text-off-white/60 text-xs tracking-[0.06em] uppercase">
+          <thead className="bg-jade/20 text-void/60 text-xs tracking-[0.06em] uppercase">
             <tr>
               <th className="text-left px-5 py-3 font-medium">
                 <button
@@ -246,11 +253,11 @@ const paginated = useMemo(() => {
                     return "title-asc";
                   })
                 }
-                  className="hover:text-off-white"
+                  className="hover:text-void"
                 >
                   TITLE
-                  {sort === "title-asc" && " ↑"}
-                  {sort === "title-desc" && " ↓"}
+                  {sort === "title-asc" && " â†‘"}
+                  {sort === "title-desc" && " â†“"}
                 </button>
               </th>
               <th className="text-left px-5 py-3 font-medium hidden sm:table-cell">
@@ -269,11 +276,11 @@ const paginated = useMemo(() => {
                       return "rating-desc";
                     })
                   }
-                  className="hover:text-off-white"
+                  className="hover:text-void"
                 >
                   RATING
-                  {sort === "rating-desc" && " ↓"}
-                  {sort === "rating-asc" && " ↑"}
+                  {sort === "rating-desc" && " â†“"}
+                  {sort === "rating-asc" && " â†‘"}
                 </button>
               </th>
               <th className="text-right px-5 py-3 font-medium">Actions</th>
@@ -282,13 +289,13 @@ const paginated = useMemo(() => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={5} className="py-10 text-center text-off-white/40">
+                <td colSpan={5} className="py-10 text-center text-void/40">
                   Loading…
                 </td>
               </tr>
             ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-10 text-center text-off-white/40">
+                <td colSpan={5} className="py-10 text-center text-void/40">
                   No reviews match.
                 </td>
               </tr>
@@ -297,7 +304,7 @@ const paginated = useMemo(() => {
                 <tr
                   key={r.slug}
                   data-testid={`admin-row-${r.slug}`}
-                  className="border-t border-off-white/10 hover:bg-crimson/10"
+                  className="hover:bg-jade/10"
                 >
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
@@ -305,30 +312,30 @@ const paginated = useMemo(() => {
                         <img
                           src={r.cover_url.startsWith("http") ? r.cover_url : `https://${r.cover_url}`}
                           alt=""
-                          className="w-10 h-10 rounded-md object-cover bg-crimson/20"
+                          className="w-10 h-10 rounded-md object-cover bg-jade/20"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-md bg-crimson/20 grid place-items-center text-off-white/40">
+                        <div className="w-10 h-10 rounded-md bg-jade/20 grid place-items-center text-void/40">
                           <ImageIcon className="w-4 h-4" />
                         </div>
                       )}
                       <div>
-                        <div className="font-display text-off-white flex items-center gap-2">
+                        <div className="font-display text-void flex items-center gap-2">
                           {r.title}
                           {r.isFeatured && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gold/20 text-gold border border-gold/30">
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blush-soft/60 text-blush-deep border border-blush/50">
                               ★ Gold
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-off-white/40">{Array.isArray(r.genre) ? r.genre.join(" · ") : r.genre}</div>
+                        <div className="text-xs text-void/40">{Array.isArray(r.genre) ? r.genre.join(" · ") : r.genre}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-5 py-3 text-off-white/70 hidden sm:table-cell">
+                  <td className="px-5 py-3 text-void/70 hidden sm:table-cell">
                     {r.platform}
                   </td>
-                  <td className="px-5 py-3 text-off-white/70 hidden md:table-cell">
+                  <td className="px-5 py-3 text-void/70 hidden md:table-cell">
                     {{
                       remake: "Remake",
                       remaster: "Remaster",
@@ -337,7 +344,7 @@ const paginated = useMemo(() => {
                     }[r.contentType] || "Original"}
                   </td>
                   <td className="px-5 py-3">
-                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-gold/20 text-gold border border-gold/30">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-blush-soft/60 text-blush-deep border border-blush/50">
                       {r.rating}
                     </span>
                   </td>
@@ -348,7 +355,7 @@ const paginated = useMemo(() => {
                         title="View review"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-off-white/10 text-off-white/60"
+                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-void/10 text-void/60"
                       >
                         <ArrowUpRight className="w-4 h-4" />
                       </Link>
@@ -356,7 +363,7 @@ const paginated = useMemo(() => {
                         onClick={() => setEditing(r)}
                         title="Edit review"
                         data-testid={`admin-edit-${r.slug}`}
-                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-gold/10 text-gold"
+                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-blush-soft/50 text-blush-deep"
                       >
                         <Pencil className="w-4 h-4" />
                       </button>
@@ -364,7 +371,7 @@ const paginated = useMemo(() => {
                         onClick={() => setDeleting(r)}
                         title="Delete review"
                         data-testid={`admin-delete-${r.slug}`}
-                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-scarlet/10 text-scarlet"
+                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-jade/10 text-jade"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -381,12 +388,12 @@ const paginated = useMemo(() => {
         <button
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page === 1}
-          className="px-4 h-9 rounded-full border border-off-white/15 text-off-white/70 text-sm disabled:opacity-40"
+          className="px-4 h-9 rounded-full border border-void/15 text-void/70 text-sm disabled:opacity-40"
         >
           Prev
         </button>
 
-        <div className="text-sm text-off-white/60">
+        <div className="text-sm text-void/60">
           Page {page} of {Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))}
         </div>
 
@@ -397,7 +404,7 @@ const paginated = useMemo(() => {
             )
           }
           disabled={page >= Math.ceil(filtered.length / PAGE_SIZE)}
-          className="px-4 h-9 rounded-full border border-off-white/15 text-off-white/70 text-sm disabled:opacity-40"
+          className="px-4 h-9 rounded-full border border-void/15 text-void/70 text-sm disabled:opacity-40"
         >
           Next
         </button>
@@ -415,12 +422,12 @@ const paginated = useMemo(() => {
         open={!!deleting}
         onOpenChange={(o) => !o && setDeleting(null)}
       >
-        <AlertDialogContent className="bg-surface border-off-white/15">
+        <AlertDialogContent className="bg-bone border-void/15">
           <AlertDialogHeader>
-            <AlertDialogTitle className="font-display text-off-white">
+            <AlertDialogTitle className="font-display text-void">
               Delete this review?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-off-white/60">
+            <AlertDialogDescription className="text-void/60">
               "{deleting?.title}" will be permanently removed. This can't be
               undone.
             </AlertDialogDescription>
@@ -432,7 +439,7 @@ const paginated = useMemo(() => {
             <AlertDialogAction
               data-testid="admin-delete-confirm"
               onClick={handleDelete}
-              className="bg-scarlet text-off-white filter hover:brightness-90"
+              className="bg-jade text-mint filter hover:brightness-90"
             >
               Delete
             </AlertDialogAction>
@@ -452,10 +459,23 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   const [showCreateConfirm, setShowCreateConfirm] = useState(false);
+  const [pendingFile, setPendingFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const fileInput = useRef(null);
+  const previewUrlRef = useRef(null);
   const initialSnapshot = useRef("");
 
   useEffect(() => {
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+      previewUrlRef.current = null;
+    }
+    setPendingFile(null);
+    setPreviewUrl(null);
+    setUploading(false);
+    setUploadProgress(0);
+    setShowCloseConfirm(false);
+    setShowCreateConfirm(false);
     if (review) {
       const hydrated = {
         ...blank,
@@ -472,14 +492,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
   if (!isOpen) return null;
 
-  const isDirty = () => JSON.stringify(form) !== initialSnapshot.current;
+  const isDirty = () =>
+    JSON.stringify(form) !== initialSnapshot.current || !!pendingFile;
 
   const requestClose = () => {
-    if (isDirty()) {
-      setShowCloseConfirm(true);
-    } else {
-      onClose();
-    }
+    setShowCloseConfirm(true);
   };
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
@@ -493,7 +510,8 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
   const removeListItem = (key, i) =>
     setForm((f) => ({ ...f, [key]: f[key].filter((_, idx) => idx !== i) }));
 
-  const hideAwardsAndPlaytime = form.date.includes("2025");
+  const dateYear = getYearFromDate(form.date);
+  const awardsAllowed = dateYear !== null && dateYear >= AWARDS_START_YEAR;
 
   const canSubmit = isEdit || (
     !!form.title.trim() &&
@@ -507,38 +525,71 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
     form.cons.some((c) => c.trim())
   );
 
-  const handleUpload = async (e) => {
+  const handleUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setUploading(true);
-    setUploadProgress(0);
-    try {
-      const res = await adminUploadImage(file, setUploadProgress);
-      set("cover_url", res.url);
-      toast.success("Image uploaded");
-    } catch (err) {
-      toast.error(errorMessage(err));
-    } finally {
-      setUploading(false);
-      setUploadProgress(0);
-      if (fileInput.current) fileInput.current.value = "";
+    if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+    const url = URL.createObjectURL(file);
+    previewUrlRef.current = url;
+    setPreviewUrl(url);
+    setPendingFile(file);
+    if (fileInput.current) fileInput.current.value = "";
+  };
+
+  const removeImage = () => {
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+      previewUrlRef.current = null;
     }
+    setPendingFile(null);
+    setPreviewUrl(null);
+    set("cover_url", "");
   };
 
   const doSave = async () => {
     setShowCreateConfirm(false);
     setSaving(true);
-    const payload = {
-      ...form,
-      isFeatured: form.isFeatured,
-      pros: form.pros.map((s) => s.trim()).filter(Boolean),
-      cons: form.cons.map((s) => s.trim()).filter(Boolean),
-      recommended: form.recommended || null,
-      contentType: form.contentType || null,
-      playTime: form.playTime?.trim ? form.playTime.trim() : form.playTime,
-      awards: (form.awards || []).filter(Boolean),
-    };
     try {
+      let coverUrlToSave = form.cover_url;
+      if (pendingFile) {
+        setUploading(true);
+        setUploadProgress(0);
+        try {
+          const res = await adminUploadImage(pendingFile, setUploadProgress);
+          coverUrlToSave = res.url;
+        } finally {
+          setUploading(false);
+          setUploadProgress(0);
+        }
+      }
+      const safeAwards = (form.awards || [])
+        .map((a) => (typeof a === "string" ? { name: a, explanation: "" } : a))
+        .filter((a) => a && typeof a.name === "string" && a.name.trim())
+        .map((a) => ({
+          name: a.name.trim(),
+          explanation: String(a.explanation || "").trim(),
+        }));
+      const awardYear = getYearFromDate(form.date);
+      if (
+        safeAwards.length > 0 &&
+        (awardYear === null || awardYear < AWARDS_START_YEAR)
+      ) {
+        toast.error(
+          `Game Awards are only available for reviews dated ${AWARDS_START_YEAR} or later.`
+        );
+        return;
+      }
+      const payload = {
+        ...form,
+        cover_url: coverUrlToSave,
+        isFeatured: form.isFeatured,
+        pros: form.pros.map((s) => s.trim()).filter(Boolean),
+        cons: form.cons.map((s) => s.trim()).filter(Boolean),
+        recommended: form.recommended || null,
+        contentType: form.contentType || null,
+        playTime: form.playTime?.trim ? form.playTime.trim() : form.playTime,
+        awards: safeAwards,
+      };
       if (isEdit) {
         await adminUpdateReview(review.slug, payload);
         toast.success("Review updated");
@@ -564,16 +615,18 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
   };
 
   const usedAwards = (excludeIndex) =>
-    form.awards.filter((a, i) => i !== excludeIndex && a);
+    form.awards
+      .map((a) => (typeof a === "string" ? a : a?.name))
+      .filter((a, i) => i !== excludeIndex && a);
 
   return (
     <Dialog open={isOpen} onOpenChange={(o) => !o && requestClose()}>
-      <DialogContent className="bg-surface border-off-white/15 max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-bone border-void/15 max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-display text-2xl text-off-white">
+          <DialogTitle className="font-display text-2xl text-void">
             {isEdit ? `Edit · ${review.title}` : "New review"}
           </DialogTitle>
-          <DialogDescription className="text-off-white/60">
+          <DialogDescription className="text-void/60">
             Recommended and Content Type are dropdowns. All other fields are
             free text.
           </DialogDescription>
@@ -581,14 +634,14 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
         <form onSubmit={submit} className="space-y-5 mt-2">
           <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-gold">
+            <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
               Image
             </Label>
             <div className="mt-2 flex gap-4 items-start">
-              <div className="w-28 h-28 rounded-xl bg-crimson/20 border border-off-white/15 overflow-hidden grid place-items-center text-off-white/40 flex-shrink-0">
-                {form.cover_url ? (
+              <div className="w-28 h-28 rounded-xl bg-jade/20 border border-void/15 overflow-hidden grid place-items-center text-void/40 flex-shrink-0">
+                {previewUrl || form.cover_url ? (
                   <img
-                    src={form.cover_url.startsWith("http") ? form.cover_url : `https://${form.cover_url}`}
+                    src={previewUrl || (form.cover_url.startsWith("http") ? form.cover_url : `https://${form.cover_url}`)}
                     alt=""
                     className="w-full h-full object-cover"
                   />
@@ -597,15 +650,31 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                 )}
               </div>
               <div className="flex-1 space-y-2">
-                <button
-                  type="button"
-                  onClick={() => fileInput.current?.click()}
-                  disabled={uploading}
-                  className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-scarlet text-off-white filter hover:brightness-90 disabled:opacity-60 text-sm"
-                >
-                  <Upload className="w-4 h-4" />
-                  {uploading ? `Uploading ${uploadProgress}%` : "Upload image"}
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fileInput.current?.click()}
+                    disabled={uploading}
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-jade text-mint filter hover:brightness-90 disabled:opacity-60 text-sm"
+                  >
+                    <Upload className="w-4 h-4" />
+                    {uploading
+                      ? `Uploading ${uploadProgress}%`
+                      : previewUrl
+                        ? "Replace image"
+                        : "Upload image"}
+                  </button>
+                  {(previewUrl || form.cover_url) && (
+                    <button
+                      type="button"
+                      onClick={removeImage}
+                      disabled={uploading}
+                      className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-bone border border-void/15 hover:bg-void/5 text-sm text-void/80 disabled:opacity-60"
+                    >
+                      <XIcon className="w-4 h-4" /> Remove
+                    </button>
+                  )}
+                </div>
                 <input
                   ref={fileInput}
                   type="file"
@@ -617,7 +686,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                   placeholder="…or paste an image URL"
                   value={form.cover_url}
                   onChange={(e) => set("cover_url", e.target.value)}
-                  className="h-10 bg-surface border-off-white/15 text-off-white"
+                  className="h-10 bg-bone border-void/15 text-void"
                 />
               </div>
             </div>
@@ -662,27 +731,37 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               label="Date"
               required
               value={form.date}
-              onChange={(v) => set("date", v)}
+              onChange={(v) => {
+                set("date", v);
+                const y = getYearFromDate(v);
+                if (y === null || y < AWARDS_START_YEAR) {
+                  setForm((f) => ({ ...f, awards: [] }));
+                }
+              }}
               testId="admin-field-date"
             />
           </div>
 
-          {!hideAwardsAndPlaytime && (
-            <div>
-              <Label className="text-xs tracking-[0.06em] uppercase text-gold flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5" /> Play Time
-              </Label>
-              <Input
-                value={form.playTime || ""}
-                onChange={(e) => set("playTime", e.target.value)}
-                data-testid="admin-field-playtime"
-                placeholder="e.g. 24 hours"
-                className="mt-2 h-10 bg-surface border-off-white/15 text-off-white"
-              />
-            </div>
+          <div>
+            <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5" /> Play Time
+            </Label>
+            <Input
+              value={form.playTime || ""}
+              onChange={(e) => set("playTime", e.target.value)}
+              data-testid="admin-field-playtime"
+              placeholder="e.g. 24 hours"
+              className="mt-2 h-10 bg-bone border-void/15 text-void"
+            />
+          </div>
+
+          {!awardsAllowed && (
+            <p className="text-xs text-void/50">
+              Game Awards are only available for reviews dated {AWARDS_START_YEAR} or later.
+            </p>
           )}
 
-          {!hideAwardsAndPlaytime && (
+          {awardsAllowed && (
             <AwardsEditor
               items={form.awards}
               onChange={(i, v) => setListItem("awards", i, v)}
@@ -699,11 +778,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             >
               <SelectTrigger
                 data-testid="admin-field-recommended"
-                className="h-10 bg-surface border-off-white/15 text-off-white"
+                className="h-10 bg-bone border-void/15 text-void"
               >
                 <SelectValue placeholder="Select…" />
               </SelectTrigger>
-              <SelectContent className="bg-surface border-off-white/15 text-off-white">
+              <SelectContent className="bg-bone border-void/15 text-void">
                 <SelectItem value="yes">Yes</SelectItem>
                 <SelectItem value="no">No</SelectItem>
               </SelectContent>
@@ -713,7 +792,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                 type="button"
                 onClick={() => set("recommended", "")}
                 aria-label="Clear recommended"
-                className="w-10 h-10 shrink-0 grid place-items-center rounded-full text-off-white/50 hover:bg-off-white/10 hover:text-off-white"
+                className="w-10 h-10 shrink-0 grid place-items-center rounded-full text-void/50 hover:bg-void/10 hover:text-void"
               >
                 <XIcon className="w-4 h-4" />
               </button>
@@ -727,11 +806,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             >
               <SelectTrigger
                 data-testid="admin-field-contentType"
-                className="h-10 bg-surface border-off-white/15 text-off-white"
+                className="h-10 bg-bone border-void/15 text-void"
               >
                 <SelectValue placeholder="Select…" />
               </SelectTrigger>
-              <SelectContent className="bg-surface border-off-white/15 text-off-white">
+              <SelectContent className="bg-bone border-void/15 text-void">
                 <SelectItem value="remake">Remake</SelectItem>
                 <SelectItem value="remaster">Remaster</SelectItem>
                 <SelectItem value="show">Enhanced</SelectItem>
@@ -743,19 +822,19 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                 type="button"
                 onClick={() => set("contentType", "")}
                 aria-label="Clear content type"
-                className="w-10 h-10 shrink-0 grid place-items-center rounded-full text-off-white/50 hover:bg-off-white/10 hover:text-off-white"
+                className="w-10 h-10 shrink-0 grid place-items-center rounded-full text-void/50 hover:bg-void/10 hover:text-void"
               >
                 <XIcon className="w-4 h-4" />
               </button>
             )}
           </ClearableField>
 
-          <div className="flex items-center justify-between p-4 rounded-xl border border-off-white/15 bg-crimson/10">
+          <div className="flex items-center justify-between p-4 rounded-xl border border-void/15 bg-jade/10">
             <div>
-              <Label className="text-xs tracking-[0.06em] uppercase text-gold">
+              <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
                 Gold Standard
               </Label>
-              <p className="text-xs text-off-white/60 mt-0.5">
+              <p className="text-xs text-void/60 mt-0.5">
                 Pin this as the featured game on the homepage
               </p>
             </div>
@@ -764,11 +843,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               data-testid="admin-field-isFeatured"
               onClick={() => set("isFeatured", !form.isFeatured)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                form.isFeatured ? "bg-scarlet" : "bg-off-white/15"
+                form.isFeatured ? "bg-jade" : "bg-void/15"
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-off-white shadow transition-transform ${
+                className={`inline-block h-4 w-4 transform rounded-full bg-bone shadow transition-transform ${
                   form.isFeatured ? "translate-x-6" : "translate-x-1"
                 }`}
               />
@@ -776,7 +855,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           </div>
 
           <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-gold">
+            <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
               Summary *
             </Label>
             <Input
@@ -784,7 +863,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               onChange={(e) => set("summary", e.target.value)}
               data-testid="admin-field-summary"
               placeholder="One sentence summary..."
-              className="mt-2 h-10 bg-surface border-off-white/15 text-off-white"
+              className="mt-2 h-10 bg-bone border-void/15 text-void"
             />
           </div>
 
@@ -809,7 +888,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           />
 
           <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-gold">
+            <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
               Review Body (Markdown) *
             </Label>
             <Textarea
@@ -818,10 +897,10 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               onChange={(e) => set("body", e.target.value)}
               data-testid="admin-field-body"
               placeholder="Write your review here."
-              className="mt-2 bg-surface border-off-white/15 text-off-white resize-y text-sm font-mono"
+              className="mt-2 bg-bone border-void/15 text-void resize-y text-sm font-mono"
             />
-            <p className="mt-2 text-xs text-off-white/60">
-              Supports Markdown headings, lists, links, bold, italics,
+            <p className="mt-2 text-xs text-void/60">
+              Supports Markdown headings, lists, links, bold,s,
               blockquotes, and code blocks.
             </p>
           </div>
@@ -830,7 +909,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             <button
               type="button"
               onClick={requestClose}
-              className="px-5 h-10 rounded-full bg-surface border border-off-white/15 hover:bg-off-white/5 text-sm text-off-white/80"
+              className="px-5 h-10 rounded-full bg-bone border border-void/15 hover:bg-void/5 text-sm text-void/80"
             >
               Cancel
             </button>
@@ -838,11 +917,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               type="submit"
               data-testid="admin-save-review"
               disabled={saving || !canSubmit}
-              className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-scarlet text-off-white filter hover:brightness-90 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium"
+              className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-jade text-mint filter hover:brightness-90 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium"
             >
               {saving ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-off-white/40 border-t-off-white rounded-full animate-spin" />
+                  <span className="w-3.5 h-3.5 border-2 border-void/40 border-t-mint rounded-full animate-spin" />
                   Saving…
                 </>
               ) : (
@@ -857,12 +936,12 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
       </DialogContent>
 
       <AlertDialog open={showCloseConfirm} onOpenChange={setShowCloseConfirm}>
-        <AlertDialogContent className="bg-surface border-off-white/15">
+        <AlertDialogContent className="bg-bone border-void/15">
           <AlertDialogHeader>
-            <AlertDialogTitle className="font-display text-off-white">
+            <AlertDialogTitle className="font-display text-void">
               Discard unsaved changes?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-off-white/60">
+            <AlertDialogDescription className="text-void/60">
               You have unsaved changes on this review. Closing now will lose
               them.
             </AlertDialogDescription>
@@ -874,7 +953,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                 setShowCloseConfirm(false);
                 onClose();
               }}
-              className="bg-scarlet text-off-white filter hover:brightness-90"
+              className="bg-jade text-mint filter hover:brightness-90"
             >
               Discard changes
             </AlertDialogAction>
@@ -883,12 +962,12 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
       </AlertDialog>
 
       <AlertDialog open={showCreateConfirm} onOpenChange={setShowCreateConfirm}>
-        <AlertDialogContent className="bg-surface border-off-white/15">
+        <AlertDialogContent className="bg-bone border-void/15">
           <AlertDialogHeader>
-            <AlertDialogTitle className="font-display text-off-white">
+            <AlertDialogTitle className="font-display text-void">
               Create this review?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-off-white/60">
+            <AlertDialogDescription className="text-void/60">
               "{form.title || "Untitled"}" will be published to the site.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -896,7 +975,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             <AlertDialogCancel>Go back</AlertDialogCancel>
             <AlertDialogAction
               onClick={doSave}
-              className="bg-scarlet text-off-white filter hover:brightness-90"
+              className="bg-jade text-mint filter hover:brightness-90"
             >
               Create review
             </AlertDialogAction>
@@ -907,10 +986,9 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
   );
 }
 
-/** Label + control row with room for a trailing clear button. */
 const ClearableField = ({ label, children }) => (
   <div>
-    <Label className="text-xs tracking-[0.06em] uppercase text-gold">
+    <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
       {label}
     </Label>
     <div className="mt-2 flex items-center gap-2">{children}</div>
@@ -919,7 +997,7 @@ const ClearableField = ({ label, children }) => (
 
 const FieldText = ({ label, value, onChange, required, testId }) => (
   <div>
-    <Label className="text-xs tracking-[0.06em] uppercase text-gold">
+    <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
       {label}
       {required ? " *" : ""}
     </Label>
@@ -928,7 +1006,7 @@ const FieldText = ({ label, value, onChange, required, testId }) => (
       required={required}
       onChange={(e) => onChange(e.target.value)}
       data-testid={testId}
-      className="mt-2 h-10 bg-surface border-off-white/15 text-off-white"
+      className="mt-2 h-10 bg-bone border-void/15 text-void"
     />
   </div>
 );
@@ -944,13 +1022,13 @@ const ListEditor = ({
 }) => (
   <div data-testid={testId}>
     <div className="flex items-center justify-between mb-2">
-      <Label className="text-xs tracking-[0.06em] uppercase text-gold">
+      <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
         {label}{required ? " *" : ""}
       </Label>
       <button
         type="button"
         onClick={onAdd}
-        className="text-xs text-gold hover:text-off-white inline-flex items-center gap-1"
+        className="text-xs text-blush-deep hover:text-void inline-flex items-center gap-1"
       >
         <Plus className="w-3 h-3" /> Add
       </button>
@@ -961,7 +1039,7 @@ const ListEditor = ({
           <Input
             value={it}
             onChange={(e) => onChange(i, e.target.value)}
-            className="h-10 bg-surface border-off-white/15 text-off-white"
+            className="h-10 bg-bone border-void/15 text-void"
             placeholder={`${label} item`}
           />
           {items.length > 1 && (
@@ -969,7 +1047,7 @@ const ListEditor = ({
               type="button"
               onClick={() => onRemove(i)}
               aria-label={`Remove ${label} item`}
-              className="w-9 h-9 grid place-items-center rounded-full text-off-white/50 hover:bg-off-white/10 hover:text-off-white"
+              className="w-9 h-9 grid place-items-center rounded-full text-void/50 hover:bg-void/10 hover:text-void"
             >
               <XIcon className="w-4 h-4" />
             </button>
@@ -980,58 +1058,84 @@ const ListEditor = ({
   </div>
 );
 
-/** Array editor for Game Awards — each row is a dropdown (not free text),
-    already-picked awards are excluded from the other rows' options, and
-    every row can be cleared with the X button so a stray click never
-    permanently sticks an award onto the review. */
+const toAwardEntry = (value) => {
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    return {
+      name: typeof value.name === "string" ? value.name : "",
+      explanation: typeof value.explanation === "string" ? value.explanation : "",
+    };
+  }
+  return { name: typeof value === "string" ? value : "", explanation: "" };
+};
+
 const AwardsEditor = ({ items, onChange, onAdd, onRemove, usedAwards }) => (
   <div data-testid="admin-awards">
     <div className="flex items-center justify-between mb-2">
-      <Label className="text-xs tracking-[0.06em] uppercase text-gold flex items-center gap-1.5">
+      <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep flex items-center gap-1.5">
         <Trophy className="w-3.5 h-3.5" /> Game Awards
       </Label>
       <button
         type="button"
         onClick={onAdd}
         data-testid="admin-awards-add"
-        className="text-xs text-gold hover:text-off-white inline-flex items-center gap-1"
+        className="text-xs text-blush-deep hover:text-void inline-flex items-center gap-1"
       >
         <Plus className="w-3 h-3" /> Add award
       </button>
     </div>
     {items.length === 0 ? (
-      <p className="text-xs text-off-white/50">No awards added.</p>
+      <p className="text-xs text-void/50">No awards added.</p>
     ) : (
-      <div className="space-y-2">
-        {items.map((value, i) => {
+      <div className="space-y-3">
+        {items.map((entry, i) => {
+          const award = toAwardEntry(entry);
+          const value = award.name;
           const taken = new Set(usedAwards(i));
+          const update = (patch) => onChange(i, { ...award, ...patch });
           return (
-            <div key={i} className="flex items-center gap-2">
-              <Select value={value || ""} onValueChange={(v) => onChange(i, v)}>
-                <SelectTrigger
-                  data-testid={`admin-awards-select-${i}`}
-                  className="h-10 bg-surface border-off-white/15 text-off-white"
+            <div
+              key={i}
+              className="rounded-lg border border-void/15 bg-void/5 p-3 space-y-2"
+            >
+              <div className="flex items-center gap-2">
+                <Select value={value} onValueChange={(v) => update({ name: v })}>
+                  <SelectTrigger
+                    data-testid={`admin-awards-select-${i}`}
+                    className="h-10 bg-bone border-void/15 text-void"
+                  >
+                    <SelectValue placeholder="Select an award…" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-bone border-void/15 text-void">
+                    {AWARD_OPTIONS.filter((opt) => opt === value || !taken.has(opt)).map(
+                      (opt) => (
+                        <SelectItem key={opt} value={opt}>
+                          {opt}
+                        </SelectItem>
+                      ),
+                    )}
+                  </SelectContent>
+                </Select>
+                <button
+                  type="button"
+                  onClick={() => onRemove(i)}
+                  aria-label="Remove award"
+                  className="w-9 h-9 shrink-0 grid place-items-center rounded-full text-void/50 hover:bg-void/10 hover:text-void"
                 >
-                  <SelectValue placeholder="Select an award…" />
-                </SelectTrigger>
-                <SelectContent className="bg-surface border-off-white/15 text-off-white">
-                  {AWARD_OPTIONS.filter((opt) => opt === value || !taken.has(opt)).map(
-                    (opt) => (
-                      <SelectItem key={opt} value={opt}>
-                        {opt}
-                      </SelectItem>
-                    ),
-                  )}
-                </SelectContent>
-              </Select>
-              <button
-                type="button"
-                onClick={() => onRemove(i)}
-                aria-label="Remove award"
-                className="w-9 h-9 shrink-0 grid place-items-center rounded-full text-off-white/50 hover:bg-off-white/10 hover:text-off-white"
-              >
-                <XIcon className="w-4 h-4" />
-              </button>
+                  <XIcon className="w-4 h-4" />
+                </button>
+              </div>
+              <Textarea
+                value={award.explanation}
+                onChange={(e) => update({ explanation: e.target.value })}
+                data-testid={`admin-awards-explain-${i}`}
+                rows={3}
+                placeholder={
+                  value
+                    ? `Why did this game win “${value}”? What does the award mean for it?`
+                    : "Explain what this award means for this game…"
+                }
+                className="resize-y text-sm"
+              />
             </div>
           );
         })}
@@ -1039,3 +1143,152 @@ const AwardsEditor = ({ items, onChange, onAdd, onRemove, usedAwards }) => (
     )}
   </div>
 );
+
+const emptyNowPlaying = { title: "", cover_url: "", platform: "", note: "" };
+
+function NowPlayingPanel() {
+  const [form, setForm] = useState(emptyNowPlaying);
+  const [saved, setSaved] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInput = useRef(null);
+  const lastUpload = useRef(null);
+
+  useEffect(() => {
+    adminGetNowPlaying()
+      .then((data) => {
+        if (data) {
+          setSaved(data);
+          setForm({ ...emptyNowPlaying, ...data });
+        }
+      })
+      .catch((e) => toast.error(errorMessage(e)));
+  }, []);
+
+  const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
+  const dirty = !saved
+    ? Boolean(form.title.trim())
+    : ["title", "cover_url", "platform", "note"].some((k) => (form[k] || "") !== (saved[k] || ""));
+
+  const upload = async (e) => {
+    const file = e.target.files?.[0];
+    if (fileInput.current) fileInput.current.value = "";
+    if (!file) return;
+    setUploading(true);
+    try {
+      const res = await adminUploadImage(file);
+      const previous = form.cover_url;
+      set("cover_url", res.url);
+      if (previous && previous === lastUpload.current && previous !== saved?.cover_url) {
+        adminDiscardUpload(previous).catch(() => {});
+      }
+      lastUpload.current = res.url;
+    } catch (err) {
+      toast.error(errorMessage(err));
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const save = async () => {
+    setBusy(true);
+    try {
+      const data = await adminSetNowPlaying(form);
+      setSaved(data);
+      setForm({ ...emptyNowPlaying, ...data });
+      toast.success(`Now playing: ${data.title}`);
+    } catch (e) {
+      toast.error(errorMessage(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const clear = async () => {
+    setBusy(true);
+    try {
+      await adminClearNowPlaying();
+      setSaved(null);
+      setForm(emptyNowPlaying);
+      toast.success("Now playing cleared");
+    } catch (e) {
+      toast.error(errorMessage(e));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const cover = form.cover_url ? (form.cover_url.startsWith("http") ? form.cover_url : `https://${form.cover_url}`) : null;
+
+  return (
+    <section className="rounded-2xl border border-void/15 bg-bone p-5 sm:p-6 mb-8" data-testid="admin-now-playing">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div className="flex items-center gap-2">
+          <Hourglass className="w-4 h-4 text-jade" />
+          <h2 className="font-display text-xl text-void">Now playing</h2>
+          <span className="text-xs text-void/50">
+            {saved ? "Showing on the homepage" : "Not set (shows your Twitch game while you're live)"}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-[7rem_1fr] gap-5">
+        <div className="w-28 aspect-[4/3] rounded-md overflow-hidden border border-void/15 bg-void/5 grid place-items-center">
+          {cover ? <img src={cover} alt="" className="w-full h-full object-cover" /> : <ImageIcon className="w-6 h-6 text-void/30" />}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label className="text-xs text-void/70">Game title *</Label>
+            <Input value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="Hollow Knight: Silksong" className="h-10 bg-bone border-void/15 text-void" />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs text-void/70">Platform</Label>
+            <Input value={form.platform} onChange={(e) => set("platform", e.target.value)} placeholder="PC" className="h-10 bg-bone border-void/15 text-void" />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs text-void/70">Progress note</Label>
+            <Input value={form.note} onChange={(e) => set("note", e.target.value)} maxLength={120} placeholder="Act 2" className="h-10 bg-bone border-void/15 text-void" />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs text-void/70">Cover</Label>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => fileInput.current?.click()}
+                disabled={uploading}
+                className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-bone border border-void/15 hover:border-blush text-sm text-void/80 shrink-0 disabled:opacity-50"
+              >
+                <Upload className="w-4 h-4" /> {uploading ? "Uploading…" : "Upload"}
+              </button>
+              <input ref={fileInput} type="file" accept="image/*" onChange={upload} className="hidden" />
+              <Input value={form.cover_url} onChange={(e) => set("cover_url", e.target.value)} placeholder="…or paste an image URL" className="h-10 bg-bone border-void/15 text-void" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-end gap-2 mt-5">
+        {saved && (
+          <button
+            type="button"
+            onClick={clear}
+            disabled={busy}
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-bone border border-void/15 hover:border-blush text-sm text-void/80 disabled:opacity-50"
+          >
+            <XIcon className="w-4 h-4" /> Clear
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={save}
+          disabled={busy || uploading || !form.title.trim() || !dirty}
+          className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-jade text-mint filter hover:brightness-90 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <Save className="w-4 h-4" /> Save
+        </button>
+      </div>
+      <p className="text-xs text-void/50 mt-3">Clears itself when you publish a review with the same title.</p>
+    </section>
+  );
+}
