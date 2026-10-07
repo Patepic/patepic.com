@@ -1,44 +1,9 @@
 import { useMemo } from "react";
 import { getYearFromDate, defaultYearInGamingYear } from "../../lib/year";
 
-const FRANCHISES = [
-  ["Sonic", /\bsonic\b|\bshadow generations\b/i],
-  ["Super Smash Bros.", /\bsmash bros\b/i],
-  ["Mario", /\bmario\b|\bmairo\b|\bbowser's fury\b/i],
-  ["Pokemon", /\bpok[eé](mon|park)\b/i],
-  ["Kirby", /\bkirby\b/i],
-  ["The Legend of Zelda", /\bzelda\b/i],
-  ["Power Rangers", /\bpower rangers\b/i],
-  ["Dragon Quest", /\bdragon quest\b/i],
-];
-
 function seriesOf(review) {
-  const listed = (Array.isArray(review?.series) ? review.series : []).map((s) => String(s || "").trim()).filter(Boolean);
-  if (listed.length) return [...new Set(listed)];
-  const guessed = extractSeries(review?.title);
-  return guessed ? [guessed] : [];
-}
-
-function extractSeries(title) {
-  if (!title) return null;
-  const cleaned = title.replace(/™|®|©/g, "").trim();
-
-  const known = FRANCHISES.find(([, pattern]) => pattern.test(cleaned));
-  if (known) return known[0];
-
-  const colonMatch = cleaned.match(/^([^:]+?)(?:\s*:|\s*–|\s*—|\s*-\s)/);
-  if (colonMatch) return colonMatch[1].trim();
-
-  const numberMatch = cleaned.match(/^(.+?)\s+#\d/);
-  if (numberMatch) return numberMatch[1].trim();
-
-  const endNumberMatch = cleaned.match(/^(.+?)\s+\d+$/);
-  if (endNumberMatch) return endNumberMatch[1].trim();
-
-  const theMatch = cleaned.match(/^(.+?),\s*The(?:\s|$)/i);
-  if (theMatch) return theMatch[1].trim();
-
-  return null;
+  const listed = Array.isArray(review?.series) ? review.series : [];
+  return [...new Set(listed.map((name) => String(name || "").trim()).filter(Boolean))];
 }
 
 function isReviewFromYear(review, year) {
