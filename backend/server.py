@@ -102,6 +102,8 @@ class ReviewIn(BaseModel):
     cons: List[str] = Field(default_factory=list)
     isFeatured: bool = False
     playTime: str = Field("", max_length=60)
+    imageCredit: str = Field("", max_length=120)
+    imageCreditUrl: str = Field("", max_length=1024)
     awards: List[AwardIn] = Field(default_factory=list)
 
 class ReviewOut(ReviewIn):
@@ -128,6 +130,8 @@ class ReviewUpdate(BaseModel):
     cons: Optional[List[str]] = None
     isFeatured: Optional[bool] = None
     playTime: Optional[str] = None
+    imageCredit: Optional[str] = None
+    imageCreditUrl: Optional[str] = None
     awards: Optional[List[AwardIn]] = None
 
 class NowPlayingIn(BaseModel):
@@ -156,6 +160,9 @@ def now_iso() -> str:
 
 
 FIRST_AWARD_YEAR = 2026
+CHARCOAL_BROWN = "#504440"
+WHITE = "#FFF8EB"
+STRAW = "#FBDDA6"
 TWITCH_HANDLE = os.environ.get("TWITCH_HANDLE", "Patepic")
 
 
@@ -279,14 +286,14 @@ async def send_contact(req: ContactRequest):
     safe_subject = html.escape(req.subject)
     safe_message = html.escape(req.message)
     email_html = f"""
-    <div style="font-family: Arial, sans-serif; max-width:600px; margin:0 auto; background:#f4f8fb; color:#1e293b; padding:24px; border-radius:12px;">
-      <h2 style="color:#0284c7; margin-top:0;">New Patepic Contact Submission</h2>
+    <div style="font-family: Arial, sans-serif; max-width:600px; margin:0 auto; background:{WHITE}; color:{CHARCOAL_BROWN}; padding:24px; border-radius:12px;">
+      <h2 style="color:{CHARCOAL_BROWN}; margin-top:0;">New Patepic Contact Submission</h2>
       <table style="width:100%; border-collapse:collapse;">
-        <tr><td style="padding:8px 0; color:#64748b;">Name</td><td style="padding:8px 0;">{safe_name}</td></tr>
-        <tr><td style="padding:8px 0; color:#64748b;">Email</td><td style="padding:8px 0;">{safe_email}</td></tr>
-        <tr><td style="padding:8px 0; color:#64748b;">Subject</td><td style="padding:8px 0;">{safe_subject}</td></tr>
+        <tr><td style="padding:8px 0; color:{CHARCOAL_BROWN}; opacity:0.7;">Name</td><td style="padding:8px 0;">{safe_name}</td></tr>
+        <tr><td style="padding:8px 0; color:{CHARCOAL_BROWN}; opacity:0.7;">Email</td><td style="padding:8px 0;">{safe_email}</td></tr>
+        <tr><td style="padding:8px 0; color:{CHARCOAL_BROWN}; opacity:0.7;">Subject</td><td style="padding:8px 0;">{safe_subject}</td></tr>
       </table>
-      <hr style="border:none; border-top:1px solid #e2e8f0; margin:16px 0;" />
+      <hr style="border:none; border-top:1px solid {STRAW}; margin:16px 0;" />
       <p style="white-space:pre-wrap; line-height:1.6;">{safe_message}</p>
     </div>
     """

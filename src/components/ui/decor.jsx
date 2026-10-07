@@ -3,15 +3,15 @@ import { Twitch, Youtube, Mail, ArrowUp } from "lucide-react";
 import { creator } from "../../data/creator";
 import modelImg from "../../assets/model.png";
 
-export const SocialRow = ({ className = "", size = "w-10 h-10" }) => {
+export const SocialRow = ({ className = "", size = "w-11 h-11" }) => {
   const items = [
-    { href: creator.twitch.url, label: "Twitch", Icon: Twitch },
-    ...creator.youtubeChannels.map((c) => ({ href: c.url, label: `YouTube: ${c.name}`, Icon: Youtube })),
-    { href: "mailto:contact@patepic.com", label: "Email", Icon: Mail },
+    { href: creator.twitch.url, label: "Twitch", text: "Twitch", Icon: Twitch },
+    ...creator.youtubeChannels.map((c) => ({ href: c.url, label: `YouTube: ${c.name}`, text: c.name, Icon: Youtube })),
+    { href: "mailto:contact@patepic.com", label: "Email", text: "Email", Icon: Mail },
   ];
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
-      {items.map(({ href, label, Icon }) => (
+    <div className={`flex items-start gap-4 ${className}`}>
+      {items.map(({ href, label, text, Icon }) => (
         <a
           key={label}
           href={href}
@@ -20,9 +20,12 @@ export const SocialRow = ({ className = "", size = "w-10 h-10" }) => {
           aria-label={label}
           title={label}
           data-testid={`social-${label.toLowerCase().replace(/[^a-z]+/g, "-")}`}
-          className={`${size} rounded-md bg-bone text-void/80 border border-hairline hover:border-jade hover:text-void grid place-items-center transition-colors`}
+          className="group inline-flex flex-col items-center gap-1.5 text-charcoal-brown"
         >
-          <Icon className="w-4 h-4" />
+          <span className={`${size} rounded-md bg-white border border-honey group-hover:border-charcoal-brown grid place-items-center transition-colors`}>
+            <Icon className="w-5 h-5" />
+          </span>
+          <span className="text-[0.68rem] font-bold uppercase tracking-[0.06em]">{text}</span>
         </a>
       ))}
     </div>
@@ -30,22 +33,22 @@ export const SocialRow = ({ className = "", size = "w-10 h-10" }) => {
 };
 
 export const SetInfoBanner = ({ emblem, name, stats = [], className = "" }) => (
-  <div className={`rounded-2xl border-2 border-void bg-void px-6 py-5 flex flex-wrap items-center gap-x-8 gap-y-4 ${className}`}>
+  <div className={`rounded-2xl border-2 border-charcoal-brown bg-charcoal-brown px-6 py-5 flex flex-wrap items-center gap-x-8 gap-y-4 ${className}`}>
     <div className="flex items-center gap-3">
-      <div className="w-11 h-11 rounded-lg bg-bone grid place-items-center text-void shrink-0" aria-hidden="true">
+      <div className="w-11 h-11 rounded-lg bg-white grid place-items-center text-charcoal-brown shrink-0" aria-hidden="true">
         {emblem}
       </div>
       <div>
-        <div className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-bone/50">Showing</div>
-        <div className="font-gothic font-bold text-bone text-lg leading-tight">{name}</div>
+        <div className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-white/70">Showing</div>
+        <div className="font-sans font-bold text-white text-lg leading-tight">{name}</div>
       </div>
     </div>
     {stats.map((s) => (
       <div key={s.label} className="flex items-center gap-x-8">
-        <div className="h-9 w-px bg-bone/15 hidden sm:block" />
+        <div className="h-9 w-px bg-white/15 hidden sm:block" />
         <div>
-          <div className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-bone/50">{s.label}</div>
-          <div className="font-gothic font-bold text-bone text-lg leading-tight">{s.value}</div>
+          <div className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-white/70">{s.label}</div>
+          <div className="font-sans font-bold text-white text-lg leading-tight">{s.value}</div>
         </div>
       </div>
     ))}
@@ -58,9 +61,9 @@ export const MascotNote = ({ children, className = "" }) => (
       src={modelImg}
       alt=""
       aria-hidden="true"
-      className="w-8 h-8 rounded-full object-cover object-top mix-blend-luminosity opacity-90 border border-jade/30 shrink-0"
+      className="w-8 h-8 rounded-full object-cover object-top mix-blend-luminosity opacity-90 border border-charcoal-brown/30 shrink-0"
     />
-    <p className="text-sm text-void/70 italic">{children}</p>
+    <p className="text-sm text-charcoal-brown/85 italic">{children}</p>
   </div>
 );
 
@@ -88,7 +91,7 @@ export const CapsuleButton = ({ as: Tag = "a", icon: Icon, children, className =
 
 const WAVE_CURVE = "M0,50 C180,95 180,5 360,50 C540,95 540,5 720,50 C900,95 900,5 1080,50 C1260,95 1260,5 1440,50";
 
-export const WaveEdge = ({ color = "var(--void)", className = "" }) => (
+export const WaveEdge = ({ color = "var(--color-charcoal-brown)", className = "" }) => (
   <svg
     aria-hidden="true"
     viewBox="0 0 120 1440"
@@ -97,13 +100,13 @@ export const WaveEdge = ({ color = "var(--void)", className = "" }) => (
   >
     <g transform="matrix(0 1 1 0 0 0)">
       <path d={`${WAVE_CURVE} L1440,120 L0,120 Z`} fill={color} />
-      <path d={WAVE_CURVE} fill="none" stroke="var(--void)" strokeWidth="3" strokeLinecap="round" />
+      <path d={WAVE_CURVE} fill="none" stroke="var(--color-charcoal-brown)" strokeWidth="3" strokeLinecap="round" />
     </g>
   </svg>
 );
 
 export const WaveDivider = ({
-  color = "var(--void)",
+  color = "var(--color-charcoal-brown)",
   position = "bottom",
   flip = false,
   mirror = false,
@@ -134,7 +137,7 @@ export const WaveDivider = ({
       style={style}
     >
       <path d={`${curve} L1440,120 L0,120 Z`} fill={color} />
-      <path d={curve} fill="none" stroke="var(--void)" strokeWidth="3" strokeLinecap="round" />
+      <path d={curve} fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" />
     </svg>
   );
 };
@@ -153,7 +156,7 @@ export const PokerChip = ({ className = "", reverse = false, still = false }) =>
   </svg>
 );
 
-export const PageBackdrop = ({ className = "page-backdrop", chip = false }) => {
+export const PageBackdrop = ({ className = "page-backdrop", chip = false, spin = false }) => {
   const ring = { fill: "none", stroke: "currentColor", strokeWidth: 44, strokeDasharray: "30 9" };
   const inner = { fill: "none", stroke: "currentColor", strokeWidth: 10 };
   return (
@@ -164,7 +167,7 @@ export const PageBackdrop = ({ className = "page-backdrop", chip = false }) => {
           <circle cx="500" cy="500" r="330" {...inner} />
         </svg>
       ))}
-      {chip && <PokerChip className="page-backdrop-chip" still />}
+      {chip && <PokerChip className="page-backdrop-chip" still={!spin} />}
     </div>
   );
 };

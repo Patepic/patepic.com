@@ -38,7 +38,7 @@ export function TheJourney({ data, loading }) {
     <section className="relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div className="text-center mb-14">
-          <h2 className="wordmark text-4xl sm:text-5xl text-void">The journey</h2>
+          <h2 className="wordmark text-4xl sm:text-5xl text-charcoal-brown">The journey</h2>
         </div>
 
         {loading ? (
@@ -47,15 +47,15 @@ export function TheJourney({ data, loading }) {
           </div>
         ) : seriesMarathons.length > 0 && (
           <div className="mb-16">
-            <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-ash mb-4 flex items-center gap-2">
-              <Layers className="w-3.5 h-3.5 text-jade" /> Franchise deep dives
+            <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-charcoal-brown/85 mb-4 flex items-center gap-2">
+              <Layers className="w-3.5 h-3.5 text-charcoal-brown" /> Franchise deep dives
             </p>
             <div className="space-y-8">
               {seriesMarathons.map(({ series, games, count }) => (
                 <div key={series}>
                   <div className="flex items-baseline gap-2 mb-6">
-                    <h3 className="font-semibold text-void">{series}</h3>
-                    <span className="text-sm text-ash">{count} games</span>
+                    <h3 className="font-semibold text-charcoal-brown">{series}</h3>
+                    <span className="text-sm text-charcoal-brown/85">{count} games</span>
                   </div>
                   <div className={CARD_GRID}>
                     {games.map((game) => (
@@ -88,8 +88,8 @@ export function TheJourney({ data, loading }) {
               return (
                 <div key={monthKey}>
                   <div className="flex items-baseline gap-3 mb-6">
-                    <h3 className="font-semibold text-void">{monthLabel}</h3>
-                    <span className="text-sm text-ash">{games.length} {games.length === 1 ? "game" : "games"}</span>
+                    <h3 className="font-semibold text-charcoal-brown">{monthLabel}</h3>
+                    <span className="text-sm text-charcoal-brown/85">{games.length} {games.length === 1 ? "game" : "games"}</span>
                   </div>
                   <div className={CARD_GRID}>
                     {games.map((game, gi) => (

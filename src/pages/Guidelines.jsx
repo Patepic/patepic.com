@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Gamepad2, Trophy } from "lucide-react";
 import { Wordmark, CapsuleButton } from "../components/ui/decor";
 import { getTierColor, getRarity } from "../lib/tier";
+import { RarityMark } from "../components/RarityMark";
 import { usePageTitle } from "../hooks/usePageTitle";
 
 const tiers = [
@@ -31,8 +32,8 @@ export default function Guidelines() {
       <div className="relative pb-20 md:pb-28">
         <section className="relative pt-12 lg:pt-16">
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <Wordmark text="Guidelines" tag="how I score" className="wordmark text-5xl sm:text-7xl lg:text-8xl text-void" tagClassName="text-void/50" />
-            <p className="mt-5 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed text-ink">
+            <Wordmark text="Guidelines" tag="how I score" className="wordmark text-5xl sm:text-7xl lg:text-8xl text-charcoal-brown" tagClassName="text-charcoal-brown/70" />
+            <p className="mt-5 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed text-charcoal-brown">
               A score tells you how good the game is. The tier tells you whether I think you should play it.
               Each tier below carries a short note on what that ranking means to me. Spot a tier on a review and
               look it up here.
@@ -41,19 +42,19 @@ export default function Guidelines() {
         </section>
 
         <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 lg:mt-16">
-          <Wordmark text="The tiers" className="wordmark text-4xl sm:text-5xl text-void" />
+          <Wordmark text="The tiers" className="wordmark text-4xl sm:text-5xl text-charcoal-brown" />
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
             {tiers.map(({ tier, label, desc }) => {
               const rarity = getRarity(tier);
               return (
-                <div key={tier} className="dex-panel flex flex-col" style={{ "--tier-color": getTierColor(tier) }}>
+                <div key={tier} className="dex-panel dex-tier flex flex-col" style={{ "--tier-color": getTierColor(tier) }}>
                   <div className="flex items-center gap-3">
                     <span className="tier-stamp">{tier}</span>
                     <h3 className="dex-title !mb-0">{label}</h3>
                   </div>
-                  <p className="mt-3 text-sm leading-relaxed text-void/85">{desc}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-charcoal-brown/95">{desc}</p>
                   <div className={`rarity-${rarity.tone} mt-auto pt-4 flex justify-end`}>
-                    <span className="pc-rarity !text-base" aria-hidden="true">{rarity.symbol.repeat(rarity.stars)}</span>
+                    <RarityMark symbol={rarity.symbol} count={rarity.stars} className="!text-base" />
                   </div>
                 </div>
               );
@@ -62,24 +63,24 @@ export default function Guidelines() {
         </section>
 
         <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 lg:mt-28">
-          <Wordmark text="The principles" className="wordmark text-4xl sm:text-5xl text-void" />
+          <Wordmark text="The principles" className="wordmark text-4xl sm:text-5xl text-charcoal-brown" />
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {principles.map((principle) => (
               <div key={principle.title} className="dex-panel">
                 <h3 className="dex-title">{principle.title}</h3>
-                <p className="text-sm leading-relaxed text-void/85">{principle.body}</p>
+                <p className="text-sm leading-relaxed text-charcoal-brown/95">{principle.body}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 text-center">
-          <p className="text-2xl lg:text-3xl leading-relaxed text-void/85 italic">
+          <p className="text-2xl lg:text-3xl leading-relaxed text-charcoal-brown/95 italic">
             &ldquo;The score gets you in the door. The review tells you if you should stay.&rdquo;
           </p>
           <div className="mt-9 flex flex-wrap gap-4 justify-center">
-            <CapsuleButton as={Link} to="/tier-list" icon={Trophy} className="!bg-mint !border-mint">See the tier list</CapsuleButton>
-            <CapsuleButton as={Link} to="/reviews" icon={Gamepad2} className="!bg-transparent !border-void/25">Browse reviews</CapsuleButton>
+            <CapsuleButton as={Link} to="/tier-list" icon={Trophy} className="pill-capsule-main">See the tier list</CapsuleButton>
+            <CapsuleButton as={Link} to="/reviews" icon={Gamepad2} >Browse reviews</CapsuleButton>
           </div>
         </section>
       </div>

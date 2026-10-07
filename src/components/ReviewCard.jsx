@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
-import { getTier, getTierColor, getTierLabel, getRarity } from "../lib/tier";
+import { NO_FLAWS, getTier, getTierColor, getRarity } from "../lib/tier";
 import { getYearFromDate } from "../lib/year";
 import { useCardTilt } from "../hooks/useCardTilt";
+import { RarityMark } from "./RarityMark";
+import { CardTitle } from "./CardTitle";
+import { PlatformIcon } from "./PlatformIcon";
 
 export const coverUrl = (review) => {
   if (!review?.cover_url) return null;
@@ -23,6 +26,12 @@ export function ReviewCardFace({ review, size = "sm", showRibbon = true, as: Tag
   const rarity = getRarity(tier);
   const genres = Array.isArray(review.genre) ? review.genre.filter(Boolean) : review.genre ? [review.genre] : [];
   const genre = genres.join(", ");
+  const flavor = [
+    review.platform && `Platform: ${review.platform}`,
+    genre && `${genres.length > 1 ? "Genres" : "Genre"}: ${genre}`,
+  ].filter(Boolean).join(", ");
+  const strengths = Array.isArray(review.pros) ? review.pros.length : 0;
+  const weaknesses = Array.isArray(review.cons) ? review.cons.filter((con) => con !== NO_FLAWS).length : 0;
   const lg = size === "lg" ? " pc-lg" : "";
   const fullArt = rarity.fullArt && cover;
   const wrapClass = [
@@ -32,15 +41,15 @@ export function ReviewCardFace({ review, size = "sm", showRibbon = true, as: Tag
     fullArt && "is-fullart",
     rarity.gold && "is-hyper",
   ].filter(Boolean).join(" ");
-  const stars = rarity.symbol.repeat(rarity.stars);
 
   const body = (layer) => (
     <>
       <div className="pc-head">
         {showRibbon && (
-          <span className="pc-stage" title={getTierLabel(tier)}>{tier}</span>
+          <span className="pc-stage" title={review.platform}><PlatformIcon platform={review.platform} /></span>
         )}
-        <span className="pc-title">{review.title}</span>
+        <span className="pc-score"><span className="pc-score-fill">{review.rating}</span></span>
+        <CardTitle>{review.title}</CardTitle>
       </div>
 
       <div className="pc-art">
@@ -50,34 +59,30 @@ export function ReviewCardFace({ review, size = "sm", showRibbon = true, as: Tag
           <div className="card-back absolute inset-0" />
         ))}
         {layer === "face" && rarity.foil === "art" && <span className="pc-foil" />}
-        {layer === "info" && <div className="pc-score"><span className="pc-score-fill">{review.rating}</span></div>}
+      </div>
+
+      <div className="pc-strip">
+        {flavor && <p className="pc-flavor">{flavor}</p>}
       </div>
 
       <div className="pc-text">
-        {review.summary && <p className="pc-verdict">&ldquo;{review.summary}&rdquo;</p>}
+        {review.summary && <p className="pc-verdict">{review.summary}</p>}
       </div>
 
-      {(review.platform || genre) && (
-        <div className="pc-stats">
-          {review.platform && (
-            <div className="pc-stat">
-              <span className="pc-stat-label">Platform</span>
-              <span className="pc-stat-value">{review.platform}</span>
-            </div>
-          )}
-          {genre && (
-            <div className="pc-stat">
-              <span className="pc-stat-label">{genres.length > 1 ? "Genres" : "Genre"}</span>
-              <span className="pc-stat-value">{genre}</span>
-            </div>
-          )}
+      <div className="pc-stats">
+        <div className="pc-stat">
+          <span className="pc-stat-label">Strengths</span>
+          <span className="pc-stat-value is-count">{strengths}</span>
         </div>
-      )}
+        <div className="pc-stat">
+          <span className="pc-stat-label">Weaknesses</span>
+          <span className="pc-stat-value is-count">{weaknesses}</span>
+        </div>
+      </div>
 
       <div className="pc-setline">
-        <span>{getTierLabel(tier)}</span>
         <span>{cardYear(review) ? `©${cardYear(review)}` : ""}</span>
-        <span className="pc-rarity" aria-hidden="true">{stars}</span>
+        <RarityMark symbol={rarity.symbol} count={rarity.stars} />
       </div>
     </>
   );
@@ -88,7 +93,6 @@ export function ReviewCardFace({ review, size = "sm", showRibbon = true, as: Tag
         <div className="pc-face" aria-hidden="true">
           {fullArt && <img className="pc-fullart" src={cover} alt="" loading={size === "lg" ? "eager" : "lazy"} />}
           {body("face")}
-          {rarity.texture && <span className={`pc-texture is-${rarity.texture}`} />}
           {rarity.foil === "card" && <span className="pc-foil" />}
           {rarity.foil && <span className="pc-glare" />}
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import {
@@ -92,6 +92,8 @@ const blank = {
   cons: [""],
   isFeatured: false,
   playTime: "",
+  imageCredit: "",
+  imageCreditUrl: "",
   awards: [],
 };
 
@@ -118,7 +120,7 @@ export default function Admin() {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await fetchReviews();
+      const data = await fetchReviews({ fresh: Date.now() });
       setReviews(Array.isArray(data) ? data : (data?.items ?? []));
     } catch (e) {
       toast.error(errorMessage(e));
@@ -199,10 +201,10 @@ const paginated = useMemo(() => {
     >
       <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
         <div>
-          <h1 className="font-display text-3xl sm:text-4xl text-void tracking-tight">
+          <h1 className="font-display text-3xl sm:text-4xl text-charcoal-brown tracking-tight">
             Reviews dashboard
           </h1>
-          <p className="text-sm text-void/60 mt-1">
+          <p className="text-sm text-charcoal-brown/80 mt-1">
             {loading
               ? "Loading…"
               : `${reviews.length} reviews in the database.`}
@@ -212,14 +214,14 @@ const paginated = useMemo(() => {
           <button
             onClick={load}
             data-testid="admin-refresh"
-            className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-bone border border-void/15 hover:border-blush text-sm text-void/80"
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white border border-charcoal-brown/15 hover:border-honey text-sm text-charcoal-brown/90"
           >
             <RefreshCw className="w-4 h-4" /> Refresh
           </button>
           <button
             onClick={() => setEditing({ ...blank })}
             data-testid="admin-new-review"
-            className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-jade text-mint filter hover:brightness-90 text-sm font-medium"
+            className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 text-sm font-medium"
           >
             <Plus className="w-4 h-4" /> New review
           </button>
@@ -229,19 +231,19 @@ const paginated = useMemo(() => {
       <NowPlayingPanel />
 
       <div className="relative mb-6">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-void/40" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-brown/65" />
         <Input
           placeholder="Filter by title…"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           data-testid="admin-filter-input"
-          className="pl-11 h-11 bg-bone border-void/15 text-void"
+          className="pl-11 h-11 bg-white border-charcoal-brown/15 text-charcoal-brown"
         />
       </div>
 
-      <div className="rounded-2xl border border-void/15 bg-bone overflow-hidden">
+      <div className="rounded-2xl border border-charcoal-brown/15 bg-white overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-jade/20 text-void/60 text-xs tracking-[0.06em] uppercase">
+          <thead className="bg-charcoal-brown/20 text-charcoal-brown/80 text-xs tracking-[0.06em] uppercase">
             <tr>
               <th className="text-left px-5 py-3 font-medium">
                 <button
@@ -253,11 +255,11 @@ const paginated = useMemo(() => {
                     return "title-asc";
                   })
                 }
-                  className="hover:text-void"
+                  className="hover:text-charcoal-brown"
                 >
                   TITLE
-                  {sort === "title-asc" && " â†‘"}
-                  {sort === "title-desc" && " â†“"}
+                  {sort === "title-asc" && " ↑"}
+                  {sort === "title-desc" && " ↓"}
                 </button>
               </th>
               <th className="text-left px-5 py-3 font-medium hidden sm:table-cell">
@@ -276,11 +278,11 @@ const paginated = useMemo(() => {
                       return "rating-desc";
                     })
                   }
-                  className="hover:text-void"
+                  className="hover:text-charcoal-brown"
                 >
                   RATING
-                  {sort === "rating-desc" && " â†“"}
-                  {sort === "rating-asc" && " â†‘"}
+                  {sort === "rating-desc" && " ↓"}
+                  {sort === "rating-asc" && " ↑"}
                 </button>
               </th>
               <th className="text-right px-5 py-3 font-medium">Actions</th>
@@ -289,13 +291,13 @@ const paginated = useMemo(() => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={5} className="py-10 text-center text-void/40">
+                <td colSpan={5} className="py-10 text-center text-charcoal-brown/65">
                   Loading…
                 </td>
               </tr>
             ) : filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-10 text-center text-void/40">
+                <td colSpan={5} className="py-10 text-center text-charcoal-brown/65">
                   No reviews match.
                 </td>
               </tr>
@@ -304,7 +306,7 @@ const paginated = useMemo(() => {
                 <tr
                   key={r.slug}
                   data-testid={`admin-row-${r.slug}`}
-                  className="hover:bg-jade/10"
+                  className="hover:bg-charcoal-brown/10"
                 >
                   <td className="px-5 py-3">
                     <div className="flex items-center gap-3">
@@ -312,30 +314,30 @@ const paginated = useMemo(() => {
                         <img
                           src={r.cover_url.startsWith("http") ? r.cover_url : `https://${r.cover_url}`}
                           alt=""
-                          className="w-10 h-10 rounded-md object-cover bg-jade/20"
+                          className="w-10 h-10 rounded-md object-cover bg-charcoal-brown/20"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-md bg-jade/20 grid place-items-center text-void/40">
+                        <div className="w-10 h-10 rounded-md bg-charcoal-brown/20 grid place-items-center text-charcoal-brown/65">
                           <ImageIcon className="w-4 h-4" />
                         </div>
                       )}
                       <div>
-                        <div className="font-display text-void flex items-center gap-2">
+                        <div className="font-display text-charcoal-brown flex items-center gap-2">
                           {r.title}
                           {r.isFeatured && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blush-soft/60 text-blush-deep border border-blush/50">
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-mango-yellow/30 text-charcoal-brown border border-honey">
                               ★ Gold
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-void/40">{Array.isArray(r.genre) ? r.genre.join(" · ") : r.genre}</div>
+                        <div className="text-xs text-charcoal-brown/65">{Array.isArray(r.genre) ? r.genre.join(" · ") : r.genre}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-5 py-3 text-void/70 hidden sm:table-cell">
+                  <td className="px-5 py-3 text-charcoal-brown/85 hidden sm:table-cell">
                     {r.platform}
                   </td>
-                  <td className="px-5 py-3 text-void/70 hidden md:table-cell">
+                  <td className="px-5 py-3 text-charcoal-brown/85 hidden md:table-cell">
                     {{
                       remake: "Remake",
                       remaster: "Remaster",
@@ -344,7 +346,7 @@ const paginated = useMemo(() => {
                     }[r.contentType] || "Original"}
                   </td>
                   <td className="px-5 py-3">
-                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-blush-soft/60 text-blush-deep border border-blush/50">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-mango-yellow/30 text-charcoal-brown border border-honey">
                       {r.rating}
                     </span>
                   </td>
@@ -355,7 +357,7 @@ const paginated = useMemo(() => {
                         title="View review"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-void/10 text-void/60"
+                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-charcoal-brown/10 text-charcoal-brown/80"
                       >
                         <ArrowUpRight className="w-4 h-4" />
                       </Link>
@@ -363,7 +365,7 @@ const paginated = useMemo(() => {
                         onClick={() => setEditing(r)}
                         title="Edit review"
                         data-testid={`admin-edit-${r.slug}`}
-                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-blush-soft/50 text-blush-deep"
+                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-mango-yellow/25 text-charcoal-brown/70"
                       >
                         <Pencil className="w-4 h-4" />
                       </button>
@@ -371,7 +373,7 @@ const paginated = useMemo(() => {
                         onClick={() => setDeleting(r)}
                         title="Delete review"
                         data-testid={`admin-delete-${r.slug}`}
-                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-jade/10 text-jade"
+                        className="w-8 h-8 grid place-items-center rounded-full hover:bg-charcoal-brown/10 text-charcoal-brown"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -388,12 +390,12 @@ const paginated = useMemo(() => {
         <button
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page === 1}
-          className="px-4 h-9 rounded-full border border-void/15 text-void/70 text-sm disabled:opacity-40"
+          className="px-4 h-9 rounded-full border border-charcoal-brown/15 text-charcoal-brown/85 text-sm disabled:opacity-40"
         >
           Prev
         </button>
 
-        <div className="text-sm text-void/60">
+        <div className="text-sm text-charcoal-brown/80">
           Page {page} of {Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))}
         </div>
 
@@ -404,7 +406,7 @@ const paginated = useMemo(() => {
             )
           }
           disabled={page >= Math.ceil(filtered.length / PAGE_SIZE)}
-          className="px-4 h-9 rounded-full border border-void/15 text-void/70 text-sm disabled:opacity-40"
+          className="px-4 h-9 rounded-full border border-charcoal-brown/15 text-charcoal-brown/85 text-sm disabled:opacity-40"
         >
           Next
         </button>
@@ -422,12 +424,12 @@ const paginated = useMemo(() => {
         open={!!deleting}
         onOpenChange={(o) => !o && setDeleting(null)}
       >
-        <AlertDialogContent className="bg-bone border-void/15">
+        <AlertDialogContent className="bg-white border-charcoal-brown/15">
           <AlertDialogHeader>
-            <AlertDialogTitle className="font-display text-void">
+            <AlertDialogTitle className="font-display text-charcoal-brown">
               Delete this review?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-void/60">
+            <AlertDialogDescription className="text-charcoal-brown/80">
               "{deleting?.title}" will be permanently removed. This can't be
               undone.
             </AlertDialogDescription>
@@ -439,7 +441,7 @@ const paginated = useMemo(() => {
             <AlertDialogAction
               data-testid="admin-delete-confirm"
               onClick={handleDelete}
-              className="bg-jade text-mint filter hover:brightness-90"
+              className="bg-charcoal-brown text-white filter hover:brightness-90"
             >
               Delete
             </AlertDialogAction>
@@ -588,6 +590,8 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
         recommended: form.recommended || null,
         contentType: form.contentType || null,
         playTime: form.playTime?.trim ? form.playTime.trim() : form.playTime,
+        imageCredit: (form.imageCredit || "").trim(),
+        imageCreditUrl: (form.imageCreditUrl || "").trim(),
         awards: safeAwards,
       };
       if (isEdit) {
@@ -621,12 +625,12 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={(o) => !o && requestClose()}>
-      <DialogContent className="bg-bone border-void/15 max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-white border-charcoal-brown/15 max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-display text-2xl text-void">
+          <DialogTitle className="font-display text-2xl text-charcoal-brown">
             {isEdit ? `Edit · ${review.title}` : "New review"}
           </DialogTitle>
-          <DialogDescription className="text-void/60">
+          <DialogDescription className="text-charcoal-brown/80">
             Recommended and Content Type are dropdowns. All other fields are
             free text.
           </DialogDescription>
@@ -634,11 +638,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
         <form onSubmit={submit} className="space-y-5 mt-2">
           <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
+            <Label className="text-xs tracking-[0.06em] uppercase text-charcoal-brown/70">
               Image
             </Label>
             <div className="mt-2 flex gap-4 items-start">
-              <div className="w-28 h-28 rounded-xl bg-jade/20 border border-void/15 overflow-hidden grid place-items-center text-void/40 flex-shrink-0">
+              <div className="w-28 h-28 rounded-xl bg-charcoal-brown/20 border border-charcoal-brown/15 overflow-hidden grid place-items-center text-charcoal-brown/65 flex-shrink-0">
                 {previewUrl || form.cover_url ? (
                   <img
                     src={previewUrl || (form.cover_url.startsWith("http") ? form.cover_url : `https://${form.cover_url}`)}
@@ -655,7 +659,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                     type="button"
                     onClick={() => fileInput.current?.click()}
                     disabled={uploading}
-                    className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-jade text-mint filter hover:brightness-90 disabled:opacity-60 text-sm"
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 disabled:opacity-60 text-sm"
                   >
                     <Upload className="w-4 h-4" />
                     {uploading
@@ -669,7 +673,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                       type="button"
                       onClick={removeImage}
                       disabled={uploading}
-                      className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-bone border border-void/15 hover:bg-void/5 text-sm text-void/80 disabled:opacity-60"
+                      className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white border border-charcoal-brown/15 hover:bg-charcoal-brown/5 text-sm text-charcoal-brown/90 disabled:opacity-60"
                     >
                       <XIcon className="w-4 h-4" /> Remove
                     </button>
@@ -686,7 +690,22 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                   placeholder="…or paste an image URL"
                   value={form.cover_url}
                   onChange={(e) => set("cover_url", e.target.value)}
-                  className="h-10 bg-bone border-void/15 text-void"
+                  className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown"
+                />
+                <Input
+                  placeholder="Image credit (artist name)"
+                  value={form.imageCredit || ""}
+                  onChange={(e) => set("imageCredit", e.target.value)}
+                  maxLength={120}
+                  data-testid="admin-field-image-credit"
+                  className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown"
+                />
+                <Input
+                  placeholder="Artist link (optional, https://…)"
+                  value={form.imageCreditUrl || ""}
+                  onChange={(e) => set("imageCreditUrl", e.target.value)}
+                  data-testid="admin-field-image-credit-url"
+                  className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown"
                 />
               </div>
             </div>
@@ -743,7 +762,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           </div>
 
           <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep flex items-center gap-1.5">
+            <Label className="text-xs tracking-[0.06em] uppercase text-charcoal-brown/70 flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" /> Play Time
             </Label>
             <Input
@@ -751,12 +770,12 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               onChange={(e) => set("playTime", e.target.value)}
               data-testid="admin-field-playtime"
               placeholder="e.g. 24 hours"
-              className="mt-2 h-10 bg-bone border-void/15 text-void"
+              className="mt-2 h-10 bg-white border-charcoal-brown/15 text-charcoal-brown"
             />
           </div>
 
           {!awardsAllowed && (
-            <p className="text-xs text-void/50">
+            <p className="text-xs text-charcoal-brown/70">
               Game Awards are only available for reviews dated {AWARDS_START_YEAR} or later.
             </p>
           )}
@@ -778,11 +797,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             >
               <SelectTrigger
                 data-testid="admin-field-recommended"
-                className="h-10 bg-bone border-void/15 text-void"
+                className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown"
               >
                 <SelectValue placeholder="Select…" />
               </SelectTrigger>
-              <SelectContent className="bg-bone border-void/15 text-void">
+              <SelectContent className="bg-white border-charcoal-brown/15 text-charcoal-brown">
                 <SelectItem value="yes">Yes</SelectItem>
                 <SelectItem value="no">No</SelectItem>
               </SelectContent>
@@ -792,7 +811,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                 type="button"
                 onClick={() => set("recommended", "")}
                 aria-label="Clear recommended"
-                className="w-10 h-10 shrink-0 grid place-items-center rounded-full text-void/50 hover:bg-void/10 hover:text-void"
+                className="w-10 h-10 shrink-0 grid place-items-center rounded-full text-charcoal-brown/70 hover:bg-charcoal-brown/10 hover:text-charcoal-brown"
               >
                 <XIcon className="w-4 h-4" />
               </button>
@@ -806,11 +825,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             >
               <SelectTrigger
                 data-testid="admin-field-contentType"
-                className="h-10 bg-bone border-void/15 text-void"
+                className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown"
               >
                 <SelectValue placeholder="Select…" />
               </SelectTrigger>
-              <SelectContent className="bg-bone border-void/15 text-void">
+              <SelectContent className="bg-white border-charcoal-brown/15 text-charcoal-brown">
                 <SelectItem value="remake">Remake</SelectItem>
                 <SelectItem value="remaster">Remaster</SelectItem>
                 <SelectItem value="show">Enhanced</SelectItem>
@@ -822,19 +841,19 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                 type="button"
                 onClick={() => set("contentType", "")}
                 aria-label="Clear content type"
-                className="w-10 h-10 shrink-0 grid place-items-center rounded-full text-void/50 hover:bg-void/10 hover:text-void"
+                className="w-10 h-10 shrink-0 grid place-items-center rounded-full text-charcoal-brown/70 hover:bg-charcoal-brown/10 hover:text-charcoal-brown"
               >
                 <XIcon className="w-4 h-4" />
               </button>
             )}
           </ClearableField>
 
-          <div className="flex items-center justify-between p-4 rounded-xl border border-void/15 bg-jade/10">
+          <div className="flex items-center justify-between p-4 rounded-xl border border-charcoal-brown/15 bg-charcoal-brown/10">
             <div>
-              <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
+              <Label className="text-xs tracking-[0.06em] uppercase text-charcoal-brown/70">
                 Gold Standard
               </Label>
-              <p className="text-xs text-void/60 mt-0.5">
+              <p className="text-xs text-charcoal-brown/80 mt-0.5">
                 Pin this as the featured game on the homepage
               </p>
             </div>
@@ -843,11 +862,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               data-testid="admin-field-isFeatured"
               onClick={() => set("isFeatured", !form.isFeatured)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                form.isFeatured ? "bg-jade" : "bg-void/15"
+                form.isFeatured ? "bg-charcoal-brown" : "bg-charcoal-brown/15"
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-bone shadow transition-transform ${
+                className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
                   form.isFeatured ? "translate-x-6" : "translate-x-1"
                 }`}
               />
@@ -855,7 +874,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           </div>
 
           <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
+            <Label className="text-xs tracking-[0.06em] uppercase text-charcoal-brown/70">
               Summary *
             </Label>
             <Input
@@ -863,7 +882,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               onChange={(e) => set("summary", e.target.value)}
               data-testid="admin-field-summary"
               placeholder="One sentence summary..."
-              className="mt-2 h-10 bg-bone border-void/15 text-void"
+              className="mt-2 h-10 bg-white border-charcoal-brown/15 text-charcoal-brown"
             />
           </div>
 
@@ -888,7 +907,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
           />
 
           <div>
-            <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
+            <Label className="text-xs tracking-[0.06em] uppercase text-charcoal-brown/70">
               Review Body (Markdown) *
             </Label>
             <Textarea
@@ -897,9 +916,9 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               onChange={(e) => set("body", e.target.value)}
               data-testid="admin-field-body"
               placeholder="Write your review here."
-              className="mt-2 bg-bone border-void/15 text-void resize-y text-sm font-mono"
+              className="mt-2 bg-white border-charcoal-brown/15 text-charcoal-brown resize-y text-sm font-mono"
             />
-            <p className="mt-2 text-xs text-void/60">
+            <p className="mt-2 text-xs text-charcoal-brown/80">
               Supports Markdown headings, lists, links, bold,s,
               blockquotes, and code blocks.
             </p>
@@ -909,7 +928,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             <button
               type="button"
               onClick={requestClose}
-              className="px-5 h-10 rounded-full bg-bone border border-void/15 hover:bg-void/5 text-sm text-void/80"
+              className="px-5 h-10 rounded-full bg-white border border-charcoal-brown/15 hover:bg-charcoal-brown/5 text-sm text-charcoal-brown/90"
             >
               Cancel
             </button>
@@ -917,11 +936,11 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               type="submit"
               data-testid="admin-save-review"
               disabled={saving || !canSubmit}
-              className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-jade text-mint filter hover:brightness-90 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium"
+              className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium"
             >
               {saving ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-void/40 border-t-mint rounded-full animate-spin" />
+                  <span className="w-3.5 h-3.5 border-2 border-charcoal-brown/40 border-t-honey rounded-full animate-spin" />
                   Saving…
                 </>
               ) : (
@@ -936,12 +955,12 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
       </DialogContent>
 
       <AlertDialog open={showCloseConfirm} onOpenChange={setShowCloseConfirm}>
-        <AlertDialogContent className="bg-bone border-void/15">
+        <AlertDialogContent className="bg-white border-charcoal-brown/15">
           <AlertDialogHeader>
-            <AlertDialogTitle className="font-display text-void">
+            <AlertDialogTitle className="font-display text-charcoal-brown">
               Discard unsaved changes?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-void/60">
+            <AlertDialogDescription className="text-charcoal-brown/80">
               You have unsaved changes on this review. Closing now will lose
               them.
             </AlertDialogDescription>
@@ -953,7 +972,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
                 setShowCloseConfirm(false);
                 onClose();
               }}
-              className="bg-jade text-mint filter hover:brightness-90"
+              className="bg-charcoal-brown text-white filter hover:brightness-90"
             >
               Discard changes
             </AlertDialogAction>
@@ -962,12 +981,12 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
       </AlertDialog>
 
       <AlertDialog open={showCreateConfirm} onOpenChange={setShowCreateConfirm}>
-        <AlertDialogContent className="bg-bone border-void/15">
+        <AlertDialogContent className="bg-white border-charcoal-brown/15">
           <AlertDialogHeader>
-            <AlertDialogTitle className="font-display text-void">
+            <AlertDialogTitle className="font-display text-charcoal-brown">
               Create this review?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-void/60">
+            <AlertDialogDescription className="text-charcoal-brown/80">
               "{form.title || "Untitled"}" will be published to the site.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -975,7 +994,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             <AlertDialogCancel>Go back</AlertDialogCancel>
             <AlertDialogAction
               onClick={doSave}
-              className="bg-jade text-mint filter hover:brightness-90"
+              className="bg-charcoal-brown text-white filter hover:brightness-90"
             >
               Create review
             </AlertDialogAction>
@@ -988,7 +1007,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
 
 const ClearableField = ({ label, children }) => (
   <div>
-    <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
+    <Label className="text-xs tracking-[0.06em] uppercase text-charcoal-brown/70">
       {label}
     </Label>
     <div className="mt-2 flex items-center gap-2">{children}</div>
@@ -997,7 +1016,7 @@ const ClearableField = ({ label, children }) => (
 
 const FieldText = ({ label, value, onChange, required, testId }) => (
   <div>
-    <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
+    <Label className="text-xs tracking-[0.06em] uppercase text-charcoal-brown/70">
       {label}
       {required ? " *" : ""}
     </Label>
@@ -1006,7 +1025,7 @@ const FieldText = ({ label, value, onChange, required, testId }) => (
       required={required}
       onChange={(e) => onChange(e.target.value)}
       data-testid={testId}
-      className="mt-2 h-10 bg-bone border-void/15 text-void"
+      className="mt-2 h-10 bg-white border-charcoal-brown/15 text-charcoal-brown"
     />
   </div>
 );
@@ -1022,13 +1041,13 @@ const ListEditor = ({
 }) => (
   <div data-testid={testId}>
     <div className="flex items-center justify-between mb-2">
-      <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep">
+      <Label className="text-xs tracking-[0.06em] uppercase text-charcoal-brown/70">
         {label}{required ? " *" : ""}
       </Label>
       <button
         type="button"
         onClick={onAdd}
-        className="text-xs text-blush-deep hover:text-void inline-flex items-center gap-1"
+        className="text-xs text-charcoal-brown/70 hover:text-charcoal-brown inline-flex items-center gap-1"
       >
         <Plus className="w-3 h-3" /> Add
       </button>
@@ -1039,7 +1058,7 @@ const ListEditor = ({
           <Input
             value={it}
             onChange={(e) => onChange(i, e.target.value)}
-            className="h-10 bg-bone border-void/15 text-void"
+            className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown"
             placeholder={`${label} item`}
           />
           {items.length > 1 && (
@@ -1047,7 +1066,7 @@ const ListEditor = ({
               type="button"
               onClick={() => onRemove(i)}
               aria-label={`Remove ${label} item`}
-              className="w-9 h-9 grid place-items-center rounded-full text-void/50 hover:bg-void/10 hover:text-void"
+              className="w-9 h-9 grid place-items-center rounded-full text-charcoal-brown/70 hover:bg-charcoal-brown/10 hover:text-charcoal-brown"
             >
               <XIcon className="w-4 h-4" />
             </button>
@@ -1071,20 +1090,20 @@ const toAwardEntry = (value) => {
 const AwardsEditor = ({ items, onChange, onAdd, onRemove, usedAwards }) => (
   <div data-testid="admin-awards">
     <div className="flex items-center justify-between mb-2">
-      <Label className="text-xs tracking-[0.06em] uppercase text-blush-deep flex items-center gap-1.5">
+      <Label className="text-xs tracking-[0.06em] uppercase text-charcoal-brown/70 flex items-center gap-1.5">
         <Trophy className="w-3.5 h-3.5" /> Game Awards
       </Label>
       <button
         type="button"
         onClick={onAdd}
         data-testid="admin-awards-add"
-        className="text-xs text-blush-deep hover:text-void inline-flex items-center gap-1"
+        className="text-xs text-charcoal-brown/70 hover:text-charcoal-brown inline-flex items-center gap-1"
       >
         <Plus className="w-3 h-3" /> Add award
       </button>
     </div>
     {items.length === 0 ? (
-      <p className="text-xs text-void/50">No awards added.</p>
+      <p className="text-xs text-charcoal-brown/70">No awards added.</p>
     ) : (
       <div className="space-y-3">
         {items.map((entry, i) => {
@@ -1095,17 +1114,17 @@ const AwardsEditor = ({ items, onChange, onAdd, onRemove, usedAwards }) => (
           return (
             <div
               key={i}
-              className="rounded-lg border border-void/15 bg-void/5 p-3 space-y-2"
+              className="rounded-lg border border-charcoal-brown/15 bg-charcoal-brown/5 p-3 space-y-2"
             >
               <div className="flex items-center gap-2">
                 <Select value={value} onValueChange={(v) => update({ name: v })}>
                   <SelectTrigger
                     data-testid={`admin-awards-select-${i}`}
-                    className="h-10 bg-bone border-void/15 text-void"
+                    className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown"
                   >
                     <SelectValue placeholder="Select an award…" />
                   </SelectTrigger>
-                  <SelectContent className="bg-bone border-void/15 text-void">
+                  <SelectContent className="bg-white border-charcoal-brown/15 text-charcoal-brown">
                     {AWARD_OPTIONS.filter((opt) => opt === value || !taken.has(opt)).map(
                       (opt) => (
                         <SelectItem key={opt} value={opt}>
@@ -1119,7 +1138,7 @@ const AwardsEditor = ({ items, onChange, onAdd, onRemove, usedAwards }) => (
                   type="button"
                   onClick={() => onRemove(i)}
                   aria-label="Remove award"
-                  className="w-9 h-9 shrink-0 grid place-items-center rounded-full text-void/50 hover:bg-void/10 hover:text-void"
+                  className="w-9 h-9 shrink-0 grid place-items-center rounded-full text-charcoal-brown/70 hover:bg-charcoal-brown/10 hover:text-charcoal-brown"
                 >
                   <XIcon className="w-4 h-4" />
                 </button>
@@ -1221,48 +1240,48 @@ function NowPlayingPanel() {
   const cover = form.cover_url ? (form.cover_url.startsWith("http") ? form.cover_url : `https://${form.cover_url}`) : null;
 
   return (
-    <section className="rounded-2xl border border-void/15 bg-bone p-5 sm:p-6 mb-8" data-testid="admin-now-playing">
+    <section className="rounded-2xl border border-charcoal-brown/15 bg-white p-5 sm:p-6 mb-8" data-testid="admin-now-playing">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-2">
-          <Hourglass className="w-4 h-4 text-jade" />
-          <h2 className="font-display text-xl text-void">Now playing</h2>
-          <span className="text-xs text-void/50">
+          <Hourglass className="w-4 h-4 text-charcoal-brown" />
+          <h2 className="font-display text-xl text-charcoal-brown">Now playing</h2>
+          <span className="text-xs text-charcoal-brown/70">
             {saved ? "Showing on the homepage" : "Not set (shows your Twitch game while you're live)"}
           </span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[7rem_1fr] gap-5">
-        <div className="w-28 aspect-[4/3] rounded-md overflow-hidden border border-void/15 bg-void/5 grid place-items-center">
-          {cover ? <img src={cover} alt="" className="w-full h-full object-cover" /> : <ImageIcon className="w-6 h-6 text-void/30" />}
+        <div className="w-28 aspect-[4/3] rounded-md overflow-hidden border border-charcoal-brown/15 bg-charcoal-brown/5 grid place-items-center">
+          {cover ? <img src={cover} alt="" className="w-full h-full object-cover" /> : <ImageIcon className="w-6 h-6 text-charcoal-brown/55" />}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="space-y-1.5">
-            <Label className="text-xs text-void/70">Game title *</Label>
-            <Input value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="Hollow Knight: Silksong" className="h-10 bg-bone border-void/15 text-void" />
+            <Label className="text-xs text-charcoal-brown/85">Game title *</Label>
+            <Input value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="Hollow Knight: Silksong" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
           </div>
           <div className="space-y-1.5">
-            <Label className="text-xs text-void/70">Platform</Label>
-            <Input value={form.platform} onChange={(e) => set("platform", e.target.value)} placeholder="PC" className="h-10 bg-bone border-void/15 text-void" />
+            <Label className="text-xs text-charcoal-brown/85">Platform</Label>
+            <Input value={form.platform} onChange={(e) => set("platform", e.target.value)} placeholder="PC" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
           </div>
           <div className="space-y-1.5">
-            <Label className="text-xs text-void/70">Progress note</Label>
-            <Input value={form.note} onChange={(e) => set("note", e.target.value)} maxLength={120} placeholder="Act 2" className="h-10 bg-bone border-void/15 text-void" />
+            <Label className="text-xs text-charcoal-brown/85">Progress note</Label>
+            <Input value={form.note} onChange={(e) => set("note", e.target.value)} maxLength={120} placeholder="Act 2" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
           </div>
           <div className="space-y-1.5">
-            <Label className="text-xs text-void/70">Cover</Label>
+            <Label className="text-xs text-charcoal-brown/85">Cover</Label>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => fileInput.current?.click()}
                 disabled={uploading}
-                className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-bone border border-void/15 hover:border-blush text-sm text-void/80 shrink-0 disabled:opacity-50"
+                className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white border border-charcoal-brown/15 hover:border-honey text-sm text-charcoal-brown/90 shrink-0 disabled:opacity-50"
               >
                 <Upload className="w-4 h-4" /> {uploading ? "Uploading…" : "Upload"}
               </button>
               <input ref={fileInput} type="file" accept="image/*" onChange={upload} className="hidden" />
-              <Input value={form.cover_url} onChange={(e) => set("cover_url", e.target.value)} placeholder="…or paste an image URL" className="h-10 bg-bone border-void/15 text-void" />
+              <Input value={form.cover_url} onChange={(e) => set("cover_url", e.target.value)} placeholder="…or paste an image URL" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
             </div>
           </div>
         </div>
@@ -1274,7 +1293,7 @@ function NowPlayingPanel() {
             type="button"
             onClick={clear}
             disabled={busy}
-            className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-bone border border-void/15 hover:border-blush text-sm text-void/80 disabled:opacity-50"
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white border border-charcoal-brown/15 hover:border-honey text-sm text-charcoal-brown/90 disabled:opacity-50"
           >
             <XIcon className="w-4 h-4" /> Clear
           </button>
@@ -1283,12 +1302,12 @@ function NowPlayingPanel() {
           type="button"
           onClick={save}
           disabled={busy || uploading || !form.title.trim() || !dirty}
-          className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-jade text-mint filter hover:brightness-90 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Save className="w-4 h-4" /> Save
         </button>
       </div>
-      <p className="text-xs text-void/50 mt-3">Clears itself when you publish a review with the same title.</p>
+      <p className="text-xs text-charcoal-brown/70 mt-3">Clears itself when you publish a review with the same title.</p>
     </section>
   );
 }

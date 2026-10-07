@@ -27,11 +27,11 @@ export function GameOfTheYear({ data, loading }) {
   return (
     <section className="relative pt-16 md:pt-24 pb-16 md:pb-20">
       <div className="text-center mb-20 px-4">
-        <h2 className="wordmark text-4xl sm:text-5xl text-void">Game of the Year</h2>
+        <h2 className="wordmark text-4xl sm:text-5xl text-charcoal-brown">Game of the Year</h2>
       </div>
 
-      <div className="relative bg-[var(--void)] py-10 md:py-14 overflow-x-clip">
-        <WaveDivider color="var(--void)" position="top" mirror />
+      <div className="relative bg-[var(--color-charcoal-brown)] py-10 md:py-14 overflow-x-clip">
+        <WaveDivider color="var(--color-charcoal-brown)" position="top" mirror />
         <div className="goty-crown" aria-hidden="true"><Crown /></div>
         <div className="relative isolate max-w-xs mx-auto px-4 sm:px-0">
           <ChipBackdrop />
@@ -55,8 +55,8 @@ export function GameOfTheYear({ data, loading }) {
 
         {runnersUp.length > 0 && (
           <div className="relative mt-12 px-4">
-            <h3 className="uppercase text-2xl sm:text-3xl text-bone text-center">Runners-up</h3>
-            <p className="mt-2 text-sm text-bone/60 text-center">
+            <h3 className="uppercase text-2xl sm:text-3xl text-white text-center">Runners-up</h3>
+            <p className="mt-2 text-sm text-white/80 text-center">
               Also scored {goty.rating} in {data.year}.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-6">
@@ -68,7 +68,7 @@ export function GameOfTheYear({ data, loading }) {
             </div>
           </div>
         )}
-        <WaveDivider color="var(--void)" position="bottom" flip />
+        <WaveDivider color="var(--color-charcoal-brown)" position="bottom" flip />
       </div>
     </section>
   );

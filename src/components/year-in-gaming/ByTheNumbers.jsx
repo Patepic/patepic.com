@@ -22,8 +22,8 @@ export function ByTheNumbers({ data, loading }) {
     <section className="relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div className="text-center mb-14">
-          <h2 className="wordmark text-4xl sm:text-5xl text-void">By the numbers</h2>
-          <p className="mt-3 text-sm text-void/60">The year, tallied up.</p>
+          <h2 className="wordmark text-4xl sm:text-5xl text-charcoal-brown">By the numbers</h2>
+          <p className="mt-3 text-sm text-charcoal-brown/80">My year, tallied up.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
@@ -52,10 +52,10 @@ export function ByTheNumbers({ data, loading }) {
                 <div className={`dex-panel h-full ${slug ? "watch-tile !block" : ""}`}>
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <span className="dex-label !pt-0">{label}</span>
-                    <Icon className="w-4 h-4 text-jade shrink-0" />
+                    <Icon className="w-4 h-4 text-charcoal-brown shrink-0" />
                   </div>
-                  <div className="font-gothic font-bold text-void leading-snug">{value}</div>
-                  {subtitle && <div className="text-sm text-void/60 mt-0.5">{subtitle}</div>}
+                  <div className="font-sans font-bold text-charcoal-brown leading-snug">{value}</div>
+                  {subtitle && <div className="text-sm text-charcoal-brown/80 mt-0.5">{subtitle}</div>}
                 </div>
               );
               return slug ? (

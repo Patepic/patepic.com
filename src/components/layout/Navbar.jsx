@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu, X, LogOut, LayoutDashboard, Twitch, Youtube, Mail } from "lucide-react";
 import { creator } from "../../data/creator";
@@ -38,10 +38,10 @@ function useTwitchLive(handle) {
 
 const navLink = ({ isActive }) =>
   `relative py-2 text-[0.9rem] font-extrabold uppercase transition-colors ${
-    isActive ? "text-void" : "text-void/75 hover:text-void"
+    isActive ? "text-charcoal-brown" : "text-charcoal-brown/90 hover:text-charcoal-brown"
   }`;
 
-const iconBtn = "text-bone hover:text-blush transition-colors";
+const iconBtn = "text-white hover:text-orange transition-colors";
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -60,13 +60,13 @@ export const Navbar = () => {
   return (
     <header className="fixed top-0 lg:top-6 left-0 right-0 z-50 pointer-events-none">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-10 mx-auto px-7 rounded-full border border-hairline bg-bone/60 backdrop-blur-md shadow-soft pointer-events-auto">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-10 mx-auto px-7 rounded-full border border-honey bg-white/60 backdrop-blur-md shadow-soft pointer-events-auto">
           {links.map((l) => (
             <NavLink key={l.to} to={l.to} end={l.to === "/"} className={navLink}>
               {({ isActive }) => (
                 <>
                   {l.label}
-                  {isActive && <span className="absolute -bottom-0.5 left-0 right-0 h-[3px] rounded-full bg-leaf" />}
+                  {isActive && <span className="absolute -bottom-0.5 left-0 right-0 h-[3px] rounded-full bg-orange" />}
                 </>
               )}
             </NavLink>
@@ -75,19 +75,19 @@ export const Navbar = () => {
 
         {live?.isLive && (
           <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer"
-            className="hidden lg:inline-flex absolute left-1/2 top-full -translate-x-1/2 mt-1 pill pill-live h-7 px-3 rounded-full text-[0.68rem] uppercase tracking-[0.14em] bg-bone pointer-events-auto">
-            <span className="w-1.5 h-1.5 rounded-full bg-jade animate-pulse" /> Live
+            className="hidden lg:inline-flex absolute left-1/2 top-full -translate-x-1/2 mt-1 pill pill-live h-7 px-3 rounded-full text-[0.68rem] uppercase tracking-[0.14em] bg-white pointer-events-auto">
+            <span className="w-1.5 h-1.5 rounded-full bg-charcoal-brown animate-pulse" /> Live
           </a>
         )}
 
         {user && (
           <div className="hidden lg:flex fixed right-5 bottom-[4.75rem] z-40 flex-col gap-2 pointer-events-auto">
             <Link to="/admin" aria-label="Admin" title="Admin"
-              className="w-11 h-11 grid place-items-center rounded-[4px] bg-blush text-void border border-blush-soft hover:bg-[#DB7FA3] transition-colors">
+              className="w-11 h-11 grid place-items-center rounded-[4px] bg-mango-yellow text-charcoal-brown border border-honey hover:bg-mango-yellow/80 transition-colors">
               <LayoutDashboard className="w-4 h-4" />
             </Link>
             <button onClick={logout} aria-label="Log out" title="Log out"
-              className="w-11 h-11 grid place-items-center rounded-[4px] bg-bone text-void border border-hairline hover:border-jade transition-colors">
+              className="w-11 h-11 grid place-items-center rounded-[4px] bg-white text-charcoal-brown border border-honey hover:border-charcoal-brown transition-colors">
               <LogOut className="w-4 h-4" />
             </button>
           </div>
@@ -96,15 +96,15 @@ export const Navbar = () => {
         <div className="flex lg:hidden items-center gap-2 ml-auto pointer-events-auto">
           {live?.isLive && (
             <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer"
-              className="pill pill-live h-8 px-3 rounded-md text-[0.72rem] uppercase tracking-[0.14em] bg-bone">
-              <span className="w-1.5 h-1.5 rounded-full bg-jade animate-pulse" /> Live
+              className="pill pill-live h-8 px-3 rounded-md text-[0.72rem] uppercase tracking-[0.14em] bg-white">
+              <span className="w-1.5 h-1.5 rounded-full bg-charcoal-brown animate-pulse" /> Live
             </a>
           )}
           <button
             onClick={() => setOpen(!open)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
-            className="lg:hidden relative z-[60] h-11 px-5 rounded-full bg-bone text-void grid place-items-center shadow-[0_8px_20px_-10px_rgba(0,0,0,0.6)] border border-void/10"
+            className="lg:hidden relative z-[60] h-11 px-5 rounded-full bg-white text-charcoal-brown grid place-items-center shadow-soft border border-charcoal-brown/10"
           >
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -113,25 +113,25 @@ export const Navbar = () => {
 
       {open && (
         <div className="lg:hidden pointer-events-auto">
-          <button type="button" aria-label="Close menu" onClick={close} className="fixed inset-0 z-40 bg-void/40 animate-in fade-in duration-200" />
-          <div className="fixed top-0 right-0 bottom-0 z-50 w-[88%] max-w-sm bg-void animate-in slide-in-from-right duration-300">
+          <button type="button" aria-label="Close menu" onClick={close} className="fixed inset-0 z-40 bg-charcoal-brown/40 animate-in fade-in duration-200" />
+          <div className="fixed top-0 right-0 bottom-0 z-50 w-[88%] max-w-sm bg-charcoal-brown animate-in slide-in-from-right duration-300">
             <WaveEdge />
             <div className="nav-chip-layer" aria-hidden="true">
-              <PokerChip still className="absolute -top-24 -left-20 w-72 h-72 text-bone opacity-[0.08]" />
+              <PokerChip still className="absolute -top-24 -left-20 w-72 h-72 text-white opacity-[0.08]" />
             </div>
 
             <div className="relative z-[2] h-full flex flex-col items-end justify-between overflow-y-auto px-5 pt-24 pb-8">
               <nav className="flex flex-col items-end gap-3 my-auto text-right">
                 {links.map((l) => (
                   <NavLink key={l.to} to={l.to} onClick={close} end={l.to === "/"}
-                    className={({ isActive }) => `wordmark text-[2.1rem] !leading-none transition-colors ${isActive ? "text-mint" : "text-bone hover:text-blush"}`}>
+                    className={({ isActive }) => `wordmark text-[2.1rem] !leading-none transition-colors ${isActive ? "text-mango-yellow" : "text-white hover:text-orange"}`}>
                     {l.label}
                   </NavLink>
                 ))}
                 {user && (
                   <>
-                    <Link to="/admin" onClick={close} className="wordmark text-[2.1rem] !leading-none text-blush-soft hover:text-blush">Admin</Link>
-                    <button onClick={() => { logout(); close(); }} className="mt-1 text-sm font-bold uppercase text-bone/70 hover:text-blush">Log out</button>
+                    <Link to="/admin" onClick={close} className="wordmark text-[2.1rem] !leading-none text-mango-yellow hover:text-white">Admin</Link>
+                    <button onClick={() => { logout(); close(); }} className="mt-1 text-sm font-bold uppercase text-white/85 hover:text-orange">Log out</button>
                   </>
                 )}
               </nav>

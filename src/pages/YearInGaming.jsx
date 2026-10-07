@@ -11,6 +11,7 @@ import { Achievements } from "../components/year-in-gaming/Achievements";
 import { ClosingCard } from "../components/year-in-gaming/ClosingCard";
 import { buildYearRange, CURRENT_YEAR } from "../lib/year";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { hasYearHighlights } from "../data/yearHighlights";
 
 export default function YearInGaming() {
   const { year: yearParam } = useParams();
@@ -30,8 +31,8 @@ export default function YearInGaming() {
       <div className="min-h-[70vh] grid place-items-center px-4">
         <div className="max-w-md text-center">
           <p className="eyebrow justify-center">Data unavailable</p>
-          <h1 className="display-hero mt-3 text-3xl text-void">Could not load reviews</h1>
-          <p className="mt-3 text-sm text-void/80">Check the API connection and database, then refresh.</p>
+          <h1 className="display-hero mt-3 text-3xl text-charcoal-brown">Could not load reviews</h1>
+          <p className="mt-3 text-sm text-charcoal-brown/90">Check the API connection and database, then refresh.</p>
         </div>
       </div>
     );
@@ -53,13 +54,13 @@ export default function YearInGaming() {
         <Cover data={data} years={years} selectedYear={selectedYear} onSelectYear={setSelectedYear} />
         <div className="min-h-[50vh] grid place-items-center px-4 pb-20">
           <div className="max-w-md text-center">
-            <h1 className="display-hero mt-3 text-3xl text-void tracking-tight">No {selectedYear} reviews yet</h1>
-            <p className="mt-4 text-void/70 leading-relaxed">
+            <h1 className="display-hero mt-3 text-3xl text-charcoal-brown tracking-tight">No {selectedYear} reviews yet</h1>
+            <p className="mt-4 text-charcoal-brown/85 leading-relaxed">
               Nothing dated {selectedYear} has been published yet. Reviews with a{" "}
               {selectedYear} date will automatically appear here as they're published.
             </p>
-            <div className="mt-8 flex items-center justify-center gap-3 text-void/70">
-              <Gamepad2 className="w-5 h-5 text-jade" />
+            <div className="mt-8 flex items-center justify-center gap-3 text-charcoal-brown/85">
+              <Gamepad2 className="w-5 h-5 text-charcoal-brown" />
               <span className="text-sm">Check back soon for the story of {selectedYear}</span>
             </div>
           </div>
@@ -75,7 +76,7 @@ export default function YearInGaming() {
       <ByTheNumbers data={data} />
       <TheJourney data={data} />
       <Achievements year={data.year} />
-      <ClosingCard year={data.year} />
+      {hasYearHighlights(data.year) && <ClosingCard year={data.year} />}
     </div>
   );
 }

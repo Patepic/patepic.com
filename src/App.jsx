@@ -18,6 +18,7 @@ const Guidelines = lazyPage(() => import("@/pages/Guidelines"));
 const Awards = lazyPage(() => import("@/pages/Awards"));
 const YearInGaming = lazyPage(() => import("@/pages/YearInGaming"));
 const Contact = lazyPage(() => import("@/pages/Contact"));
+const Credits = lazyPage(() => import("@/pages/Credits"));
 const AdminLogin = lazyPage(() => import("@/pages/AdminLogin"));
 const Admin = lazyPage(() => import("@/pages/Admin"));
 const NotFound = lazyPage(() => import("@/pages/NotFound"));
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/guidelines" element={<Guidelines />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/credits" element={<Credits />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route
                   path="/admin"
@@ -62,13 +64,13 @@ function App() {
           position="bottom-right"
           toastOptions={{
             style: {
-              background: "#9DECB8",
-              color: "#171C1A",
-              border: "1px solid rgba(38, 106, 90, 0.4)",
+              background: "var(--color-charcoal-brown)",
+              color: "var(--color-soft-white)",
+              border: "1px solid var(--color-charcoal-brown)",
               borderRadius: "4px",
               fontFamily: "var(--font-sans)",
               fontSize: "14px",
-              boxShadow: "0 10px 28px -12px rgba(0, 0, 0, 0.35)",
+              boxShadow: "0 10px 28px -12px color-mix(in srgb, var(--color-charcoal-brown) 35%, transparent)",
             },
           }}
         />

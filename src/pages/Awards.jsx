@@ -26,10 +26,16 @@ const normalizeAwards = (list) =>
 export default function Awards() {
   const { reviews, loading, error } = useReviews();
   const years = useMemo(() => buildYearRange(), []);
-  const [year, setYear] = useState(() => {
-    const preferred = defaultAwardsYear();
-    return years.includes(preferred) ? preferred : years[0];
-  });
+  const [pickedYear, setYear] = useState(null);
+  const latestAwardYear = useMemo(() => {
+    const awarded = (reviews || [])
+      .filter((r) => normalizeAwards(r.awards).length > 0)
+      .map((r) => getYearFromDate(r.date))
+      .filter((y) => years.includes(y));
+    return awarded.length ? Math.max(...awarded) : null;
+  }, [reviews, years]);
+  const preferredYear = defaultAwardsYear();
+  const year = pickedYear ?? latestAwardYear ?? (years.includes(preferredYear) ? preferredYear : years[0]);
 
   const games = useMemo(() => {
     return (reviews || [])
@@ -46,10 +52,10 @@ export default function Awards() {
       <div className="min-h-[70vh] grid place-items-center px-4">
         <div className="max-w-md text-center">
           <p className="eyebrow justify-center">Awards unavailable</p>
-          <h1 className="display-hero mt-3 text-3xl text-void">
+          <h1 className="display-hero mt-3 text-3xl text-charcoal-brown">
             Could not load reviews
           </h1>
-          <p className="mt-3 text-sm text-void/80">
+          <p className="mt-3 text-sm text-charcoal-brown/90">
             Check the API connection and database, then refresh.
           </p>
         </div>
@@ -61,9 +67,9 @@ export default function Awards() {
     <div className="relative">
       <section className="relative pt-12 lg:pt-16">
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Wordmark text="Awards" tag="yearly awards" className="wordmark text-6xl sm:text-7xl lg:text-8xl text-void" tagClassName="text-void/50" />
-          <p className="mt-5 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed text-ink">
-            The honors handed out each year, with a note on why each game earned
+          <Wordmark text="Awards" tag="yearly awards" className="wordmark text-6xl sm:text-7xl lg:text-8xl text-charcoal-brown" tagClassName="text-charcoal-brown/70" />
+          <p className="mt-5 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed text-charcoal-brown">
+            The honors I hand out each year, with a note on why each game earned
             its award.
           </p>
         </div>
@@ -80,7 +86,7 @@ export default function Awards() {
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <CalendarDays className="w-4 h-4 text-blush-deep" />
+            <CalendarDays className="w-4 h-4 text-charcoal-brown/70" />
             <span className="eyebrow !text-[0.65rem]">Awards year</span>
           </div>
           <Select
@@ -89,11 +95,11 @@ export default function Awards() {
           >
             <SelectTrigger
               data-testid="awards-year-filter"
-              className="w-44 h-12 bg-bone border-hairline text-void"
+              className="w-44 h-12 bg-white border-honey text-charcoal-brown"
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-bone border-hairline text-void">
+            <SelectContent className="bg-white border-honey text-charcoal-brown">
               {years.map((y) => (
                 <SelectItem key={y} value={String(y)}>
                   {y}
@@ -106,13 +112,12 @@ export default function Awards() {
         {loading ? (
           <AwardsDataSkeleton />
         ) : games.length === 0 ? (
-          <div className="mt-12 border border-hairline bg-bone p-12 text-center">
-            <p className="display-heading text-2xl text-void mb-2">
-              No awards for {year}.
+          <div className="mt-12 border border-honey bg-white p-12 text-center">
+            <p className="display-heading text-2xl text-charcoal-brown mb-2">
+              No awards for {year} yet.
             </p>
-            <p className="text-sm text-ink">
-              Awards appear here once titles dated {year} are given honors in the
-              admin form.
+            <p className="text-sm text-charcoal-brown">
+              I hand out awards once the year{"'"}s reviews are in.{years.length > 1 ? " Try another year from the menu above." : " Check back at the end of the year."}
             </p>
           </div>
         ) : (
@@ -133,26 +138,26 @@ function GameAwardCard({ game }) {
       : `https://${game.cover_url}`
     : null;
   return (
-    <article className="flex flex-col h-full border border-hairline bg-bone hover:border-jade/50 transition-colors overflow-hidden">
+    <article className="flex flex-col h-full border border-honey bg-white hover:border-charcoal-brown/50 transition-colors overflow-hidden">
       <div className="flex items-center gap-4 p-5">
         {cover ? (
           <img
             src={cover}
             alt=""
-            className="w-16 h-16 object-cover rounded-md border border-hairline"
+            className="w-16 h-16 object-cover rounded-md border border-honey"
           />
         ) : (
-          <div className="w-16 h-16 rounded-md bg-jade/20 grid place-items-center text-void/40 shrink-0">
+          <div className="w-16 h-16 rounded-md bg-charcoal-brown/20 grid place-items-center text-charcoal-brown/65 shrink-0">
             <Gamepad2 className="w-5 h-5" />
           </div>
         )}
         <div className="min-w-0">
           {game.date && (
-            <div className="eyebrow !text-[0.55rem] text-ash">{game.date}</div>
+            <div className="eyebrow !text-[0.55rem] text-charcoal-brown/85">{game.date}</div>
           )}
           <Link
             to={`/reviews/${game.slug}`}
-            className="display-heading text-xl text-void hover:text-jade transition-colors leading-snug block mt-1"
+            className="display-heading text-xl text-charcoal-brown hover:text-charcoal-brown transition-colors leading-snug block mt-1"
           >
             {game.title}
           </Link>
@@ -162,13 +167,13 @@ function GameAwardCard({ game }) {
         {game.awards.map((award, i) => (
           <div key={`${award.name}-${i}`} className="p-4">
             <div className="flex items-center gap-2">
-              <Trophy className="w-4 h-4 text-blush-deep shrink-0" />
-              <h3 className="font-gothic text-lg font-semibold text-void">
+              <Trophy className="w-4 h-4 text-charcoal-brown/70 shrink-0" />
+              <h3 className="font-sans text-lg font-semibold text-charcoal-brown">
                 {award.name}
               </h3>
             </div>
             {award.explanation && (
-              <p className="mt-1.5 text-sm leading-relaxed text-void/80">
+              <p className="mt-1.5 text-sm leading-relaxed text-charcoal-brown/90">
                 {award.explanation}
               </p>
             )}

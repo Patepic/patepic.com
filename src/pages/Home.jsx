@@ -7,9 +7,9 @@ import { ReviewCard } from "../components/ReviewCard";
 import { NowPlayingCard } from "../components/NowPlayingCard";
 import { HeroVideo, VideoCard } from "../components/VideoCard";
 import { CreatorCard } from "../components/CreatorCard";
-import { Wordmark, CapsuleButton, SocialRow, WaveDivider, ChipBackdrop, PokerChip } from "../components/ui/decor";
+import { Wordmark, CapsuleButton, SocialRow, WaveDivider, ChipBackdrop, PokerChip, PageBackdrop } from "../components/ui/decor";
 import { HomeDataSkeleton, SkeletonReviewCard, SkeletonVideoCard } from "../components/ui/skeleton";
-import { ArrowUpRight, ArrowDown, Gamepad2, BookOpen, Twitch, Youtube, Mail, Play, Sparkle, Trophy } from "lucide-react";
+import { ArrowUpRight, ArrowDown, BookOpen, Play, Sparkle, Trophy } from "lucide-react";
 import { useMemo } from "react";
 import { usePageTitle } from "../hooks/usePageTitle";
 
@@ -38,25 +38,16 @@ export default function Home() {
   return (
     <div>
       <section className="hero relative overflow-x-clip">
+        <div className="hero-bg" aria-hidden="true" />
+        <PageBackdrop className="hero-backdrop" />
         <PokerChip className="hero-chip" />
-
-        <ul className="hero-socials hero-socials-l">
-          <li><a href={creator.twitch.url} target="_blank" rel="noopener noreferrer" aria-label={`Twitch: ${creator.twitch.handle}`}><Twitch aria-hidden="true" /> <span className="hero-social-label">{creator.twitch.handle}</span></a></li>
-          {creator.youtubeChannels.map((c) => (
-            <li key={c.url}><a href={c.url} target="_blank" rel="noopener noreferrer" aria-label={`YouTube: ${c.name}`} title={`YouTube: ${c.name}`}><Youtube aria-hidden="true" /> <span className="hero-social-label">{c.handle || c.name}</span></a></li>
-          ))}
-        </ul>
-        <ul className="hero-socials hero-socials-r">
-          <li><a href="mailto:contact@patepic.com" aria-label="Email contact@patepic.com"><span className="hero-social-label">contact@patepic.com</span> <Mail aria-hidden="true" /></a></li>
-          <li><Link to="/reviews" aria-label="All reviews"><span className="hero-social-label">All reviews</span> <Gamepad2 aria-hidden="true" /></Link></li>
-        </ul>
 
         <div className="relative z-[1] flex flex-col items-center text-center px-4 pt-14 md:pt-20">
           <div className="relative">
-            {HERO_SPARKLES.map(([cls, pink], i) => (
-              <Sparkle key={i} aria-hidden="true" className={`hero-sparkle ${cls} ${pink ? "text-blush fill-blush" : "text-void"}`} />
+            {HERO_SPARKLES.map(([cls, accent], i) => (
+              <Sparkle key={i} aria-hidden="true" className={`hero-sparkle ${cls} ${accent ? "text-orange fill-orange" : "text-charcoal-brown"}`} />
             ))}
-            <h1 className="wordmark hero-name text-void">{creator.name}</h1>
+            <h1 className="wordmark hero-name">{creator.name}</h1>
           </div>
           <p className="hero-tagline">Reviewer · Streamer · VTuber</p>
 
@@ -65,9 +56,11 @@ export default function Home() {
             <span className="hero-cta-icon" aria-hidden="true"><Play className="w-5 h-5" fill="currentColor" /></span>
             <span className="hero-cta-label">Watch on Pixie</span>
           </a>
+
+          <SocialRow className="hero-follow mt-7" />
         </div>
 
-        <div className="relative z-[1] flex justify-center px-4 mt-12 pb-16">
+        <div className="relative z-[1] flex justify-center px-4 mt-12">
           <CreatorCard reviews={reviews} loading={loading} className="w-full max-w-[21rem] -rotate-2" />
         </div>
 
@@ -77,18 +70,18 @@ export default function Home() {
 
       {(videosLoading || latestVideo) && (
         <>
-          <div className="mb-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mt-24 mb-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="max-w-md mx-auto">
               <Wordmark
                 text="Latest Video"
-                className="wordmark text-4xl sm:text-5xl text-void"
+                className="wordmark text-4xl sm:text-5xl text-charcoal-brown"
               />
-              <p className="mt-2 text-sm text-void/50">The newest upload from {creator.pixie.url ? "the Pixie channel" : "the channel"}.</p>
+              <p className="mt-2 text-sm text-charcoal-brown/70">My newest upload on {creator.pixie.url ? "the Pixie channel" : "the channel"}.</p>
             </div>
           </div>
 
-          <section className="relative py-8 md:py-10 bg-[var(--void)] overflow-x-clip">
-            <WaveDivider color="var(--void)" position="top" mirror />
+          <section className="relative py-8 md:py-10 bg-[var(--color-straw)] overflow-x-clip">
+            <WaveDivider color="var(--color-straw)" position="top" mirror />
 
             <div className="watch-row">
               <div className="watch-gutter py-20" aria-hidden="true"><span /><span /></div>
@@ -99,7 +92,7 @@ export default function Home() {
               <div className="watch-gutter py-20" aria-hidden="true"><span /><span /></div>
             </div>
 
-            <WaveDivider color="var(--void)" position="bottom" flip />
+            <WaveDivider color="var(--color-straw)" position="bottom" flip />
           </section>
         </>
       )}
@@ -108,13 +101,13 @@ export default function Home() {
         <section className="relative pt-16 pb-4" data-testid="recent-videos">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-10 gap-4 flex-wrap">
-              <Wordmark text="More Videos" className="wordmark text-4xl sm:text-5xl text-void" />
+              <Wordmark text="More Videos" className="wordmark text-4xl sm:text-5xl text-charcoal-brown" />
               <a href={videoChannelUrl || creator.youtube.url} target="_blank" rel="noopener noreferrer" className="pill pill-outline h-10 px-5 text-sm">
                 See all videos <ArrowUpRight className="w-4 h-4" />
               </a>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="deal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {videosLoading
                 ? Array.from({ length: 6 }, (_, i) => <SkeletonVideoCard key={i} />)
                 : recentVideos.map((video) => <VideoCard key={video.id} video={video} />)}
@@ -126,7 +119,7 @@ export default function Home() {
       <section className="relative py-16 md:py-24" data-testid="featured-review">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10 gap-4 flex-wrap">
-            <Wordmark text="Featured" tag="top pick" className="wordmark text-4xl sm:text-5xl text-void" tagClassName="text-void/50" />
+            <Wordmark text="Featured" tag="top pick" className="wordmark text-4xl sm:text-5xl text-charcoal-brown" tagClassName="text-charcoal-brown/70" />
             <Link to="/reviews" className="pill pill-outline h-10 px-5 text-sm">View all reviews <ArrowUpRight className="w-4 h-4" /></Link>
           </div>
 
@@ -140,50 +133,48 @@ export default function Home() {
             </div>
 
             <div className="lg:col-span-8">
-              <p className="eyebrow !text-[0.6rem] mb-4">Latest reviews</p>
+              <p className="eyebrow mb-4">Latest reviews</p>
               {loading ? (
                 <HomeDataSkeleton />
               ) : recent[0] || nowPlaying ? (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="deal card-fan grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xs sm:max-w-none mx-auto">
                   {nowPlaying && (
-                    <div className="animate-reveal">
+                    <div>
                       <NowPlayingCard game={nowPlaying} />
                     </div>
                   )}
-                  {latestRow.map((r, i) => (
-                    <div key={r.slug} className="animate-reveal" style={{ animationDelay: `${0.1 * (i + (nowPlaying ? 1 : 0))}s` }}>
+                  {latestRow.map((r) => (
+                    <div key={r.slug}>
                       <ReviewCard review={r} />
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-void/60">Nothing's been judged yet.</p>
+                <p className="text-sm text-charcoal-brown/80">I haven't judged anything yet.</p>
               )}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="relative py-20 md:py-28">
+      <section className="relative isolate py-20 md:py-28">
+        <PageBackdrop className="section-backdrop section-backdrop-chip" chip />
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Wordmark
             text="My Approach"
             tag="no shortcuts"
-            className="wordmark text-4xl sm:text-6xl text-void"
-            tagClassName="text-void/60"
+            className="wordmark text-4xl sm:text-6xl text-charcoal-brown"
+            tagClassName="text-charcoal-brown/70"
           />
-          <p className="mt-7 mx-auto max-w-xl leading-relaxed text-sm sm:text-base text-ink">
-            Every review is graded off a full playthrough. What you read is the actual verdict, with no
+          <p className="mt-7 mx-auto max-w-xl leading-relaxed text-sm sm:text-base text-charcoal-brown">
+            I grade every review off a full playthrough. What you read is my actual verdict, with no
             early calls and no crowd-pleasing scores.
           </p>
           <div className="mt-9 flex gap-4 flex-wrap justify-center">
-            <CapsuleButton as={Link} to="/guidelines" icon={BookOpen} className="!bg-transparent !text-void !border-void/25">Read the guidelines</CapsuleButton>
-            <CapsuleButton as={Link} to="/contact" icon={Trophy} className="!bg-mint !border-mint !text-void">Get in touch</CapsuleButton>
+            <CapsuleButton as={Link} to="/guidelines" icon={BookOpen}>Read the guidelines</CapsuleButton>
+            <CapsuleButton as={Link} to="/contact" icon={Trophy} className="pill-capsule-main">Get in touch</CapsuleButton>
           </div>
 
-          <div className="mt-14 flex justify-center">
-            <SocialRow />
-          </div>
         </div>
       </section>
     </div>
@@ -196,11 +187,11 @@ const HomeDataState = ({
   eyebrow = "Reviews unavailable",
   compact = false,
 }) => (
-  <div className={compact ? "border border-hairline bg-bone p-10 text-center" : "min-h-[70vh] grid place-items-center px-4"}>
+  <div className={compact ? "border border-honey bg-white p-10 text-center" : "min-h-[70vh] grid place-items-center px-4"}>
     <div className="max-w-md text-center">
       <p className="eyebrow">{eyebrow}</p>
-      <h1 className="display-hero mt-3 text-3xl text-void">{title}</h1>
-      <p className="mt-3 text-sm font-semibold text-void/80">{subtitle}</p>
+      <h1 className="display-hero mt-3 text-3xl text-charcoal-brown">{title}</h1>
+      <p className="mt-3 text-sm font-semibold text-charcoal-brown/90">{subtitle}</p>
     </div>
   </div>
 );

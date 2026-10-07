@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ArrowLeft, Check, X as XIcon } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Check, Trophy, X as XIcon } from "lucide-react";
 import { fetchReview, fetchReviews } from "../lib/api";
 import { getTier, getTierColor, getTierLabel, getRarity } from "../lib/tier";
 import { ReviewDetailDataSkeleton } from "../components/ui/skeleton";
 import { ReviewCard, coverUrl } from "../components/ReviewCard";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { RarityMark } from "../components/RarityMark";
+import { PlatformIcon } from "../components/PlatformIcon";
 
 export default function ReviewDetail() {
   const { slug } = useParams();
@@ -46,10 +48,13 @@ export default function ReviewDetail() {
   const rarity = getRarity(tier);
   const genres = Array.isArray(review.genre) ? review.genre : review.genre ? [review.genre] : [];
   const cover = coverUrl(review);
+  const awards = (Array.isArray(review.awards) ? review.awards : [])
+    .map((a) => (typeof a === "string" ? { name: a, explanation: "" } : a))
+    .filter((a) => a?.name);
   const facts = [
     { label: "Score", value: `${review.rating} / 10` },
     { label: "Tier", value: `${tier} · ${getTierLabel(tier)}` },
-    review.platform && { label: "Platform", value: review.platform },
+    review.platform && { label: "Platform", value: <span className="inline-flex items-center gap-2 align-middle"><PlatformIcon platform={review.platform} />{review.platform}</span>, center: true },
     genres.length > 0 && { label: genres.length > 1 ? "Genres" : "Genre", value: genres.join(", ") },
     review.playTime && { label: "Play time", value: review.playTime },
     review.date && { label: "Reviewed", value: review.date },
@@ -60,47 +65,77 @@ export default function ReviewDetail() {
     <article className="relative" style={{ "--tier-color": tierColor }}>
       <header className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <Link to="/reviews" className="pill pill-outline h-9 px-4 text-sm mb-8"><ArrowLeft className="w-3.5 h-3.5" /> Back to reviews</Link>
-        <h1 className="wordmark text-3xl sm:text-4xl lg:text-5xl text-void !leading-[1.05] max-w-4xl text-balance">{review.title}</h1>
+        <h1 className="wordmark text-3xl sm:text-4xl lg:text-5xl text-charcoal-brown !leading-[1.05] max-w-4xl text-balance">{review.title}</h1>
         {review.summary && (
-          <p className="mt-6 text-base lg:text-lg max-w-3xl leading-relaxed text-void/80 italic">
-            &ldquo;{review.summary}&rdquo;
+          <p className="mt-6 max-w-3xl pl-4 border-l-4 border-[var(--tier-color)] text-xl lg:text-2xl leading-snug font-bold text-charcoal-brown">
+            {review.summary}
           </p>
         )}
       </header>
 
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         {cover && (
-          <figure className="lg:col-span-8 dex-panel !p-2 flex items-center" style={{ "--tier-color": tierColor }}>
+          <figure className="lg:col-span-8 dex-panel dex-tier !p-2 flex flex-col justify-center" style={{ "--tier-color": tierColor }}>
             <img src={cover} alt={review.title} className="block w-full h-auto rounded-md" />
+            {review.imageCredit && (
+              <figcaption className="px-1 pt-1.5 text-right text-xs font-semibold text-charcoal-brown/85">
+                Image by{" "}
+                {/^https?:\/\//i.test(review.imageCreditUrl || "") ? (
+                  <a href={review.imageCreditUrl} target="_blank" rel="noopener noreferrer" className="underline decoration-orange decoration-2 underline-offset-2">{review.imageCredit}</a>
+                ) : review.imageCredit}
+              </figcaption>
+            )}
           </figure>
         )}
 
-        <aside className={`dex-panel flex flex-col ${cover ? "lg:col-span-4" : "lg:col-span-12"}`} style={{ "--tier-color": tierColor }}>
+        <aside className={`dex-panel dex-tier flex flex-col ${cover ? "lg:col-span-4" : "lg:col-span-12"}`} style={{ "--tier-color": tierColor }}>
           <dl>
-            {facts.map(({ label, value }) => (
-              <div key={label} className="dex-row !grid-cols-[6.5rem_1fr]">
-                <dt className="dex-label">{label}</dt>
-                <dd className="text-void">{value}</dd>
+            {facts.map(({ label, value, center }) => (
+              <div key={label} className={`dex-row !grid-cols-[6.5rem_1fr]${center ? " items-center" : ""}`}>
+                <dt className={`dex-label${center ? " !pt-0" : ""}`}>{label}</dt>
+                <dd className="text-charcoal-brown">{value}</dd>
               </div>
             ))}
           </dl>
-          <div className={`rarity-${rarity.tone} mt-auto pt-3 border-t border-void/15 flex items-center justify-between text-xs font-semibold text-void/60`}>
-            <span>Stars</span>
-            <span className="pc-rarity !text-base" aria-hidden="true">{rarity.symbol.repeat(rarity.stars)}</span>
+          <div className={`rarity-${rarity.tone} mt-auto pt-3 border-t border-charcoal-brown/15 flex items-center justify-between text-xs font-semibold text-charcoal-brown/80`}>
+            <span>Rarity</span>
+            <RarityMark symbol={rarity.symbol} count={rarity.stars} className="!text-base" />
           </div>
         </aside>
       </section>
 
+      {awards.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-8" data-testid="review-awards">
+          <div className="dex-panel dex-tier" style={{ "--tier-color": getTierColor("★") }}>
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
+              <h2 className="dex-title !mb-0">{awards.length === 1 ? "Award" : "Awards"}</h2>
+              <Link to="/awards" className="pill pill-outline h-8 px-3.5 text-xs">All awards <ArrowUpRight className="w-3.5 h-3.5" /></Link>
+            </div>
+            <ul className={`grid gap-x-8 ${awards.length > 1 ? "md:grid-cols-2" : ""}`}>
+              {awards.map((award, index) => (
+                <li key={`${award.name}-${index}`} className="flex gap-3 py-3">
+                  <span className="watch-tile-icon !w-10 !h-10 mt-0.5" aria-hidden="true"><Trophy className="w-4 h-4" /></span>
+                  <div className="min-w-0">
+                    <h3 className="text-lg leading-tight text-charcoal-brown">{award.name}</h3>
+                    {award.explanation && <p className="mt-1 text-sm leading-relaxed text-charcoal-brown/90">{award.explanation}</p>}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
       {review.body && (
         <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-14">
           <div className="review-sheet relative prose prose-lg max-w-none
-            prose-headings:text-void prose-h1:mb-0
-            prose-p:text-void/80 prose-p:leading-relaxed
-            prose-a:text-jade prose-a:no-underline
-            prose-strong:text-void prose-strong:font-extrabold
-            prose-blockquote:border-l-blush prose-blockquote:text-void/80 prose-blockquote:not-italic
-            prose-li:text-void/80 prose-hr:border-hairline
-            prose-pre:bg-bone prose-pre:border prose-pre:border-hairline prose-pre:rounded-md prose-kbd:rounded-md">
+            prose-headings:text-charcoal-brown prose-h1:mb-0
+            prose-p:text-charcoal-brown/90 prose-p:leading-relaxed
+            prose-a:text-charcoal-brown prose-a:no-underline
+            prose-strong:text-charcoal-brown prose-strong:font-extrabold
+            prose-blockquote:border-l-charcoal-brown/30 prose-blockquote:text-charcoal-brown/90 prose-blockquote:not-italic
+            prose-li:text-charcoal-brown/90 prose-hr:border-honey
+            prose-pre:bg-white prose-pre:border prose-pre:border-honey prose-pre:rounded-md prose-kbd:rounded-md">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{review.body}</ReactMarkdown>
           </div>
         </section>
@@ -113,20 +148,20 @@ export default function ReviewDetail() {
               <h2 className="dex-title">Pros</h2>
               <ul className="space-y-3">
                 {review.pros.map((pro, index) => (
-                  <li key={index} className="flex gap-3 text-sm leading-relaxed text-void/85">
-                    <Check className="w-4 h-4 shrink-0 mt-0.5 text-jade" />{pro}
+                  <li key={index} className="flex gap-3 text-sm leading-relaxed text-charcoal-brown/95">
+                    <Check className="w-4 h-4 shrink-0 mt-0.5 text-charcoal-brown" />{pro}
                   </li>
                 ))}
               </ul>
             </div>
           )}
           {review.cons?.length > 0 && (
-            <div className="dex-panel" style={{ "--tier-color": "var(--blush)" }}>
+            <div className="dex-panel">
               <h2 className="dex-title">Cons</h2>
               <ul className="space-y-3">
                 {review.cons.map((con, index) => (
-                  <li key={index} className="flex gap-3 text-sm leading-relaxed text-void/85">
-                    <XIcon className="w-4 h-4 shrink-0 mt-0.5 text-blush-deep" />{con}
+                  <li key={index} className="flex gap-3 text-sm leading-relaxed text-charcoal-brown/95">
+                    <XIcon className="w-4 h-4 shrink-0 mt-0.5 text-orange" />{con}
                   </li>
                 ))}
               </ul>
@@ -136,13 +171,13 @@ export default function ReviewDetail() {
       )}
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 mb-8 flex justify-center">
-        <div className="dex-panel flex items-center gap-4 !py-4" style={{ "--tier-color": tierColor }}>
+        <div className="dex-panel dex-tier flex items-center gap-4 !py-4" style={{ "--tier-color": tierColor }}>
           <div className="score-badge">
             <span className="score-badge-fill">{review.rating}</span>
           </div>
           <div>
             <div className="dex-label">Final verdict</div>
-            <div className="font-gothic font-bold text-lg text-void leading-tight">{tier} · {getTierLabel(tier)}</div>
+            <div className="font-sans font-bold text-lg text-charcoal-brown leading-tight">{tier} · {getTierLabel(tier)}</div>
           </div>
         </div>
       </div>
@@ -150,8 +185,8 @@ export default function ReviewDetail() {
       {related.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pb-8">
           <div className="pt-12">
-            <h2 className="wordmark text-3xl sm:text-4xl text-void mb-10">More {genres.join(" & ")} reviews</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <h2 className="wordmark text-3xl sm:text-4xl text-charcoal-brown mb-10">More {genres.join(" & ")} reviews</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xs sm:max-w-none mx-auto">
               {related.map((relatedReview) => (
                 <ReviewCard key={relatedReview.slug} review={relatedReview} />
               ))}

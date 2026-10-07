@@ -3,6 +3,8 @@ import { Gamepad2, Star, CalendarDays, Sparkles } from "lucide-react";
 import { creator } from "../data/creator";
 import { useCardTilt } from "../hooks/useCardTilt";
 import modelImg from "../assets/model.png";
+import { RarityMark } from "./RarityMark";
+import { PrideFlags } from "./PrideFlags";
 import { getYearFromDate } from "../lib/year";
 
 const reviewYear = (review) => {
@@ -28,13 +30,16 @@ function useCardStats(reviews, loading) {
   }, [reviews, loading]);
 }
 
-function StatRow({ Icon, name, text, value }) {
+const FOILS = ["bi", "pan", "nonbinary"];
+const randomFoil = () => FOILS[Math.floor(Math.random() * FOILS.length)];
+
+function StatRow({ Icon, name, text, value, clip = false }) {
   return (
     <div className="creator-move">
       <span className="creator-cost" aria-hidden="true"><Icon /></span>
       <div className="min-w-0">
         <div className="creator-move-name">{name}</div>
-        <p className="creator-move-text truncate">{text}</p>
+        <p className={`creator-move-text${clip ? " truncate" : ""}`}>{text}</p>
       </div>
       <span className="creator-dmg">{value}</span>
     </div>
@@ -44,6 +49,7 @@ function StatRow({ Icon, name, text, value }) {
 export function CreatorCard({ reviews = [], loading = false, className = "" }) {
   const tilt = useCardTilt(28);
   const [flipped, setFlipped] = useState(false);
+  const [foil, setFoil] = useState(randomFoil);
   const toggle = () => setFlipped((f) => !f);
   const year = new Date().getFullYear();
   const stats = useCardStats(reviews, loading);
@@ -51,23 +57,23 @@ export function CreatorCard({ reviews = [], loading = false, className = "" }) {
 
   const frontStats = (
     <>
-      <StatRow Icon={Gamepad2} name="Games Reviewed" text="Every game is finished before it's reviewed." value={stats ? stats.total : wait} />
+      <StatRow Icon={Gamepad2} name="Games Reviewed" text="I finish every game before I review it." value={stats ? stats.total : wait} />
       <StatRow Icon={Star} name="Average Score" text="Across every review, scored 1 to 10." value={stats ? stats.average : wait} />
     </>
   );
 
   const backStats = (
     <>
-      <StatRow Icon={CalendarDays} name={`Reviews in ${year}`} text="Games finished and reviewed this year." value={stats ? stats.thisYear : wait} />
-      <StatRow Icon={Sparkles} name="Latest Review" text={stats?.latest?.title || "Nothing yet."} value={stats?.latest?.rating || wait} />
+      <StatRow Icon={CalendarDays} name={`Reviews in ${year}`} text="Games I finished and reviewed this year." value={stats ? stats.thisYear : wait} />
+      <StatRow Icon={Sparkles} name="Latest Review" clip text={stats?.latest?.title || "Nothing yet."} value={stats?.latest?.rating || wait} />
     </>
   );
 
   const setLine = (
     <div className="pc-setline">
-      <span>{creator.name}</span>
       <span>©{year}</span>
-      <span className="pc-rarity" title="Secret rare">★★</span>
+      <PrideFlags />
+      <RarityMark symbol="★" count={2} />
     </div>
   );
 
@@ -98,9 +104,10 @@ export function CreatorCard({ reviews = [], loading = false, className = "" }) {
 
   return (
     <div
-      className={`pc-wrap pc-lg creator-card ${className}`}
-      style={{ "--tier-color": "var(--leaf)" }}
+      className={`pc-wrap pc-lg creator-card foil-${foil} ${className}`}
+      style={{ "--tier-color": "var(--color-mango-yellow)" }}
       {...tilt}
+      onPointerEnter={() => setFoil(randomFoil())}
     >
       <div
         className={`creator-flipper${flipped ? " is-flipped" : ""}`}

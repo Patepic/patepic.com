@@ -5,7 +5,7 @@ export const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
   if (user === undefined) {
     return (
-      <div className="min-h-[60vh] grid place-items-center text-void text-sm">
+      <div className="min-h-[60vh] grid place-items-center text-charcoal-brown text-sm">
         Checking session…
       </div>
     );

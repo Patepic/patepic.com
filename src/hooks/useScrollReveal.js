@@ -10,7 +10,7 @@ export function useScrollReveal(rootRef) {
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-in");
+          entry.target.setAttribute("data-reveal", "in");
           io.unobserve(entry.target);
         });
       },
@@ -20,8 +20,9 @@ export function useScrollReveal(rootRef) {
     const seen = new WeakSet();
     const tag = () => {
       root.querySelectorAll("section:not(.hero)").forEach((el) => {
-        if (seen.has(el) || el.classList.contains("is-in")) return;
+        if (seen.has(el) || el.getAttribute("data-reveal") === "in") return;
         seen.add(el);
+        if (el.getBoundingClientRect().top < window.innerHeight) return;
         el.setAttribute("data-reveal", "");
         io.observe(el);
       });

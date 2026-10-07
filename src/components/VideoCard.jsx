@@ -39,12 +39,12 @@ function VideoCardFace({ video, size = "sm", loading = "lazy", testId, className
       </div>
       <div className="pc-setline">
         <span>{date ? `Uploaded ${date}` : "YouTube"}</span>
-        <span className="pc-rarity" aria-hidden="true">▶</span>
+        <span className="pc-rarity" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" /></svg></span>
       </div>
     </>
   );
   return (
-    <div className={`pc-wrap pc-video${lg} ${className}`} style={{ "--tier-color": "var(--blush)" }} {...tilt}>
+    <div className={`pc-wrap pc-video${lg} ${className}`} style={{ "--tier-color": "var(--color-mango-yellow)" }} {...tilt}>
       <a
         href={video.url}
         target="_blank"

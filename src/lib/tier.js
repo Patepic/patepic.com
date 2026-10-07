@@ -1,14 +1,14 @@
 export const TIERS = ["★", "S+", "S", "A", "B", "C", "D", "F"];
 
 const TIER_COLOR = {
-  "★": "#F4C542",
-  "S+": "#FF6F61",
-  "S": "#FFA24C",
-  "A": "#9BD66A",
-  "B": "#4FC7B3",
-  "C": "#6BA3F2",
-  "D": "#A58BF2",
-  "F": "#9CA5B4",
+  "★": "#FDC76C",
+  "S+": "#EE7650",
+  "S": "#F4A261",
+  "A": "#B3C26B",
+  "B": "#7DBBA0",
+  "C": "#86A9C4",
+  "D": "#B29AC0",
+  "F": "#B8A69E",
 };
 
 const TIER_META = {
@@ -24,11 +24,13 @@ const TIER_META = {
 
 export const getTierLabel = (tier) => TIER_META[tier] || "";
 
+export const NO_FLAWS = "Hard to point to any real flaws";
+
 export const getTier = (rating, { recommended, cons, isFeatured } = {}) => {
   if (isFeatured) return "★";
   const score = parseFloat(rating);
   const flawCount = Array.isArray(cons) ? cons.length : 0;
-  const hasNoFlaws = Array.isArray(cons) && cons.includes("Hard to point to any real flaws");
+  const hasNoFlaws = Array.isArray(cons) && cons.includes(NO_FLAWS);
   if (score <= 3 || recommended === "no") return "F";
   if (score <= 5) return "D";
   if (score <= 6) return "C";
@@ -42,14 +44,14 @@ export const getTier = (rating, { recommended, cons, isFeatured } = {}) => {
 export const getTierColor = (tier) => TIER_COLOR[tier] || TIER_COLOR.A;
 
 const RARITY = {
-  "F":  { stars: 1, symbol: "●", tone: "black" },
+  "F":  { stars: 1, symbol: "✕", tone: "black" },
   "D":  { stars: 1, symbol: "◆", tone: "black" },
   "C":  { stars: 1, symbol: "★", tone: "black", foil: "art" },
   "B":  { stars: 2, symbol: "★", tone: "black", foil: "art" },
-  "A":  { stars: 2, symbol: "★", tone: "silver", foil: "card", fullArt: true, texture: "light" },
-  "S":  { stars: 1, symbol: "★", tone: "gold", foil: "card", fullArt: true, texture: "light" },
-  "S+": { stars: 2, symbol: "★", tone: "gold", foil: "card", fullArt: true, texture: "heavy" },
-  "★":  { stars: 3, symbol: "★", tone: "gold", foil: "card", fullArt: true, texture: "light", gold: true },
+  "A":  { stars: 2, symbol: "★", tone: "silver", foil: "card", fullArt: true },
+  "S":  { stars: 1, symbol: "★", tone: "gold", foil: "card", fullArt: true },
+  "S+": { stars: 2, symbol: "★", tone: "gold", foil: "card", fullArt: true },
+  "★":  { stars: 3, symbol: "★", tone: "gold", foil: "card", fullArt: true, gold: true },
 };
 
 export const getRarity = (tier) => RARITY[tier] || RARITY.F;

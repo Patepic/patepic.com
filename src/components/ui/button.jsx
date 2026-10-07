@@ -5,13 +5,13 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-jade text-mint filter hover:brightness-90",
-        accent: "bg-blush text-void filter hover:brightness-90",
+        default: "bg-charcoal-brown text-white filter hover:brightness-90",
+        accent: "bg-mango-yellow text-charcoal-brown filter hover:brightness-90",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-void/10 text-jade hover:bg-jade/[0.06]",
-        secondary: "bg-bone text-jade border border-hairline hover:bg-void/[0.06]",
-        ghost: "text-void hover:bg-void/[0.06]",
-        link: "text-jade underline-offset-4 hover:underline",
+        outline: "border border-charcoal-brown/10 text-charcoal-brown hover:bg-charcoal-brown/[0.06]",
+        secondary: "bg-white text-charcoal-brown border border-honey hover:bg-charcoal-brown/[0.06]",
+        ghost: "text-charcoal-brown hover:bg-charcoal-brown/[0.06]",
+        link: "text-charcoal-brown underline-offset-4 hover:underline",
       },
       size: {
         xs: "h-7 px-3 text-xs rounded-md",

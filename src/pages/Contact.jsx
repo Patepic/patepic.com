@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Send, CheckCircle2, Twitch, Youtube, ArrowUpRight } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
@@ -44,20 +44,20 @@ export default function Contact() {
     try { const res = await sendContact(form); setSent(true); if (res?.dev_mode) toast.success("Message logged (Resend not configured)"); else toast.success("Message sent! I'll reply soon."); } catch (err) { toast.error(errorMessage(err)); } finally { setLoading(false); }
   };
 
-  const field = "mt-2 h-12 bg-bone border-void/20 text-void placeholder:text-void/45";
-  const fieldError = "text-sm font-semibold text-blush-deep mt-1.5";
+  const field = "mt-2 h-12 bg-white border-honey text-charcoal-brown placeholder:text-charcoal-brown/70";
+  const fieldError = "text-sm font-semibold text-charcoal-brown/70 mt-1.5";
 
   if (sent) {
     return (
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
         <div className="dex-panel text-center !py-12">
           <span className="watch-tile-icon mx-auto mb-6" aria-hidden="true"><CheckCircle2 className="w-6 h-6" /></span>
-          <h1 className="wordmark text-4xl sm:text-5xl text-void">Message sent</h1>
-          <p className="mt-4 max-w-md mx-auto text-sm sm:text-base leading-relaxed text-void/75">
+          <h1 className="wordmark text-4xl sm:text-5xl text-charcoal-brown">Message sent</h1>
+          <p className="mt-4 max-w-md mx-auto text-sm sm:text-base leading-relaxed text-charcoal-brown/90">
             Thanks, {form.name || "stranger"}. I read every message. Replies usually go out within a week.
           </p>
           <div className="mt-8 flex justify-center">
-            <CapsuleButton as="button" type="button" icon={Send} className="!bg-mint !border-mint"
+            <CapsuleButton as="button" type="button" icon={Send} className="pill-capsule-main"
               onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); }}>
               Send another
             </CapsuleButton>
@@ -70,9 +70,9 @@ export default function Contact() {
   return (
     <div className="relative">
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 lg:pt-16 text-center">
-        <Wordmark text="Contact" tag="business and partnership inquiries" className="wordmark text-6xl sm:text-7xl lg:text-8xl text-void" tagClassName="text-void/50" />
-        <p className="mt-5 max-w-xl mx-auto text-sm sm:text-base leading-relaxed text-ink">
-          For sponsorships, review requests, collaborations and press. Use the form or email directly.
+        <Wordmark text="Contact" tag="business and partnership inquiries" className="wordmark text-6xl sm:text-7xl lg:text-8xl text-charcoal-brown" tagClassName="text-charcoal-brown/70" />
+        <p className="mt-5 max-w-xl mx-auto text-sm sm:text-base leading-relaxed text-charcoal-brown">
+          For sponsorships, review requests, collaborations and press. Use the form or email me directly.
         </p>
       </section>
 
@@ -99,17 +99,17 @@ export default function Contact() {
           <div className="mt-5">
             <div className="flex items-center justify-between">
               <Label htmlFor="message" className="dex-label">Message</Label>
-              <span className={`text-xs font-semibold tabular-nums ${charsOver ? "text-blush-deep" : "text-void/55"}`}>
+              <span className={`text-xs font-semibold tabular-nums ${charsOver ? "text-charcoal-brown/70" : "text-charcoal-brown/75"}`}>
                 {form.message.length} / {MAX_MESSAGE}
               </span>
             </div>
             <Textarea id="message" rows={7} value={form.message} onChange={(e) => update("message", e.target.value)} placeholder="What would you like to discuss?"
-              className="mt-2 bg-bone border-void/20 text-void placeholder:text-void/45 resize-none" />
+              className="mt-2 bg-white border-honey text-charcoal-brown placeholder:text-charcoal-brown/70 resize-none" />
             {errors.message && <p className={fieldError}>{errors.message}</p>}
           </div>
           <div className="mt-7 flex flex-wrap items-center justify-between gap-4">
-            <p className="text-xs text-void/55">All fields are required.</p>
-            <CapsuleButton as="button" type="submit" icon={Send} disabled={loading || !allFilled} className="!bg-mint !border-mint disabled:opacity-40 disabled:pointer-events-none">
+            <p className="text-xs text-charcoal-brown/75">All fields are required.</p>
+            <CapsuleButton as="button" type="submit" icon={Send} disabled={loading || !allFilled} className="pill-capsule-main disabled:opacity-40 disabled:pointer-events-none">
               {loading ? "Sending…" : "Send message"}
             </CapsuleButton>
           </div>
@@ -122,24 +122,24 @@ export default function Contact() {
               <div className="dex-row">
                 <dt className="dex-label">Email</dt>
                 <dd>
-                  <a href={`mailto:${EMAIL}`} className="font-semibold text-void underline decoration-blush decoration-2 underline-offset-4 break-all">{EMAIL}</a>
+                  <a href={`mailto:${EMAIL}`} className="font-semibold text-charcoal-brown underline decoration-orange decoration-2 underline-offset-4 break-all">{EMAIL}</a>
                 </dd>
               </div>
               <div className="dex-row">
                 <dt className="dex-label">Reply time</dt>
-                <dd className="text-void">Usually within a week</dd>
+                <dd className="text-charcoal-brown">Usually within a week</dd>
               </div>
               <div className="dex-row">
                 <dt className="dex-label">Best for</dt>
-                <dd className="text-void">Sponsorships, review requests, collaborations, press</dd>
+                <dd className="text-charcoal-brown">Sponsorships, review requests, collaborations, press</dd>
               </div>
             </dl>
           </div>
 
-          <ChannelTile href={creator.twitch.url} color="#A58BF2" Icon={Twitch} title={`Twitch · ${creator.twitch.handle}`} body="Live streams and the schedule." />
-          <ChannelTile href={creator.youtube.url} color="#FF6F61" Icon={Youtube} title={`YouTube · ${creator.youtube.handle}`} body="The main channel." />
+          <ChannelTile href={creator.twitch.url} color="var(--color-charcoal-brown)" Icon={Twitch} title={`Twitch · ${creator.twitch.handle}`} body="Live streams and the schedule." />
+          <ChannelTile href={creator.youtube.url} color="var(--color-charcoal-brown)" Icon={Youtube} title={`YouTube · ${creator.youtube.handle}`} body="My main channel." />
           {creator.pixie.url && (
-            <ChannelTile href={creator.pixie.url} color="#E693B3" Icon={Youtube} title={`YouTube · ${creator.pixie.handle || creator.pixie.name}`} body="The second channel, with the newest videos." />
+            <ChannelTile href={creator.pixie.url} color="var(--color-charcoal-brown)" Icon={Youtube} title={`YouTube · ${creator.pixie.handle || creator.pixie.name}`} body="My second channel, with the newest videos." />
           )}
         </div>
       </section>
@@ -152,10 +152,10 @@ function ChannelTile({ href, color, Icon, title, body }) {
     <a href={href} target="_blank" rel="noopener noreferrer" className="dex-panel watch-tile group" style={{ "--tier-color": color }}>
       <span className="watch-tile-icon" aria-hidden="true"><Icon className="w-5 h-5" /></span>
       <div className="min-w-0">
-        <div className="font-gothic font-bold text-lg text-void leading-tight">{title}</div>
-        <p className="mt-1 text-sm leading-relaxed text-void/75">{body}</p>
+        <div className="font-sans font-bold text-lg text-charcoal-brown leading-tight">{title}</div>
+        <p className="mt-1 text-sm leading-relaxed text-charcoal-brown/90">{body}</p>
       </div>
-      <ArrowUpRight className="w-5 h-5 shrink-0 ml-auto text-void/60 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      <ArrowUpRight className="w-5 h-5 shrink-0 ml-auto text-charcoal-brown/80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
     </a>
   );
 }

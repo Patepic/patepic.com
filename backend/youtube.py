@@ -10,7 +10,7 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-YOUTUBE_CHANNEL_ID = "UC4dSp0pH0jfntIfKmlbw_BQ"
+YOUTUBE_CHANNEL_ID = "UCe06wovCKUw5WeGB53hbyEg"
 
 SUCCESS_TTL_SECONDS = 45 * 60
 FAILURE_TTL_SECONDS = 5 * 60
