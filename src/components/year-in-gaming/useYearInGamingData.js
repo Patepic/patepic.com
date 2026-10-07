@@ -1,9 +1,30 @@
 import { useMemo } from "react";
 import { getYearFromDate, defaultYearInGamingYear } from "../../lib/year";
 
+const FRANCHISES = [
+  ["Sonic", /\bsonic\b|\bshadow generations\b/i],
+  ["Super Smash Bros.", /\bsmash bros\b/i],
+  ["Mario", /\bmario\b|\bmairo\b|\bbowser's fury\b/i],
+  ["Pokemon", /\bpok[eé](mon|park)\b/i],
+  ["Kirby", /\bkirby\b/i],
+  ["The Legend of Zelda", /\bzelda\b/i],
+  ["Power Rangers", /\bpower rangers\b/i],
+  ["Dragon Quest", /\bdragon quest\b/i],
+];
+
+function seriesOf(review) {
+  const listed = (Array.isArray(review?.series) ? review.series : []).map((s) => String(s || "").trim()).filter(Boolean);
+  if (listed.length) return [...new Set(listed)];
+  const guessed = extractSeries(review?.title);
+  return guessed ? [guessed] : [];
+}
+
 function extractSeries(title) {
   if (!title) return null;
   const cleaned = title.replace(/™|®|©/g, "").trim();
+
+  const known = FRANCHISES.find(([, pattern]) => pattern.test(cleaned));
+  if (known) return known[0];
 
   const colonMatch = cleaned.match(/^([^:]+?)(?:\s*:|\s*–|\s*—|\s*-\s)/);
   if (colonMatch) return colonMatch[1].trim();
@@ -121,11 +142,10 @@ export function useYearInGamingData(reviews, year = defaultYearInGamingYear()) {
 
     const seriesGroups = {};
     yearReviews.forEach((r) => {
-      const series = extractSeries(r.title);
-      if (series) {
+      seriesOf(r).forEach((series) => {
         if (!seriesGroups[series]) seriesGroups[series] = [];
         seriesGroups[series].push(r);
-      }
+      });
     });
     const seriesMarathons = Object.entries(seriesGroups)
       .filter(([, games]) => games.length >= 5)

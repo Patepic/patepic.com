@@ -81,6 +81,7 @@ const blank = {
   title: "",
   platform: "",
   genre: [""],
+  series: [""],
   rating: "",
   date: "",
   summary: "",
@@ -483,6 +484,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
         ...blank,
         ...review,
         isFeatured: !!review.isFeatured,
+        series: review.series?.length ? review.series : [""],
         pros: review.pros?.length ? review.pros : [""],
         cons: review.cons?.length ? review.cons : [""],
         awards: review.awards?.length ? review.awards : [],
@@ -585,6 +587,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
         ...form,
         cover_url: coverUrlToSave,
         isFeatured: form.isFeatured,
+        series: (form.series || []).map((s) => s.trim()).filter(Boolean),
         pros: form.pros.map((s) => s.trim()).filter(Boolean),
         cons: form.cons.map((s) => s.trim()).filter(Boolean),
         recommended: form.recommended || null,
@@ -736,6 +739,15 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
             onAdd={() => addListItem("genre")}
             onRemove={(i) => removeListItem("genre", i)}
             testId="admin-genre"
+          />
+
+          <ListEditor
+            label="Series"
+            items={form.series || [""]}
+            onChange={(i, v) => setListItem("series", i, v)}
+            onAdd={() => addListItem("series")}
+            onRemove={(i) => removeListItem("series", i)}
+            testId="admin-series"
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
