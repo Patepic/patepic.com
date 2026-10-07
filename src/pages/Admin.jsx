@@ -1259,15 +1259,15 @@ function NowPlayingPanel() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="space-y-1.5">
             <Label className="text-xs text-charcoal-brown/85">Game title *</Label>
-            <Input value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="Hollow Knight: Silksong" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
+            <Input value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="Game title" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs text-charcoal-brown/85">Platform</Label>
-            <Input value={form.platform} onChange={(e) => set("platform", e.target.value)} placeholder="PC" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
+            <Input value={form.platform} onChange={(e) => set("platform", e.target.value)} placeholder="Platform" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs text-charcoal-brown/85">Progress note</Label>
-            <Input value={form.note} onChange={(e) => set("note", e.target.value)} maxLength={120} placeholder="Act 2" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
+            <Input value={form.note} onChange={(e) => set("note", e.target.value)} maxLength={120} placeholder="Where you are in the game (optional)" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs text-charcoal-brown/85">Cover</Label>
