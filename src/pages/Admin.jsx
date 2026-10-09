@@ -58,6 +58,7 @@ import {
 } from "../lib/api";
 import { AWARDS_START_YEAR, getYearFromDate } from "../lib/year";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { DesktopOnly } from "../components/DesktopOnly";
 
 const AWARD_OPTIONS = [
   "Game of the Year",
@@ -196,6 +197,7 @@ const paginated = useMemo(() => {
   };
 
   return (
+    <DesktopOnly>
     <div
       data-testid="admin-page"
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16"
@@ -450,6 +452,7 @@ const paginated = useMemo(() => {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+    </DesktopOnly>
   );
 }
 

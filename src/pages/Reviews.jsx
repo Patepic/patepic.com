@@ -258,7 +258,7 @@ export default function Reviews() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-xs sm:max-w-none mx-auto">
                 {paginated.map((r) => <ReviewCard key={r.slug} review={r} />)}
               </div>
 

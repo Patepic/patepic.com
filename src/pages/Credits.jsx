@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { useReviews } from "../hooks/useReviews";
 import { Skeleton } from "../components/ui/skeleton";
 import { Wordmark } from "../components/ui/decor";
@@ -16,8 +16,8 @@ const CreditName = ({ name, url }) => {
   const href = safeUrl(url);
   if (!href) return <span>{name}</span>;
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 underline decoration-orange decoration-2 underline-offset-4">
-      {name} <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+    <a href={href} target="_blank" rel="noopener noreferrer" className="underline decoration-orange decoration-2 underline-offset-4">
+      {name} <ArrowUpRight className="inline w-4 h-4 align-[-0.15em]" aria-hidden="true" />
     </a>
   );
 };
@@ -26,20 +26,36 @@ export default function Credits() {
   usePageTitle("Credits");
   const { reviews, loading } = useReviews();
   const [requestedPage, setPage] = useState(1);
+  const [expandedArtists, setExpandedArtists] = useState(() => new Set());
+
+  const toggleArtist = (key) => {
+    setExpandedArtists((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
 
   const artists = useMemo(() => {
     const byName = new Map();
     for (const review of reviews) {
       const name = (review.imageCredit || "").trim();
       if (!name) continue;
-      const entry = byName.get(name.toLowerCase()) || { name, url: "", games: [] };
-      entry.url = entry.url || safeUrl(review.imageCreditUrl) || "";
+      const entry = byName.get(name.toLowerCase()) || { name, games: [] };
       entry.games.push(review);
       byName.set(name.toLowerCase(), entry);
     }
     return [...byName.values()]
-      .filter((entry) => entry.url)
-      .map((entry) => ({ ...entry, games: entry.games.sort((a, b) => a.title.localeCompare(b.title)) }))
+      .map((entry) => {
+        const urls = [...new Set(entry.games.map((game) => safeUrl(game.imageCreditUrl)).filter(Boolean))];
+        return {
+          ...entry,
+          url: urls.length === 1 ? urls[0] : null,
+          perImageLinks: urls.length > 1,
+          games: entry.games.sort((a, b) => a.title.localeCompare(b.title)),
+        };
+      })
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [reviews]);
 
@@ -63,19 +79,20 @@ export default function Credits() {
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pb-16 md:pb-24 space-y-8">
         <section className="dex-panel">
           <h2 className="dex-title">Site art</h2>
-          <div className="dex-row items-center">
-            <div className="dex-label !pt-0">Pixel icons</div>
-            <div className="text-charcoal-brown">
-              <CreditName name="Caz Wolf" url="https://cazwolf.itch.io/" />
-              <p className="mt-1 text-sm text-charcoal-brown/85">The console icons and the pride flags.</p>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                {["GameCube", "Game Boy", "Switch", "SNES"].map((platform) => (
-                  <PlatformIcon key={platform} platform={platform} />
-                ))}
-                <PrideFlags />
-              </div>
+          <dl>
+            <div className="dex-row dex-row-stack">
+              <dt className="min-w-0 break-words font-bold text-charcoal-brown"><CreditName name="Caz Wolf" url="https://cazwolf.itch.io/" /></dt>
+              <dd className="min-w-0 text-sm leading-relaxed text-charcoal-brown">
+                <span className="text-charcoal-brown/70">Pixel art used for</span> the console icons and the pride flags
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {["GameCube", "Game Boy", "Switch", "SNES"].map((platform) => (
+                    <PlatformIcon key={platform} platform={platform} />
+                  ))}
+                  <PrideFlags />
+                </div>
+              </dd>
             </div>
-          </div>
+          </dl>
         </section>
 
         <section className="dex-panel">
@@ -93,18 +110,57 @@ export default function Credits() {
           ) : (
             <>
               <dl>
-                {pageArtists.map(({ name, url, games }) => (
-                  <div key={name} className="dex-row">
-                    <dt className="font-bold text-charcoal-brown"><CreditName name={name} url={url} /></dt>
-                    <dd className="text-sm leading-relaxed text-charcoal-brown">
-                      {games.length > 1 ? (
-                        `Artwork used on ${games.length} reviews`
-                      ) : (
-                        <Link to={`/reviews/${games[0].slug}`} className="hover:text-orange transition-colors">{games[0].title}</Link>
-                      )}
-                    </dd>
-                  </div>
-                ))}
+                {pageArtists.map(({ name, url, perImageLinks, games }) => {
+                  const isOpen = expandedArtists.has(name.toLowerCase());
+                  return (
+                    <div key={name} className="dex-row dex-row-stack">
+                      <dt className="min-w-0 break-words font-bold text-charcoal-brown"><CreditName name={name} url={url} /></dt>
+                      <dd className="min-w-0 text-sm leading-relaxed text-charcoal-brown">
+                        {games.length === 1 ? (
+                          <span>
+                            <span className="text-charcoal-brown/70">Artwork used on</span>{" "}
+                            <Link to={`/reviews/${games[0].slug}`} className="hover:text-orange transition-colors">{games[0].title}</Link>
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => toggleArtist(name.toLowerCase())}
+                            aria-expanded={isOpen}
+                            className="inline-flex items-center gap-1 text-charcoal-brown/70 hover:text-orange transition-colors"
+                          >
+                            Artwork used on {games.length} reviews
+                            <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+                          </button>
+                        )}
+                        {games.length > 1 && (
+                          <div
+                            inert={!isOpen}
+                            className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+                          >
+                          <ul className="min-h-0 overflow-hidden pt-2 space-y-1.5">
+                            {games.map((game) => (
+                              <li key={game.slug} className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+                                <Link to={`/reviews/${game.slug}`} className="hover:text-orange transition-colors">{game.title}</Link>
+                                {perImageLinks && safeUrl(game.imageCreditUrl) && (
+                                  <a
+                                    href={safeUrl(game.imageCreditUrl)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={`Image source for ${game.title}`}
+                                    className="inline-flex items-center gap-0.5 text-xs text-charcoal-brown/70 hover:text-orange transition-colors"
+                                  >
+                                    Image source <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                                  </a>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                          </div>
+                        )}
+                      </dd>
+                    </div>
+                  );
+                })}
               </dl>
               {totalPages > 1 && (
                 <div className="mt-6 flex items-center justify-center gap-3">

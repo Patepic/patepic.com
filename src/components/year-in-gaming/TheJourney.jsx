@@ -26,7 +26,7 @@ function parseMonth(key) {
   return { name: raw, sortIndex: 99 };
 }
 
-const CARD_GRID = "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4";
+const CARD_GRID = "grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-xs sm:max-w-none mx-auto";
 
 export function TheJourney({ data, loading }) {
   const seriesMarathons = data.seriesMarathons || [];

@@ -98,7 +98,7 @@ export const HomeDataSkeleton = () => (
 export const ReviewsDataSkeleton = () => (
   <div
     data-testid="reviews-data-skeleton"
-    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
+    className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-xs sm:max-w-none mx-auto"
     aria-label="Loading reviews"
   >
     {Array.from({ length: 12 }).map((_, i) => (<SkeletonReviewCard key={i} />))}

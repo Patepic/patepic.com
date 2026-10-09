@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import { errorMessage } from "../lib/api";
 import { toast } from "sonner";
 import { usePageTitle } from "../hooks/usePageTitle";
+import { DesktopOnly } from "../components/DesktopOnly";
 
 export default function AdminLogin() {
   usePageTitle("Admin sign in");
@@ -35,7 +36,8 @@ export default function AdminLogin() {
   };
 
   return (
-    <div data-testid="admin-login-page" className="min-h-[80vh] grid place-items-center px-4 py-16">
+    <DesktopOnly>
+      <div data-testid="admin-login-page" className="min-h-[80vh] grid place-items-center px-4 py-16">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
           <h1 className="display-hero text-4xl text-charcoal-brown">Admin sign in</h1>
@@ -67,6 +69,7 @@ export default function AdminLogin() {
           </button>
         </form>
       </div>
-    </div>
+      </div>
+    </DesktopOnly>
   );
 }

@@ -56,10 +56,10 @@ export default function About() {
                 match the crowd.
               </p>
               <p>
-                I'm nonbinary, and I'm bi and pan. “Man” and “woman” never really felt like me, and nonbinary did. I
-                use both bi and pan because bi is the label I've always known, and pan fits the fact that gender
-                isn't a deciding factor for me. I don't make content about being LGBTQIA+, but I don't hide it
-                either, and I want everyone who shows up here to feel welcome.
+                I'm nonbinary, and I identify as both bi and pan. Nonbinary is the label that feels right for me, and
+                I use both bi and pan because I've always identified with bi, while pan describes how gender doesn't really
+                factor into who I'm attracted to. It's just one part of who I am, and while I don't make LGBTQIA+
+                content specifically, I want my space to be welcoming to everyone.
               </p>
               <p>
                 The <Link to="/reviews" className="hl underline decoration-orange decoration-2 underline-offset-4">reviews</Link> are
