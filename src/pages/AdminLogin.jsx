@@ -60,7 +60,7 @@ export default function AdminLogin() {
           </div>
 
           <button type="submit" disabled={submitting} data-testid="admin-login-submit"
-            className="relative w-full pill pill-pink h-12 px-8 text-sm disabled:opacity-60">
+            className="relative w-full pill pill-dark h-12 px-8 text-sm disabled:opacity-60">
             {submitting ? (
               <><span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> Signing in…</>
             ) : (

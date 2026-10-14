@@ -69,9 +69,9 @@ export default function Home() {
       </section>
 
       {nowPlaying && (
-        <div className="max-w-2xl mx-auto px-4 mt-16">
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 mt-20">
           <NowPlayingStrip game={nowPlaying} />
-        </div>
+        </section>
       )}
 
       {(videosLoading || latestVideo) && (
