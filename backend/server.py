@@ -377,15 +377,19 @@ async def share_image(slug: str):
 
 
 @api_router.get("/now-playing")
-async def now_playing(response: Response):
-    response.headers["Cache-Control"] = "public, max-age=60"
+async def now_playing(request: Request):
     doc = await db.settings.find_one({"_id": "now_playing"}, {"_id": 0})
     if doc:
-        return {**doc, "source": "manual"}
-    game = await get_playing_game(TWITCH_HANDLE)
-    if game:
-        return {**game, "platform": "", "note": "Live on Twitch now", "source": "twitch"}
-    return None
+        data = {**doc, "source": "manual"}
+    else:
+        game = await get_playing_game(TWITCH_HANDLE)
+        data = {**game, "platform": "", "note": "Live on Twitch now", "source": "twitch"} if game else None
+    body = json.dumps(data, separators=(",", ":"), sort_keys=True)
+    etag = '"' + hashlib.sha1(body.encode()).hexdigest() + '"'
+    headers = {"Cache-Control": "no-cache", "ETag": etag}
+    if request.headers.get("if-none-match") == etag:
+        return Response(status_code=304, headers=headers)
+    return Response(content=body, media_type="application/json", headers=headers)
 
 
 @api_router.get("/twitch/live")
