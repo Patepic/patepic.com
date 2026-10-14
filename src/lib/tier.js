@@ -1,14 +1,14 @@
 export const TIERS = ["★", "S+", "S", "A", "B", "C", "D", "F"];
 
 const TIER_COLOR = {
-  "★": "#FDC76C",
-  "S+": "#EE7650",
-  "S": "#F4A261",
-  "A": "#B3C26B",
-  "B": "#7DBBA0",
-  "C": "#86A9C4",
-  "D": "#B29AC0",
-  "F": "#B8A69E",
+  "★": "#DE5A94",
+  "S+": "#A08FDD",
+  "S": "#6FB1E0",
+  "A": "#6CC4A1",
+  "B": "#A9CF73",
+  "C": "#EDD36B",
+  "D": "#F29A5C",
+  "F": "#E46A6A",
 };
 
 const TIER_META = {
@@ -55,3 +55,41 @@ const RARITY = {
 };
 
 export const getRarity = (tier) => RARITY[tier] || RARITY.F;
+
+const proCount = (review) => (Array.isArray(review?.pros) ? review.pros.length : 0);
+
+const conCount = (review) => {
+  const cons = review?.cons;
+  if (!Array.isArray(cons)) return 0;
+  if (cons.includes(NO_FLAWS)) return 0;
+  return cons.length;
+};
+
+const reviewScore = (review) => parseFloat(review?.rating) || 0;
+
+const reviewTimestamp = (review) =>
+  new Date(review?.date || review?.created_at || 0).getTime();
+
+/** Higher pros, fewer cons, higher score, then newer date. */
+export const compareReviewsByStanding = (a, b) => {
+  const byPros = proCount(b) - proCount(a);
+  if (byPros !== 0) return byPros;
+
+  const byCons = conCount(a) - conCount(b);
+  if (byCons !== 0) return byCons;
+
+  const byScore = reviewScore(b) - reviewScore(a);
+  if (byScore !== 0) return byScore;
+
+  return reviewTimestamp(b) - reviewTimestamp(a);
+};
+
+/** Tier list order: tier first, then standing within the tier. */
+export const compareReviewsByRank = (a, b) => {
+  const byTier = TIERS.indexOf(getTier(a.rating, a)) - TIERS.indexOf(getTier(b.rating, b));
+  if (byTier !== 0) return byTier;
+  return compareReviewsByStanding(a, b);
+};
+
+export const sortReviewsByStanding = (reviews) =>
+  [...reviews].sort(compareReviewsByStanding);
