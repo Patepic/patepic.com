@@ -19,8 +19,8 @@ const linkColumns = [navLinks.slice(0, half), navLinks.slice(half)];
 
 const EMAIL = "contact@patepic.com";
 
-const socialIcon = "text-charcoal-brown hover:text-orange transition-colors";
-const footLink = "text-sm font-bold uppercase text-charcoal-brown hover:text-orange transition-colors";
+const socialIcon = "text-charcoal-brown hover:text-pink transition-colors";
+const footLink = "text-sm font-bold uppercase text-charcoal-brown hover:text-pink transition-colors";
 
 export const Footer = () => {
   return (
@@ -31,7 +31,7 @@ export const Footer = () => {
         <div className="relative z-[12] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:items-start text-center">
             <div className="md:text-left">
-              <h3 className="wordmark text-[40px] text-charcoal-brown md:mt-6 mb-10">Socials</h3>
+              <h3 className="wordmark text-[34px] text-charcoal-brown md:mt-6 mb-10">Socials</h3>
               <div className="flex items-start justify-center md:justify-start gap-6">
                 <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer" data-testid="footer-twitch" aria-label="Twitch" className={socialIcon}>
                   <Twitch className="w-8 h-8" />
@@ -40,14 +40,14 @@ export const Footer = () => {
                   <a key={c.url} href={c.url} target="_blank" rel="noopener noreferrer" data-testid={`footer-youtube-${c.name.toLowerCase()}`}
                     aria-label={`YouTube: ${c.name}`} title={`YouTube: ${c.name}`} className={`${socialIcon} inline-flex flex-col items-center gap-1`}>
                     <Youtube className="w-8 h-8" />
-                    {creator.youtubeChannels.length > 1 && <span className="text-[0.65rem] font-bold uppercase">{c.name}</span>}
+                    {creator.youtubeChannels.length > 1 && <span className="text-[10px] font-bold uppercase">{c.name}</span>}
                   </a>
                 ))}
               </div>
             </div>
 
             <div>
-              <h3 className="wordmark text-[64px] text-charcoal-brown mb-10">Links</h3>
+              <h3 className="wordmark text-[54px] text-charcoal-brown mb-10">Links</h3>
               <nav className="inline-grid grid-cols-2 text-left">
                 {linkColumns.map((column, i) => (
                   <div key={i} className={`flex flex-col gap-4 ${i === 0 ? "pr-10 items-end text-right" : "pl-10 items-start border-l-[3px] border-charcoal-brown"}`}>
@@ -58,16 +58,16 @@ export const Footer = () => {
                 ))}
               </nav>
               <div className="mt-10">
-                <a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-3 text-sm font-bold text-charcoal-brown hover:text-orange transition-colors">
+                <a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-3 text-sm font-bold text-charcoal-brown hover:text-pink transition-colors">
                   <Mail className="w-6 h-6" /> {EMAIL}
                 </a>
               </div>
             </div>
 
             <div className="md:text-right">
-              <h3 className="wordmark text-[40px] text-charcoal-brown md:mt-6">
+              <h3 className="wordmark text-[34px] text-charcoal-brown md:mt-6">
                 <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} title="Back to top"
-                  className="uppercase text-inherit hover:text-orange transition-colors md:text-right">
+                  className="uppercase text-inherit hover:text-pink transition-colors md:text-right">
                   Game over.<br />Continue?
                 </button>
               </h3>

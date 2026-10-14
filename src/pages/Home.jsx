@@ -4,18 +4,18 @@ import { useRecentVideos } from "../hooks/useRecentVideos";
 import { useNowPlaying } from "../hooks/useNowPlaying";
 import { creator } from "../data/creator";
 import { ReviewCard } from "../components/ReviewCard";
-import { NowPlayingCard } from "../components/NowPlayingCard";
+import { NowPlayingStrip } from "../components/NowPlayingStrip";
 import { HeroVideo, VideoCard } from "../components/VideoCard";
 import { CreatorCard } from "../components/CreatorCard";
-import { Wordmark, CapsuleButton, SocialRow, WaveDivider, ChipBackdrop, PokerChip, PageBackdrop } from "../components/ui/decor";
+import { Wordmark, CapsuleButton, SocialRow, WaveDivider, ChipBackdrop, PokerChip, PageBackdrop, Blossom } from "../components/ui/decor";
 import { HomeDataSkeleton, SkeletonReviewCard, SkeletonVideoCard } from "../components/ui/skeleton";
 import { ArrowUpRight, ArrowDown, BookOpen, Play, Sparkle, Trophy } from "lucide-react";
 import { useMemo } from "react";
 import { usePageTitle } from "../hooks/usePageTitle";
 
 const HERO_SPARKLES = [
-  ["hero-sparkle-1", true], ["hero-sparkle-2", false], ["hero-sparkle-3", false],
-  ["hero-sparkle-4", false], ["hero-sparkle-5", true], ["hero-sparkle-6", false],
+  ["hero-sparkle-1", "text-mango-yellow"], ["hero-sparkle-2", null], ["hero-sparkle-3", null],
+  ["hero-sparkle-4", "text-pink-dusty"], ["hero-sparkle-5", "text-sky"], ["hero-sparkle-6", null],
 ];
 
 export default function Home() {
@@ -31,21 +31,21 @@ export default function Home() {
   const nowPlayingRaw = useNowPlaying();
   const sameTitle = (a, b) => a.toLowerCase().replace(/[^a-z0-9]+/g, "") === b.toLowerCase().replace(/[^a-z0-9]+/g, "");
   const nowPlaying = nowPlayingRaw && !reviews.some((r) => sameTitle(r.title || "", nowPlayingRaw.title)) ? nowPlayingRaw : null;
-  const latestRow = nowPlaying ? recent.slice(0, 2) : recent;
   if (error) return <HomeDataState title="Could not load reviews" />;
 
 
   return (
     <div>
       <section className="hero relative overflow-x-clip">
-        <div className="hero-bg" aria-hidden="true" />
         <PageBackdrop className="hero-backdrop" />
         <PokerChip className="hero-chip" />
 
         <div className="relative z-[1] flex flex-col items-center text-center px-4 pt-14 md:pt-20">
           <div className="relative">
             {HERO_SPARKLES.map(([cls, accent], i) => (
-              <Sparkle key={i} aria-hidden="true" className={`hero-sparkle ${cls} ${accent ? "text-orange fill-orange" : "text-charcoal-brown"}`} />
+              accent
+                ? <Blossom key={i} strokeWidth={10} className={`hero-sparkle ${cls} stroke-charcoal-brown ${accent}`} />
+                : <Sparkle key={i} aria-hidden="true" className={`hero-sparkle ${cls} text-charcoal-brown`} />
             ))}
             <h1 className="wordmark hero-name">{creator.name}</h1>
           </div>
@@ -61,12 +61,18 @@ export default function Home() {
         </div>
 
         <div className="relative z-[1] flex justify-center px-4 mt-12">
-          <CreatorCard reviews={reviews} loading={loading} className="w-full max-w-[21rem] -rotate-2" />
+          <CreatorCard reviews={reviews} loading={loading} className="w-full max-w-[21rem]" />
         </div>
 
         <span className="hero-arrow hero-arrow-l" aria-hidden="true"><ArrowDown /></span>
         <span className="hero-arrow hero-arrow-r" aria-hidden="true"><ArrowDown /></span>
       </section>
+
+      {nowPlaying && (
+        <div className="max-w-2xl mx-auto px-4 mt-16">
+          <NowPlayingStrip game={nowPlaying} />
+        </div>
+      )}
 
       {(videosLoading || latestVideo) && (
         <>
@@ -80,8 +86,8 @@ export default function Home() {
             </div>
           </div>
 
-          <section className="relative py-8 md:py-10 bg-[var(--color-straw)] overflow-x-clip">
-            <WaveDivider color="var(--color-straw)" position="top" mirror />
+          <section className="relative py-8 md:py-10 bg-[var(--color-blush)] overflow-x-clip">
+            <WaveDivider color="var(--color-blush)" position="top" mirror />
 
             <div className="watch-row">
               <div className="watch-gutter py-20" aria-hidden="true"><span /><span /></div>
@@ -92,7 +98,7 @@ export default function Home() {
               <div className="watch-gutter py-20" aria-hidden="true"><span /><span /></div>
             </div>
 
-            <WaveDivider color="var(--color-straw)" position="bottom" flip />
+            <WaveDivider color="var(--color-blush)" position="bottom" flip />
           </section>
         </>
       )}
@@ -136,14 +142,9 @@ export default function Home() {
               <p className="eyebrow mb-4">Latest reviews</p>
               {loading ? (
                 <HomeDataSkeleton />
-              ) : recent[0] || nowPlaying ? (
+              ) : recent[0] ? (
                 <div className="deal card-fan grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xs sm:max-w-none mx-auto">
-                  {nowPlaying && (
-                    <div>
-                      <NowPlayingCard game={nowPlaying} />
-                    </div>
-                  )}
-                  {latestRow.map((r) => (
+                  {recent.map((r) => (
                     <div key={r.slug}>
                       <ReviewCard review={r} />
                     </div>

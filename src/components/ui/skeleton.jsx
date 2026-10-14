@@ -14,50 +14,28 @@ const NBSP = "\u00a0";
 const VERDICT_LINES = ["w-full", "w-11/12", "w-full", "w-5/6", "w-1/2"];
 const STAT_LABELS = ["Strengths", "Weaknesses"];
 
-export const SkeletonReviewCard = ({ size = "sm", showRibbon = true }) => {
-  const lg = size === "lg" ? " pc-lg" : "";
-  const body = (layer) => (
-    <>
-      <div className="pc-head">
-        {showRibbon && <span className="pc-stage">{NBSP}</span>}
-        <span className="pc-score"><span className="pc-score-fill">{NBSP}</span></span>
-        <span className="pc-title">{layer === "info" ? <Bar className="h-[1.15em] w-3/5 ml-auto" /> : NBSP}</span>
+export const SkeletonReviewCard = () => (
+  <div className="pc-wrap phc-wrap pc-skeleton" aria-hidden="true">
+    <div className="photo-card">
+      <span className="phc-tab-wrap"><span className="phc-tab">{NBSP}</span></span>
+      <div className="phc-photo">
+        <div className="phc-window"><Skeleton className="absolute inset-0" /></div>
       </div>
-      <div className="pc-art">
-        {layer === "face" && <div className="card-back absolute inset-0" />}
-      </div>
-      <div className="pc-strip">
-        <div className="pc-flavor">{layer === "info" ? <Bar className="h-[1em] my-[0.125em] w-2/3 mx-auto" /> : NBSP}</div>
-      </div>
-      <div className="pc-text">
-        <div className="pc-verdict">
-          {VERDICT_LINES.map((w, i) => (
-            layer === "info" ? <Bar key={i} className={`h-[1em] my-[0.225em] mx-auto ${w}`} /> : <div key={i} className="h-[1.45em]" />
-          ))}
+      <div className="phc-caption">
+        <Bar className="h-[1.25em] w-3/5 mx-auto" />
+        <Bar className="h-[0.7em] w-2/5 mx-auto mt-[0.6em]" />
+        <div className="phc-text"><div className="w-full">
+          {VERDICT_LINES.slice(0, 3).map((w, i) => <Bar key={i} className={`h-[0.8em] my-[0.3em] mx-auto ${w}`} />)}
+        </div></div>
+        <div className="phc-foot">
+          <span>{STAT_LABELS[0]}<span className="phc-count">{NBSP}</span></span>
+          <span />
+          <span>{STAT_LABELS[1]}<span className="phc-count">{NBSP}</span></span>
         </div>
       </div>
-      <div className="pc-stats">
-        {STAT_LABELS.map((label) => (
-          <div key={label} className="pc-stat">
-            <span className="pc-stat-label">{label}</span>
-            <span className="pc-stat-value is-count">{NBSP}</span>
-          </div>
-        ))}
-      </div>
-      <div className="pc-setline">
-        {layer === "info" ? <Bar className="h-[1.2em] w-1/2" /> : <span>{NBSP}</span>}
-      </div>
-    </>
-  );
-  return (
-    <div className={`pc-wrap pc-skeleton${lg}`} aria-hidden="true">
-      <div className={`profile-card${lg}`}>
-        <div className="pc-face">{body("face")}</div>
-        <div className="pc-info">{body("info")}</div>
-      </div>
     </div>
-  );
-};
+  </div>
+);
 
 export const SkeletonVideoCard = ({ size = "sm" }) => {
   const lg = size === "lg" ? " pc-lg" : "";
@@ -98,7 +76,7 @@ export const HomeDataSkeleton = () => (
 export const ReviewsDataSkeleton = () => (
   <div
     data-testid="reviews-data-skeleton"
-    className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-xs sm:max-w-none mx-auto"
+    className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xs sm:max-w-none mx-auto"
     aria-label="Loading reviews"
   >
     {Array.from({ length: 12 }).map((_, i) => (<SkeletonReviewCard key={i} />))}
@@ -109,12 +87,12 @@ const TIER_CARD_REVEAL = ["", "", "hidden sm:block", "hidden md:block"];
 
 export const SkeletonTierCards = ({ label = "Loading tier entries", showRibbon = true }) => (
   <div
-    className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 max-w-xs sm:max-w-none mx-auto"
+    className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-xs sm:max-w-none mx-auto"
     aria-label={label}
   >
     {TIER_CARD_REVEAL.map((revealClass, j) => (
       <div key={j} className={revealClass}>
-        <SkeletonReviewCard showRibbon={showRibbon} />
+        <SkeletonReviewCard />
       </div>
     ))}
   </div>

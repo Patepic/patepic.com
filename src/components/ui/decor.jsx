@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Twitch, Youtube, Mail, ArrowUp } from "lucide-react";
 import { creator } from "../../data/creator";
-import modelImg from "../../assets/model.png";
 
 export const SocialRow = ({ className = "", size = "w-11 h-11" }) => {
   const items = [
@@ -25,7 +24,7 @@ export const SocialRow = ({ className = "", size = "w-11 h-11" }) => {
           <span className={`${size} rounded-md bg-white border border-honey group-hover:border-charcoal-brown grid place-items-center transition-colors`}>
             <Icon className="w-5 h-5" />
           </span>
-          <span className="text-[0.68rem] font-bold uppercase tracking-[0.06em]">{text}</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.06em]">{text}</span>
         </a>
       ))}
     </div>
@@ -33,13 +32,14 @@ export const SocialRow = ({ className = "", size = "w-11 h-11" }) => {
 };
 
 export const SetInfoBanner = ({ emblem, name, stats = [], className = "" }) => (
-  <div className={`rounded-2xl border-2 border-charcoal-brown bg-charcoal-brown px-6 py-5 flex flex-wrap items-center gap-x-8 gap-y-4 ${className}`}>
+  <div className={`relative rounded-2xl border-2 border-charcoal-brown bg-charcoal-brown px-6 py-5 flex flex-wrap items-center gap-x-8 gap-y-4 ${className}`}>
+    <BlossomCorner small />
     <div className="flex items-center gap-3">
       <div className="w-11 h-11 rounded-lg bg-white grid place-items-center text-charcoal-brown shrink-0" aria-hidden="true">
         {emblem}
       </div>
       <div>
-        <div className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-white/70">Showing</div>
+        <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/70">Showing</div>
         <div className="font-sans font-bold text-white text-lg leading-tight">{name}</div>
       </div>
     </div>
@@ -47,7 +47,7 @@ export const SetInfoBanner = ({ emblem, name, stats = [], className = "" }) => (
       <div key={s.label} className="flex items-center gap-x-8">
         <div className="h-9 w-px bg-white/15 hidden sm:block" />
         <div>
-          <div className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-white/70">{s.label}</div>
+          <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/70">{s.label}</div>
           <div className="font-sans font-bold text-white text-lg leading-tight">{s.value}</div>
         </div>
       </div>
@@ -55,21 +55,9 @@ export const SetInfoBanner = ({ emblem, name, stats = [], className = "" }) => (
   </div>
 );
 
-export const MascotNote = ({ children, className = "" }) => (
-  <div className={`flex items-center gap-3 ${className}`}>
-    <img
-      src={modelImg}
-      alt=""
-      aria-hidden="true"
-      className="w-8 h-8 rounded-full object-cover object-top mix-blend-luminosity opacity-90 border border-charcoal-brown/30 shrink-0"
-    />
-    <p className="text-sm text-charcoal-brown/85 italic">{children}</p>
-  </div>
-);
-
 export const Wordmark = ({ text, tag, className = "", tagClassName = "" }) => (
   <span className={`inline-block ${className}`}>
-    <span className="block">{text}</span>
+    <span className="wordmark-text block">{text}</span>
     {tag && (
       <span className={`sticker-tag block mt-3 text-xs sm:text-sm ${tagClassName}`}>
         {tag}
@@ -78,11 +66,11 @@ export const Wordmark = ({ text, tag, className = "", tagClassName = "" }) => (
   </span>
 );
 
-export const CapsuleButton = ({ as: Tag = "a", icon: Icon, children, className = "", ...props }) => (
+export const CapsuleButton = ({ as: Tag = "a", icon: Icon, solidIcon = false, children, className = "", ...props }) => (
   <Tag className={`pill-capsule ${className}`} {...props}>
     {Icon && (
       <span className="pill-capsule-icon" aria-hidden="true">
-        <Icon className="w-4 h-4" fill="currentColor" />
+        <Icon className="w-4 h-4" fill={solidIcon ? "currentColor" : "none"} />
       </span>
     )}
     <span>{children}</span>
@@ -142,7 +130,32 @@ export const WaveDivider = ({
   );
 };
 
-const SPADE = "M12 2 C9 7 4 9 4 14 C4 16.5 6 18 9 18 L9 22 L15 22 L15 18 C18 18 20 16.5 20 14 C20 9 15 7 12 2 Z";
+export const PETAL = "M0 0C-34 -22 -46 -62 -20 -92L0 -76L20 -92C46 -62 34 -22 0 0Z";
+export const PETAL_ANGLES = [0, 72, 144, 216, 288];
+
+export const Blossom = ({ className = "", detailed = false, ...props }) => (
+  <svg className={className} viewBox="-110 -110 220 220" aria-hidden="true" fill="currentColor" strokeLinejoin="round" {...props}>
+    {PETAL_ANGLES.map((a) => <path key={a} d={PETAL} transform={`rotate(${a})`} />)}
+    {detailed && (
+      <g fill="var(--color-honey)" stroke="none">
+        {PETAL_ANGLES.map((a) => (
+          <g key={a} transform={`rotate(${a + 36})`}>
+            <path d="M0 -12V-36" fill="none" stroke="var(--color-honey)" strokeWidth="5" strokeLinecap="round" />
+            <circle cx="0" cy="-40" r="5" />
+          </g>
+        ))}
+        <circle r="11" />
+      </g>
+    )}
+  </svg>
+);
+
+export const BlossomCorner = ({ small = false }) => (
+  <span className={`blossom-corner${small ? " is-small" : ""}`} aria-hidden="true">
+    <Blossom detailed className="text-mango-yellow" />
+    <Blossom detailed className="text-pink-dusty" />
+  </span>
+);
 
 export const PokerChip = ({ className = "", reverse = false, still = false }) => (
   <svg className={className} viewBox="0 0 1000 1000" aria-hidden="true">
@@ -151,7 +164,9 @@ export const PokerChip = ({ className = "", reverse = false, still = false }) =>
       <circle cx="500" cy="500" r="430" strokeWidth="72" strokeDasharray="169 168.7" />
       <circle cx="500" cy="500" r="352" strokeWidth="12" />
       <circle cx="500" cy="500" r="306" strokeWidth="8" strokeDasharray="16 16" />
-      <path d={SPADE} transform="translate(320 315) scale(15)" fill="currentColor" stroke="none" />
+      <g transform="translate(500 505) scale(2.1)" fill="currentColor" stroke="none">
+        {PETAL_ANGLES.map((a) => <path key={a} d={PETAL} transform={`rotate(${a})`} />)}
+      </g>
     </g>
   </svg>
 );

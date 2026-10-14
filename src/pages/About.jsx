@@ -1,21 +1,20 @@
 import { Link } from "react-router-dom";
-import { Twitch, Youtube, ArrowUpRight, Gamepad2, Code2, Trophy, PenLine, Heart, X as XIcon, Mail } from "lucide-react";
+import { Twitch, Youtube, ArrowUpRight, Gamepad2, Code2, Trophy, PenLine, Heart, Sparkle, X as XIcon } from "lucide-react";
 import { creator } from "../data/creator";
-import { useReviews } from "../hooks/useReviews";
-import { CreatorCard } from "../components/CreatorCard";
 import { PrideFlags } from "../components/PrideFlags";
-import { Wordmark, CapsuleButton } from "../components/ui/decor";
+import { Wordmark, SocialRow, Blossom, PokerChip } from "../components/ui/decor";
+import modelImg from "../assets/model.png";
 import { usePageTitle } from "../hooks/usePageTitle";
 
 const PROFILE = [
   { label: "Birthday", value: "October 24" },
-  { label: "Debut", value: "TBH" },
+  { label: "Debut", value: "TBD" },
   { label: "Height", value: "169 cm" },
   { label: "Based in", value: "Eastern United States" },
-  { label: "Oshi mark", value: "♠🐶" },
+  { label: "Oshi mark", value: "🎴🌸🐶" },
   { label: "Gender", value: <span className="inline-flex items-center gap-2.5"><PrideFlags only={["Nonbinary"]} />Nonbinary</span>, center: true },
-  { label: "Pronouns", value: "They/them" },
-  { label: "Orientation", value: <span className="inline-flex items-center gap-2.5"><PrideFlags only={["Bisexual", "Pansexual"]} />Bisexual, pansexual</span>, center: true },
+  { label: "Pronouns", value: "They/Them" },
+  { label: "Orientation", value: <span className="inline-flex items-center gap-2.5"><PrideFlags only={["Bisexual", "Pansexual"]} />Bisexual, Pansexual</span>, center: true },
   { label: "Unit", value: "Wild Card" },
   { label: "Community", value: "Handlers" },
 ];
@@ -32,7 +31,6 @@ const DISLIKES = ["Slow internet", "Cold weather", "Brutal difficulty spikes"];
 
 export default function About() {
   usePageTitle("About");
-  const { reviews, loading } = useReviews();
 
   return (
     <div>
@@ -41,14 +39,14 @@ export default function About() {
           <div className="lg:col-span-7">
             <h1 className="leading-none">
               <Wordmark
-                text="About Me"
+                text={`Who is ${creator.name}?`}
                 tag="the person behind the reviews"
                 className="wordmark text-5xl sm:text-6xl lg:text-7xl text-charcoal-brown"
                 tagClassName="text-charcoal-brown/70"
               />
             </h1>
 
-            <div className="mt-8 space-y-4 max-w-xl text-sm sm:text-base leading-relaxed text-charcoal-brown">
+            <div className="mt-8 space-y-5 max-w-xl text-[15px] leading-[28px] text-charcoal-brown">
               <p>
                 I'm a <span className="hl">game reviewer, streamer and VTuber</span> with strong opinions on games.
                 Most of what I review gets played live on stream, and some of it off stream when a game is better
@@ -62,29 +60,27 @@ export default function About() {
                 content specifically, I want my space to be welcoming to everyone.
               </p>
               <p>
-                The <Link to="/reviews" className="hl underline decoration-orange decoration-2 underline-offset-4">reviews</Link> are
-                the main event, the <Link to="/tier-list" className="hl underline decoration-orange decoration-2 underline-offset-4">tier list</Link> is
-                where they all settle, and the <Link to="/guidelines" className="hl underline decoration-orange decoration-2 underline-offset-4">guidelines</Link> explain
+                The <Link to="/reviews" className="hl underline decoration-pink decoration-2 underline-offset-4">reviews</Link> are
+                the main event, the <Link to="/tier-list" className="hl underline decoration-pink decoration-2 underline-offset-4">tier list</Link> is
+                where they all settle, and the <Link to="/guidelines" className="hl underline decoration-pink decoration-2 underline-offset-4">guidelines</Link> explain
                 why a 5 can still land in F.
               </p>
             </div>
 
-            <div className="mt-9 flex flex-wrap gap-4">
-              <CapsuleButton href={creator.twitch.url} target="_blank" rel="noopener noreferrer" icon={Twitch} className="pill-capsule-main">
-                Follow on Twitch
-              </CapsuleButton>
-              <CapsuleButton href={creator.youtube.url} target="_blank" rel="noopener noreferrer" icon={Youtube} >
-                Subscribe
-              </CapsuleButton>
-              <CapsuleButton as={Link} to="/contact" icon={Mail} >
-                Get in touch
-              </CapsuleButton>
-            </div>
+            <h2 className="mt-10 text-base text-charcoal-brown">Follow me on socials!</h2>
+            <SocialRow className="mt-4 flex-wrap" />
           </div>
 
-          <div className="lg:col-span-5 flex flex-col items-center gap-4">
-            <CreatorCard reviews={reviews} loading={loading} className="w-full max-w-[21rem] rotate-2" />
-            <p className="text-xs text-charcoal-brown/70">Click the card to flip it.</p>
+          <div className="lg:col-span-5 flex justify-center">
+            <div className="about-arch">
+              <Blossom detailed className="about-arch-blossom about-arch-b1 text-mango-yellow" />
+              <Blossom detailed className="about-arch-blossom about-arch-b2 text-pink-dusty" />
+              <Sparkle aria-hidden="true" className="about-arch-sparkle about-arch-s1" />
+              <Sparkle aria-hidden="true" className="about-arch-sparkle about-arch-s2" />
+              <img src={modelImg} alt={`${creator.name}'s VTuber model`} className="about-arch-model" />
+              <span className="about-arch-chip" aria-hidden="true"><PokerChip still /></span>
+              <span className="about-arch-plate">Reviewer, streamer, VTuber</span>
+            </div>
           </div>
         </div>
       </section>

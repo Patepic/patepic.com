@@ -3,15 +3,15 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { MascotNote, Wordmark } from "../components/ui/decor";
+import { Wordmark, BlossomCorner } from "../components/ui/decor";
 import { ReviewCard } from "../components/ReviewCard";
 import { PlatformIcon } from "../components/PlatformIcon";
 import { fetchReviews } from "../lib/api";
-import { TIERS, getTier, getTierColor, getTierLabel } from "../lib/tier";
+import { TIERS, getTier, getTierColor, getTierLabel, compareReviewsByRank } from "../lib/tier";
 import { ReviewsDataSkeleton } from "../components/ui/skeleton";
 import { usePageTitle } from "../hooks/usePageTitle";
 
-const SORTS = ["recent", "oldest", "score-desc", "score-asc", "a-z"];
+const SORTS = ["recent", "oldest", "standing", "score-desc", "score-asc", "a-z"];
 const VERDICTS = ["all", "recommended", "avoid"];
 const TIER_SLUG = { "★": "favorite", "S+": "splus", "S": "s", "A": "a", "B": "b", "C": "c", "D": "d", "F": "f" };
 
@@ -107,6 +107,7 @@ export default function Reviews() {
       if (verdict === "avoid" && r.recommended !== "no") return false;
       return true;
     });
+    if (sort === "standing") res = [...res].sort(compareReviewsByRank);
     if (sort === "recent") res = [...res].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
     if (sort === "oldest") res = [...res].sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0));
     if (sort === "score-desc") res = [...res].sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0));
@@ -137,7 +138,7 @@ export default function Reviews() {
               {latestReview?.date && (
                 <>
                   The latest one is{" "}
-                  <Link to={`/reviews/${latestReview.slug}`} className="hl underline decoration-orange decoration-2 underline-offset-4">{latestReview.title}</Link>
+                  <Link to={`/reviews/${latestReview.slug}`} className="hl underline decoration-pink decoration-2 underline-offset-4">{latestReview.title}</Link>
                   , from {latestReview.date}.
                 </>
               )}
@@ -145,13 +146,14 @@ export default function Reviews() {
           </div>
         </section>
 
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
           <div className="game-panel p-5 sm:p-7 corner-ticks">
+            <BlossomCorner />
             <div className="relative flex flex-col md:flex-row gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-brown/85" />
                 <Input placeholder="Search reviews…" value={query} onChange={(e) => setQuery(e.target.value)}
-                  className="pl-11 h-12 bg-white border-honey text-charcoal-brown placeholder:text-charcoal-brown/70" />
+                  className="pl-11 h-12 bg-white border-honey text-charcoal-brown placeholder:text-charcoal-brown/70 focus-visible:!ring-pink focus-visible:border-pink" />
               </div>
               <Select value={verdict} onValueChange={setVerdict}>
                 <SelectTrigger aria-label="Verdict" className="md:w-44 h-12 bg-white border-honey text-charcoal-brown"><SelectValue /></SelectTrigger>
@@ -173,6 +175,7 @@ export default function Reviews() {
                 <SelectContent className="bg-white border-honey text-charcoal-brown">
                   <SelectItem value="recent">Newest first</SelectItem>
                   <SelectItem value="oldest">Oldest first</SelectItem>
+                  <SelectItem value="standing">Best ranked</SelectItem>
                   <SelectItem value="score-desc">Highest score</SelectItem>
                   <SelectItem value="score-asc">Lowest score</SelectItem>
                   <SelectItem value="a-z">A → Z</SelectItem>
@@ -209,7 +212,7 @@ export default function Reviews() {
               </div>
               <div>
                 <p className="eyebrow mb-3">Tiers</p>
-                <div className="flex gap-1.5 flex-wrap" role="group" aria-label="Filter by tier">
+                <div className="flex gap-1.5 flex-wrap sm:flex-nowrap" role="group" aria-label="Filter by tier">
                   {TIERS.map((tier) => {
                     const on = selectedTiers.includes(tier);
                     return (
@@ -221,7 +224,7 @@ export default function Reviews() {
                         aria-label={getTierLabel(tier)}
                         title={getTierLabel(tier)}
                         style={{ "--tier-color": getTierColor(tier) }}
-                        className={`h-9 min-w-9 px-2 rounded-full grid place-items-center text-[0.8rem] font-extrabold text-charcoal-brown border-2 transition-colors ${
+                        className={`h-9 min-w-9 px-2 rounded-full grid place-items-center text-[13px] font-extrabold text-charcoal-brown border-2 transition-colors ${
                           on ? "bg-[var(--tier-color)] border-tier-ink text-tier-ink" : "bg-white border-[color-mix(in_srgb,var(--tier-color)_62%,var(--color-tier-ink))] hover:bg-[color-mix(in_srgb,var(--tier-color)_30%,var(--color-soft-white))]"
                         }`}
                       >
@@ -235,9 +238,9 @@ export default function Reviews() {
           </div>
         </section>
 
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 lg:mt-16">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 lg:mt-16">
           <div className="mb-6 min-h-9 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-[0.72rem] font-bold uppercase tracking-[0.14em] text-charcoal-brown/85">
+            <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-charcoal-brown/85">
               {loading ? "Loading reviews…" : (
                 filtered.length === 0 ? "No reviews to show" : <>Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length} reviews</>
               )}
@@ -254,11 +257,11 @@ export default function Reviews() {
           ) : filtered.length === 0 ? (
             <div className="border border-honey bg-white p-12 text-center">
               <p className="display-heading text-2xl text-charcoal-brown mb-2">No reviews match those filters.</p>
-              <MascotNote className="mt-6 justify-center">Try changing or clearing the filters.</MascotNote>
+              <p className="mt-6 text-sm text-charcoal-brown/85 italic">Try changing or clearing the filters.</p>
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-xs sm:max-w-none mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xs sm:max-w-none mx-auto">
                 {paginated.map((r) => <ReviewCard key={r.slug} review={r} />)}
               </div>
 

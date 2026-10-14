@@ -87,7 +87,7 @@ export default function Awards() {
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <CalendarDays className="w-4 h-4 text-charcoal-brown/70" />
-            <span className="eyebrow !text-[0.65rem]">Awards year</span>
+            <span className="eyebrow !text-[10px]">Awards year</span>
           </div>
           <Select
             value={String(year)}
@@ -153,7 +153,7 @@ function GameAwardCard({ game }) {
         )}
         <div className="min-w-0">
           {game.date && (
-            <div className="eyebrow !text-[0.55rem] text-charcoal-brown/85">{game.date}</div>
+            <div className="eyebrow !text-[9px] text-charcoal-brown/85">{game.date}</div>
           )}
           <Link
             to={`/reviews/${game.slug}`}

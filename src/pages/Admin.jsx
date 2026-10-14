@@ -224,7 +224,7 @@ const paginated = useMemo(() => {
           <button
             onClick={() => setEditing({ ...blank })}
             data-testid="admin-new-review"
-            className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 text-sm font-medium"
+            className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 text-sm font-semibold"
           >
             <Plus className="w-4 h-4" /> New review
           </button>
@@ -248,7 +248,7 @@ const paginated = useMemo(() => {
         <table className="w-full text-sm">
           <thead className="bg-charcoal-brown/20 text-charcoal-brown/80 text-xs tracking-[0.06em] uppercase">
             <tr>
-              <th className="text-left px-5 py-3 font-medium">
+              <th className="text-left px-5 py-3 font-semibold">
                 <button
                   type="button"
                   onClick={() =>
@@ -265,13 +265,13 @@ const paginated = useMemo(() => {
                   {sort === "title-desc" && " ↓"}
                 </button>
               </th>
-              <th className="text-left px-5 py-3 font-medium hidden sm:table-cell">
+              <th className="text-left px-5 py-3 font-semibold hidden sm:table-cell">
                 Platform
               </th>
-              <th className="text-left px-5 py-3 font-medium hidden md:table-cell">
+              <th className="text-left px-5 py-3 font-semibold hidden md:table-cell">
                 Content Type
               </th>
-              <th className="text-left px-5 py-3 font-medium">
+              <th className="text-left px-5 py-3 font-semibold">
                 <button
                   type="button"
                   onClick={() =>
@@ -288,7 +288,7 @@ const paginated = useMemo(() => {
                   {sort === "rating-asc" && " ↑"}
                 </button>
               </th>
-              <th className="text-right px-5 py-3 font-medium">Actions</th>
+              <th className="text-right px-5 py-3 font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -328,7 +328,7 @@ const paginated = useMemo(() => {
                         <div className="font-display text-charcoal-brown flex items-center gap-2">
                           {r.title}
                           {r.isFeatured && (
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-mango-yellow/30 text-charcoal-brown border border-honey">
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-mango-yellow/30 text-charcoal-brown border border-honey">
                               ★ Gold
                             </span>
                           )}
@@ -349,7 +349,7 @@ const paginated = useMemo(() => {
                     }[r.contentType] || "Original"}
                   </td>
                   <td className="px-5 py-3">
-                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-mango-yellow/30 text-charcoal-brown border border-honey">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-semibold bg-mango-yellow/30 text-charcoal-brown border border-honey">
                       {r.rating}
                     </span>
                   </td>
@@ -951,7 +951,7 @@ function ReviewEditor({ review, onClose, onSaved, platforms, genres }) {
               type="submit"
               data-testid="admin-save-review"
               disabled={saving || !canSubmit}
-              className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium"
+              className="inline-flex items-center gap-2 px-5 h-10 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-semibold"
             >
               {saving ? (
                 <>
@@ -1317,7 +1317,7 @@ function NowPlayingPanel() {
           type="button"
           onClick={save}
           disabled={busy || uploading || !form.title.trim() || !dirty}
-          className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Save className="w-4 h-4" /> Save
         </button>

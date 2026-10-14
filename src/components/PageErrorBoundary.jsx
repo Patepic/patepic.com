@@ -17,7 +17,7 @@ export class PageErrorBoundary extends Component {
         <button
           type="button"
           onClick={() => window.location.reload()}
-          className="pill pill-brown h-11 px-6 mt-8 text-sm"
+          className="pill pill-pink h-11 px-6 mt-8 text-sm"
         >
           <RefreshCw className="w-4 h-4" /> Reload
         </button>

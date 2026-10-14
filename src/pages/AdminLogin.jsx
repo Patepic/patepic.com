@@ -46,21 +46,21 @@ export default function AdminLogin() {
 
         <form onSubmit={submit} className="panel-framed p-7">
           <div className="relative mb-5">
-            <Label htmlFor="email" className="eyebrow !text-[0.6rem] text-charcoal-brown">Email</Label>
+            <Label htmlFor="email" className="eyebrow !text-[10px] text-charcoal-brown">Email</Label>
             <Input id="email" type="email" required autoComplete="username" value={email}
               onChange={(e) => setEmail(e.target.value)} data-testid="admin-email-input" placeholder="Email"
               className="mt-2 h-12 bg-white border-honey text-charcoal-brown" />
           </div>
 
           <div className="relative mb-7">
-            <Label htmlFor="password" className="eyebrow !text-[0.6rem] text-charcoal-brown">Password</Label>
+            <Label htmlFor="password" className="eyebrow !text-[10px] text-charcoal-brown">Password</Label>
             <Input id="password" type="password" required autoComplete="current-password" value={password}
               onChange={(e) => setPassword(e.target.value)} data-testid="admin-password-input" placeholder="Password"
               className="mt-2 h-12 bg-white border-honey text-charcoal-brown" />
           </div>
 
           <button type="submit" disabled={submitting} data-testid="admin-login-submit"
-            className="relative w-full pill pill-brown h-12 px-8 text-sm disabled:opacity-60">
+            className="relative w-full pill pill-pink h-12 px-8 text-sm disabled:opacity-60">
             {submitting ? (
               <><span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" /> Signing in…</>
             ) : (

@@ -14,9 +14,12 @@ module.exports = {
       full: "9999px",
     },
     extend: {
+      lineHeight: {
+        relaxed: "round(1.625em, 1px)",
+      },
       fontFamily: {
-        display: ['"MADE Okine Sans"', "ui-sans-serif", "system-ui", "sans-serif"],
-        sans: ['"MADE Okine Sans"', "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ['"Nunito"', "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ['"Nunito"', "ui-sans-serif", "system-ui", "sans-serif"],
       },
       colors: {
         "charcoal-brown": "color-mix(in srgb, var(--color-charcoal-brown) calc(<alpha-value> * 100%), transparent)",
@@ -25,8 +28,12 @@ module.exports = {
         "honey": "color-mix(in srgb, var(--color-honey) calc(<alpha-value> * 100%), transparent)",
         "mango-yellow": "color-mix(in srgb, var(--color-mango-yellow) calc(<alpha-value> * 100%), transparent)",
         "cream-yellow": "color-mix(in srgb, var(--color-cream-yellow) calc(<alpha-value> * 100%), transparent)",
-        "latte": "color-mix(in srgb, var(--color-latte) calc(<alpha-value> * 100%), transparent)",
-        "orange": "color-mix(in srgb, var(--color-orange) calc(<alpha-value> * 100%), transparent)",
+        "gold": "color-mix(in srgb, var(--color-gold) calc(<alpha-value> * 100%), transparent)",
+        "sky": "color-mix(in srgb, var(--color-sky) calc(<alpha-value> * 100%), transparent)",
+        "pink": "color-mix(in srgb, var(--color-pink) calc(<alpha-value> * 100%), transparent)",
+        "pink-dusty": "color-mix(in srgb, var(--color-pink-dusty) calc(<alpha-value> * 100%), transparent)",
+        "pink-soft": "color-mix(in srgb, var(--color-pink-soft) calc(<alpha-value> * 100%), transparent)",
+        "blush": "color-mix(in srgb, var(--color-blush) calc(<alpha-value> * 100%), transparent)",
         "chestnut-brown": "color-mix(in srgb, var(--color-chestnut-brown) calc(<alpha-value> * 100%), transparent)",
         "tier-ink": "color-mix(in srgb, var(--color-tier-ink) calc(<alpha-value> * 100%), transparent)",
         background: "color-mix(in srgb, var(--color-soft-white) calc(<alpha-value> * 100%), transparent)",

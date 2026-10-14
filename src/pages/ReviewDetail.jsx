@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowUpRight, Check, Trophy, X as XIcon } from "lucide-react
 import { fetchReview, fetchReviews } from "../lib/api";
 import { getTier, getTierColor, getTierLabel, getRarity } from "../lib/tier";
 import { ReviewDetailDataSkeleton } from "../components/ui/skeleton";
+import { BlossomCorner, Wordmark } from "../components/ui/decor";
 import { ReviewCard, coverUrl } from "../components/ReviewCard";
 import { usePageTitle } from "../hooks/usePageTitle";
 import { RarityMark } from "../components/RarityMark";
@@ -24,7 +25,13 @@ export default function ReviewDetail() {
       setReview(fetched);
       const all = await fetchReviews();
       const genreList = Array.isArray(fetched.genre) ? fetched.genre : fetched.genre ? [fetched.genre] : [];
-      setRelated(all.filter((other) => { if (other.slug === fetched.slug) return false; const otherGenres = Array.isArray(other.genre) ? other.genre : other.genre ? [other.genre] : []; return genreList.some((g) => otherGenres.includes(g)); }).sort(() => Math.random() - 0.5).slice(0, 3));
+      const shared = (other) => (Array.isArray(other.genre) ? other.genre : other.genre ? [other.genre] : []).filter((g) => genreList.includes(g)).length;
+      setRelated(all
+        .filter((other) => other.slug !== fetched.slug && shared(other) > 0)
+        .map((other) => ({ other, score: shared(other) + Math.random() }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 3)
+        .map(({ other }) => other));
     }).catch((e) => { if (e?.response?.status === 404) setNotFound(true); }).finally(() => setLoading(false));
   }, [slug]);
 
@@ -58,14 +65,14 @@ export default function ReviewDetail() {
     genres.length > 0 && { label: genres.length > 1 ? "Genres" : "Genre", value: genres.join(", ") },
     review.playTime && { label: "Play time", value: review.playTime },
     review.date && { label: "Reviewed", value: review.date },
-    review.recommended && { label: "Recommended", value: review.recommended === "no" ? "No" : "Yes" },
+    review.recommended && { label: "Recommend Playing", value: review.recommended === "no" ? "No" : "Yes" },
   ].filter(Boolean);
 
   return (
     <article className="relative" style={{ "--tier-color": tierColor }}>
       <header className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <Link to="/reviews" className="pill pill-outline h-9 px-4 text-sm mb-8"><ArrowLeft className="w-3.5 h-3.5" /> Back to reviews</Link>
-        <h1 className="wordmark text-3xl sm:text-4xl lg:text-5xl text-charcoal-brown !leading-[1.05] max-w-4xl text-balance">{review.title}</h1>
+        <h1 className="wordmark text-[1.625rem] sm:text-[2rem] lg:text-[2.625rem] text-charcoal-brown !leading-[1.05] max-w-4xl text-balance">{review.title}</h1>
         {review.summary && (
           <p className="mt-6 max-w-3xl pl-4 border-l-4 border-[var(--tier-color)] text-xl lg:text-2xl leading-snug font-bold text-charcoal-brown">
             {review.summary}
@@ -76,12 +83,13 @@ export default function ReviewDetail() {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         {cover && (
           <figure className="lg:col-span-8 dex-panel dex-tier !p-2 flex flex-col justify-center" style={{ "--tier-color": tierColor }}>
+            <BlossomCorner />
             <img src={cover} alt={review.title} className="block w-full h-auto rounded-md" />
             {review.imageCredit && (
               <figcaption className="px-1 pt-1.5 text-right text-xs font-semibold text-charcoal-brown/85">
                 Image by{" "}
                 {/^https?:\/\//i.test(review.imageCreditUrl || "") ? (
-                  <a href={review.imageCreditUrl} target="_blank" rel="noopener noreferrer" className="underline decoration-orange decoration-2 underline-offset-2">{review.imageCredit}</a>
+                  <a href={review.imageCreditUrl} target="_blank" rel="noopener noreferrer" className="font-extrabold text-charcoal-brown underline decoration-pink decoration-2 underline-offset-2">{review.imageCredit}</a>
                 ) : review.imageCredit}
               </figcaption>
             )}
@@ -136,6 +144,7 @@ export default function ReviewDetail() {
             prose-blockquote:border-l-charcoal-brown/30 prose-blockquote:text-charcoal-brown/90 prose-blockquote:not-italic
             prose-li:text-charcoal-brown/90 prose-hr:border-honey
             prose-pre:bg-white prose-pre:border prose-pre:border-honey prose-pre:rounded-md prose-kbd:rounded-md">
+            <BlossomCorner />
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{review.body}</ReactMarkdown>
           </div>
         </section>
@@ -145,23 +154,25 @@ export default function ReviewDetail() {
         <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 grid md:grid-cols-2 gap-6 items-stretch">
           {review.pros?.length > 0 && (
             <div className="dex-panel">
+              <BlossomCorner small />
               <h2 className="dex-title">Pros</h2>
               <ul className="space-y-3">
                 {review.pros.map((pro, index) => (
                   <li key={index} className="flex gap-3 text-sm leading-relaxed text-charcoal-brown/95">
-                    <Check className="w-4 h-4 shrink-0 mt-0.5 text-charcoal-brown" />{pro}
+                    <span className="w-5 h-5 shrink-0 grid place-items-center rounded-full bg-pink-soft text-charcoal-brown"><Check className="w-3 h-3" strokeWidth={3} /></span>{pro}
                   </li>
                 ))}
               </ul>
             </div>
           )}
           {review.cons?.length > 0 && (
-            <div className="dex-panel">
+            <div className="dex-panel !bg-[color-mix(in_srgb,var(--color-ice)_35%,var(--color-soft-white))]">
+              <BlossomCorner small />
               <h2 className="dex-title">Cons</h2>
               <ul className="space-y-3">
                 {review.cons.map((con, index) => (
                   <li key={index} className="flex gap-3 text-sm leading-relaxed text-charcoal-brown/95">
-                    <XIcon className="w-4 h-4 shrink-0 mt-0.5 text-orange" />{con}
+                    <span className="w-5 h-5 shrink-0 grid place-items-center rounded-full bg-sky text-charcoal-brown"><XIcon className="w-3 h-3" strokeWidth={3} /></span>{con}
                   </li>
                 ))}
               </ul>
@@ -172,6 +183,7 @@ export default function ReviewDetail() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 mb-8 flex justify-center">
         <div className="dex-panel dex-tier flex items-center gap-4 !py-4" style={{ "--tier-color": tierColor }}>
+          <BlossomCorner small />
           <div className="score-badge">
             <span className="score-badge-fill">{review.rating}</span>
           </div>
@@ -185,8 +197,10 @@ export default function ReviewDetail() {
       {related.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pb-8">
           <div className="pt-12">
-            <h2 className="wordmark text-3xl sm:text-4xl text-charcoal-brown mb-10">More {genres.join(" & ")} reviews</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xs sm:max-w-none mx-auto">
+            <h2 className="mb-10">
+              <Wordmark text="You might also like" className="wordmark text-3xl sm:text-4xl text-charcoal-brown" />
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-xs sm:max-w-[52rem] mx-auto sm:mx-0">
               {related.map((relatedReview) => (
                 <ReviewCard key={relatedReview.slug} review={relatedReview} />
               ))}

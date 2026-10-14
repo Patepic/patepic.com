@@ -11,7 +11,7 @@ export default function NotFound() {
         <p className="mt-4 text-sm sm:text-base text-charcoal-brown/90">
           The page you're looking for doesn't exist or has moved.
         </p>
-        <Link to="/" className="pill pill-brown h-12 px-7 text-sm mt-8">
+        <Link to="/" className="pill pill-pink h-12 px-7 text-sm mt-8">
           Back to home
         </Link>
       </div>

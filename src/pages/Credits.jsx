@@ -16,7 +16,7 @@ const CreditName = ({ name, url }) => {
   const href = safeUrl(url);
   if (!href) return <span>{name}</span>;
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="underline decoration-orange decoration-2 underline-offset-4">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="underline decoration-pink decoration-2 underline-offset-4">
       {name} <ArrowUpRight className="inline w-4 h-4 align-[-0.15em]" aria-hidden="true" />
     </a>
   );
@@ -119,14 +119,14 @@ export default function Credits() {
                         {games.length === 1 ? (
                           <span>
                             <span className="text-charcoal-brown/70">Artwork used on</span>{" "}
-                            <Link to={`/reviews/${games[0].slug}`} className="hover:text-orange transition-colors">{games[0].title}</Link>
+                            <Link to={`/reviews/${games[0].slug}`} className="hover:text-pink transition-colors">{games[0].title}</Link>
                           </span>
                         ) : (
                           <button
                             type="button"
                             onClick={() => toggleArtist(name.toLowerCase())}
                             aria-expanded={isOpen}
-                            className="inline-flex items-center gap-1 text-charcoal-brown/70 hover:text-orange transition-colors"
+                            className="inline-flex items-center gap-1 text-charcoal-brown/70 hover:text-pink transition-colors"
                           >
                             Artwork used on {games.length} reviews
                             <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} aria-hidden="true" />
@@ -140,14 +140,14 @@ export default function Credits() {
                           <ul className="min-h-0 overflow-hidden pt-2 space-y-1.5">
                             {games.map((game) => (
                               <li key={game.slug} className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
-                                <Link to={`/reviews/${game.slug}`} className="hover:text-orange transition-colors">{game.title}</Link>
+                                <Link to={`/reviews/${game.slug}`} className="hover:text-pink transition-colors">{game.title}</Link>
                                 {perImageLinks && safeUrl(game.imageCreditUrl) && (
                                   <a
                                     href={safeUrl(game.imageCreditUrl)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label={`Image source for ${game.title}`}
-                                    className="inline-flex items-center gap-0.5 text-xs text-charcoal-brown/70 hover:text-orange transition-colors"
+                                    className="inline-flex items-center gap-0.5 text-xs text-charcoal-brown/70 hover:text-pink transition-colors"
                                   >
                                     Image source <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                                   </a>

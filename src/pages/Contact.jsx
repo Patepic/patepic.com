@@ -122,7 +122,7 @@ export default function Contact() {
               <div className="dex-row">
                 <dt className="dex-label">Email</dt>
                 <dd>
-                  <a href={`mailto:${EMAIL}`} className="font-semibold text-charcoal-brown underline decoration-orange decoration-2 underline-offset-4 break-all">{EMAIL}</a>
+                  <a href={`mailto:${EMAIL}`} className="font-semibold text-charcoal-brown underline decoration-pink decoration-2 underline-offset-4 break-all">{EMAIL}</a>
                 </dd>
               </div>
               <div className="dex-row">
@@ -131,7 +131,7 @@ export default function Contact() {
               </div>
               <div className="dex-row">
                 <dt className="dex-label">Best for</dt>
-                <dd className="text-charcoal-brown">Sponsorships, review requests, collaborations, press</dd>
+                <dd className="text-charcoal-brown">Sponsorships, review requests, collaborations</dd>
               </div>
             </dl>
           </div>

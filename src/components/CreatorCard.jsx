@@ -5,6 +5,7 @@ import { useCardTilt } from "../hooks/useCardTilt";
 import modelImg from "../assets/model.png";
 import { RarityMark } from "./RarityMark";
 import { PrideFlags } from "./PrideFlags";
+import { Blossom } from "./ui/decor";
 import { getYearFromDate } from "../lib/year";
 
 const reviewYear = (review) => {
@@ -69,43 +70,47 @@ export function CreatorCard({ reviews = [], loading = false, className = "" }) {
     </>
   );
 
-  const setLine = (
-    <div className="pc-setline">
-      <span>©{year}</span>
-      <PrideFlags />
-      <RarityMark symbol="★" count={2} />
+  const side = (back) => (
+    <div className={`cc-card creator-side${back ? " creator-back cc-full" : ""}`} aria-hidden={back ? !flipped : flipped}>
+      {back && (
+        <span className="cc-bg" aria-hidden="true">
+          <img src={modelImg} alt="" />
+          <span className="pc-foil" />
+          <span className="pc-glare" />
+        </span>
+      )}
+      <span className="phc-tab-wrap" aria-hidden="true"><span className="phc-tab"><Star className="cc-tab-star" fill="currentColor" /></span></span>
+      <Blossom detailed className="phc-blossom phc-b1 text-mango-yellow" />
+      <Blossom detailed className="phc-blossom phc-b2 text-pink-dusty" />
+
+      <p className="cc-title">{creator.name}</p>
+
+      <div className="cc-window">
+        {!back && <img src={modelImg} alt="" />}
+        {!back && <span className="pc-foil" />}
+        {!back && <span className="pc-glare" />}
+      </div>
+
+      <div className="cc-body">
+        <p className="cc-strip">Game reviewer and streamer</p>
+        <div className="creator-moves">{back ? backStats : frontStats}</div>
+        <div className="cc-traits">
+          <span><b>Gacha</b>Dislikes</span>
+          <span><b>Hype</b>Ignores</span>
+          <span><b>Never</b>Gives up</span>
+        </div>
+        <div className="cc-setline">
+          <span>©{year}</span>
+          <PrideFlags />
+          <RarityMark symbol="★" count={2} />
+        </div>
+      </div>
     </div>
-  );
-
-  const body = (layer, side = "front") => (
-    <>
-      <div className="pc-head">
-        <span className="pc-title creator-name">{creator.name}</span>
-      </div>
-
-      <div className="pc-art creator-art">
-        {layer === "face" && <img src={modelImg} alt="" />}
-        {layer === "face" && <span className="pc-foil" />}
-      </div>
-
-      <p className="creator-strip">Game reviewer and streamer.</p>
-
-      <div className="creator-moves">{side === "back" ? backStats : frontStats}</div>
-
-      <div className="pc-stats">
-        <div className="pc-stat"><span className="pc-stat-label">Dislikes</span><span className="pc-stat-value">Gacha</span></div>
-        <div className="pc-stat"><span className="pc-stat-label">Ignores</span><span className="pc-stat-value">Hype</span></div>
-        <div className="pc-stat"><span className="pc-stat-label">Gives up</span><span className="pc-stat-value">Never</span></div>
-      </div>
-
-      {setLine}
-    </>
   );
 
   return (
     <div
-      className={`pc-wrap pc-lg creator-card foil-${foil} ${className}`}
-      style={{ "--tier-color": "var(--color-mango-yellow)" }}
+      className={`pc-wrap creator-card rarity-gold foil-${foil} ${className}`}
       {...tilt}
       onPointerEnter={() => setFoil(randomFoil())}
     >
@@ -123,22 +128,8 @@ export function CreatorCard({ reviews = [], loading = false, className = "" }) {
           }
         }}
       >
-        <div className="profile-card pc-lg creator-side" aria-hidden={flipped}>
-          <div className="pc-face" aria-hidden="true">
-            {body("face")}
-            <span className="pc-glare" />
-          </div>
-          <div className="pc-info">{body("info")}</div>
-        </div>
-
-        <div className="profile-card pc-lg creator-side creator-back is-fullart" aria-hidden={!flipped}>
-          <div className="pc-face" aria-hidden="true">
-            <img className="pc-fullart creator-fullart" src={modelImg} alt="" />
-            <span className="pc-foil" />
-            <span className="pc-glare" />
-          </div>
-          <div className="pc-info">{body("info", "back")}</div>
-        </div>
+        {side(false)}
+        {side(true)}
       </div>
     </div>
   );

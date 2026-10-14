@@ -37,11 +37,11 @@ function useTwitchLive(handle) {
 }
 
 const navLink = ({ isActive }) =>
-  `relative py-2 text-[0.9rem] font-extrabold uppercase transition-colors ${
+  `relative py-2 text-[13px] font-extrabold uppercase transition-colors ${
     isActive ? "text-charcoal-brown" : "text-charcoal-brown/90 hover:text-charcoal-brown"
   }`;
 
-const iconBtn = "text-white hover:text-orange transition-colors";
+const iconBtn = "text-white hover:text-pink-soft transition-colors";
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -66,7 +66,7 @@ export const Navbar = () => {
               {({ isActive }) => (
                 <>
                   {l.label}
-                  {isActive && <span className="absolute -bottom-0.5 left-0 right-0 h-[3px] rounded-full bg-orange" />}
+                  {isActive && <span className="absolute -bottom-0.5 left-0 right-0 h-[3px] rounded-full bg-[var(--color-pink)]" />}
                 </>
               )}
             </NavLink>
@@ -75,7 +75,7 @@ export const Navbar = () => {
 
         {live?.isLive && (
           <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer"
-            className="hidden lg:inline-flex absolute left-1/2 top-full -translate-x-1/2 mt-1 pill pill-live h-7 px-3 rounded-full text-[0.68rem] uppercase tracking-[0.14em] bg-white pointer-events-auto">
+            className="hidden lg:inline-flex absolute left-1/2 top-full -translate-x-1/2 mt-1 pill pill-live h-7 px-3 rounded-full text-[11px] uppercase tracking-[0.14em] bg-white pointer-events-auto">
             <span className="w-1.5 h-1.5 rounded-full bg-charcoal-brown animate-pulse" /> Live
           </a>
         )}
@@ -96,7 +96,7 @@ export const Navbar = () => {
         <div className="flex lg:hidden items-center gap-2 ml-auto pointer-events-auto">
           {live?.isLive && (
             <a href={creator.twitch.url} target="_blank" rel="noopener noreferrer"
-              className="pill pill-live h-8 px-3 rounded-md text-[0.72rem] uppercase tracking-[0.14em] bg-white">
+              className="pill pill-live h-8 px-3 rounded-md text-[12px] uppercase tracking-[0.14em] bg-white">
               <span className="w-1.5 h-1.5 rounded-full bg-charcoal-brown animate-pulse" /> Live
             </a>
           )}
@@ -124,14 +124,14 @@ export const Navbar = () => {
               <nav className="flex flex-col items-end gap-3 my-auto text-right">
                 {links.map((l) => (
                   <NavLink key={l.to} to={l.to} onClick={close} end={l.to === "/"}
-                    className={({ isActive }) => `wordmark text-[2.1rem] !leading-none transition-colors ${isActive ? "text-mango-yellow" : "text-white hover:text-orange"}`}>
+                    className={({ isActive }) => `wordmark text-[30px] !leading-none transition-colors ${isActive ? "text-mango-yellow" : "text-white hover:text-pink-soft"}`}>
                     {l.label}
                   </NavLink>
                 ))}
                 {user && (
                   <>
-                    <Link to="/admin" onClick={close} className="wordmark text-[2.1rem] !leading-none text-mango-yellow hover:text-white">Admin</Link>
-                    <button onClick={() => { logout(); close(); }} className="mt-1 text-sm font-bold uppercase text-white/85 hover:text-orange">Log out</button>
+                    <Link to="/admin" onClick={close} className="wordmark text-[30px] !leading-none text-mango-yellow hover:text-white">Admin</Link>
+                    <button onClick={() => { logout(); close(); }} className="mt-1 text-sm font-bold uppercase text-white/85 hover:text-pink-soft">Log out</button>
                   </>
                 )}
               </nav>
