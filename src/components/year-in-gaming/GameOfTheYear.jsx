@@ -30,7 +30,7 @@ export function GameOfTheYear({ data, loading }) {
         <h2 className="wordmark text-4xl sm:text-5xl text-charcoal-brown">Game of the Year</h2>
       </div>
 
-      <div className="relative bg-[var(--color-charcoal-brown)] py-10 md:py-14 overflow-x-clip">
+      <div className="goty-band relative bg-[var(--color-charcoal-brown)] py-10 md:py-14 overflow-x-clip">
         <WaveDivider color="var(--color-charcoal-brown)" position="top" mirror />
         <div className="goty-crown" aria-hidden="true"><Crown /></div>
         <div className="relative isolate max-w-xs mx-auto px-4 sm:px-0">
@@ -43,7 +43,7 @@ export function GameOfTheYear({ data, loading }) {
         </div>
 
         {stats.length > 0 && (
-          <dl className="goty-stats relative mt-10 max-w-4xl mx-auto px-4">
+          <dl className="goty-stats relative mt-10 max-w-5xl mx-auto px-4">
             {stats.map(({ label, value }) => (
               <div key={label}>
                 <dt>{label}</dt>
@@ -54,14 +54,14 @@ export function GameOfTheYear({ data, loading }) {
         )}
 
         {runnersUp.length > 0 && (
-          <div className="relative mt-12 px-4">
+          <div className="relative mt-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 className="uppercase text-2xl sm:text-3xl text-white text-center">Runners-up</h3>
             <p className="mt-2 text-sm text-white/80 text-center">
               Also scored {goty.rating} in {data.year}.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-6">
+            <div className="mt-8 flex flex-wrap justify-center gap-4 sm:gap-6">
               {runnersUp.map((r) => (
-                <div key={r.slug} className="w-64 max-w-full">
+                <div key={r.slug} className="w-full max-w-xs sm:max-w-none sm:w-[calc((100%-3rem)/3)]">
                   <ReviewCard review={r} />
                 </div>
               ))}

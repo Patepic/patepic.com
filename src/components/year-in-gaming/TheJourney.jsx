@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 import { Layers } from "lucide-react";
 import { Skeleton, SkeletonReviewCard } from "../ui/skeleton";
-import { ReviewCard } from "../ReviewCard";
+import { ReviewCard, coverUrl } from "../ReviewCard";
 
 const MONTH_NAMES_FULL = [
   "January", "February", "March", "April", "May", "June",
@@ -26,7 +27,7 @@ function parseMonth(key) {
   return { name: raw, sortIndex: 99 };
 }
 
-const CARD_GRID = "grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-xs sm:max-w-none mx-auto";
+const CARD_GRID = "grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-xs sm:max-w-none mx-auto";
 
 export function TheJourney({ data, loading }) {
   const seriesMarathons = data.seriesMarathons || [];
@@ -36,35 +37,16 @@ export function TheJourney({ data, loading }) {
 
   return (
     <section className="relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div className="text-center mb-14">
           <h2 className="wordmark text-4xl sm:text-5xl text-charcoal-brown">The journey</h2>
         </div>
 
-        {loading ? (
-          <div className={`${CARD_GRID} mb-14`}>
-            {Array.from({ length: 4 }).map((_, i) => (<SkeletonReviewCard key={i} />))}
-          </div>
-        ) : seriesMarathons.length > 0 && (
-          <div className="mb-16">
-            <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-charcoal-brown/85 mb-4 flex items-center gap-2">
-              <Layers className="w-3.5 h-3.5 text-charcoal-brown" /> Franchise deep dives
-            </p>
-            <div className="space-y-8">
-              {seriesMarathons.map(({ series, games, count }) => (
-                <div key={series}>
-                  <div className="flex items-baseline gap-2 mb-6">
-                    <h3 className="font-semibold text-charcoal-brown">{series}</h3>
-                    <span className="text-sm text-charcoal-brown/85">{count} games</span>
-                  </div>
-                  <div className={CARD_GRID}>
-                    {games.map((game) => (
-                      <ReviewCard key={game.slug} review={game} />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+        {!loading && seriesMarathons.length > 0 && (
+          <div className="mb-16 space-y-6">
+            {seriesMarathons.map(({ series, games, count }) => (
+              <MarathonBanner key={series} series={series} games={games} count={count} />
+            ))}
           </div>
         )}
 
@@ -103,5 +85,30 @@ export function TheJourney({ data, loading }) {
         )}
       </div>
     </section>
+  );
+}
+
+function MarathonBanner({ series, games, count }) {
+  return (
+    <div className="marathon-banner">
+      <div className="flex items-center gap-3 mb-5">
+        <span className="marathon-icon" aria-hidden="true"><Layers className="w-5 h-5" /></span>
+        <h3 className="text-lg font-extrabold leading-tight text-charcoal-brown">
+          Marathon: {series}, {count} games
+        </h3>
+      </div>
+      <ul className="marathon-shelf">
+        {games.map((game) => (
+          <li key={game.slug}>
+            <Link to={`/reviews/${game.slug}`} className="marathon-item">
+              <span className="marathon-cover">
+                {coverUrl(game) && <img src={coverUrl(game)} alt="" loading="lazy" />}
+              </span>
+              <span className="marathon-title"><span>{game.title}</span></span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
