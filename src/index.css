@@ -460,7 +460,7 @@ h1, h2, h3, h4, h5, h6, .display-heading { font-family: var(--font-sans); font-w
 .phc-wrap[data-tier] .photo-card .phc-foot .pc-rarity { flex-direction: column; justify-content: flex-start; }
 .phc-wrap[data-tier] .photo-card .phc-foot .pc-rarity::before { content: ""; display: flex; }
 .phc-wrap[data-tier] .photo-card .phc-foot .pc-rarity svg { width: 1.9em; height: 1.9em; margin-block: 0.58em; }
-.phc-wrap[data-tier] .photo-card .phc-foot .pc-rarity { flex-flow: row wrap; align-content: flex-start; justify-content: center; gap: 0 0.1em; text-indent: 0; color: var(--color-tier-ink); }
+.phc-wrap[data-tier] .photo-card .phc-foot .pc-rarity { flex-flow: row wrap; align-content: flex-start; justify-content: center; gap: 0; text-indent: 0; color: var(--color-tier-ink); }
 .phc-wrap[data-tier].rarity-silver .photo-card .phc-foot .pc-rarity { color: #B9C2C8; }
 .phc-wrap[data-tier].rarity-gold .photo-card .phc-foot .pc-rarity { color: #E8B230; }
 .phc-wrap[data-tier] .photo-card .phc-foot .pc-rarity::after { content: "Rarity"; flex: 0 0 100%; margin-top: 0.5em; font-weight: 600; line-height: 1; text-indent: 0.08em; text-align: center; -webkit-text-stroke: 0; color: color-mix(in srgb, var(--color-charcoal-brown) 72%, transparent); }
@@ -822,3 +822,4 @@ a.underline, .prose a { text-decoration-skip-ink: none; }
 .phc-wrap[data-tier]:not(.is-full) .phc-text .phc-verdict { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 .phc-wrap[data-tier] .photo-card .phc-foot .pc-rarity:has(> svg:nth-of-type(3)) { padding-inline: 0.15em; gap: 0; }
 .phc-wrap[data-tier] .photo-card .phc-foot .pc-rarity:has(> svg:nth-of-type(3)) svg { width: 1.55em; height: 1.55em; }
+.phc-wrap[data-tier] .photo-card .phc-caption .phc-foot > .pc-rarity { padding-inline: 0.35em; }

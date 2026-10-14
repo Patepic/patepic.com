@@ -1,8 +1,19 @@
 import { Link } from "react-router-dom";
-import { Twitch, Youtube, ArrowUpRight, Gamepad2, Code2, Trophy, PenLine, Heart, Sparkle, X as XIcon } from "lucide-react";
+import {
+  Twitch,
+  Youtube,
+  ArrowUpRight,
+  Gamepad2,
+  Code2,
+  Trophy,
+  PenLine,
+  Heart,
+  Sparkle,
+  X as XIcon,
+} from "lucide-react";
 import { creator } from "../data/creator";
 import { PrideFlags } from "../components/PrideFlags";
-import { Wordmark, SocialRow, Blossom, PokerChip } from "../components/ui/decor";
+import { Wordmark, Blossom, PokerChip } from "../components/ui/decor";
 import modelImg from "../assets/model.png";
 import { usePageTitle } from "../hooks/usePageTitle";
 
@@ -12,18 +23,52 @@ const PROFILE = [
   { label: "Height", value: "169 cm" },
   { label: "Based in", value: "Eastern United States" },
   { label: "Oshi mark", value: "🎴🌸🐶" },
-  { label: "Gender", value: <span className="inline-flex items-center gap-2.5"><PrideFlags only={["Nonbinary"]} />Nonbinary</span>, center: true },
+  {
+    label: "Gender",
+    value: (
+      <span className="inline-flex items-center gap-2.5">
+        <PrideFlags only={["Nonbinary"]} />
+        Nonbinary
+      </span>
+    ),
+    center: true,
+  },
   { label: "Pronouns", value: "They/Them" },
-  { label: "Orientation", value: <span className="inline-flex items-center gap-2.5"><PrideFlags only={["Bisexual", "Pansexual"]} />Bisexual, Pansexual</span>, center: true },
+  {
+    label: "Orientation",
+    value: (
+      <span className="inline-flex items-center gap-2.5">
+        <PrideFlags only={["Bisexual", "Pansexual"]} />
+        Bisexual, Pansexual
+      </span>
+    ),
+    center: true,
+  },
   { label: "Unit", value: "Wild Card" },
   { label: "Community", value: "Handlers" },
 ];
 
 const HOBBIES = [
-  { Icon: Gamepad2, title: "Gaming", desc: "RPGs and adventure titles are my go-to." },
-  { Icon: PenLine, title: "Writing game reviews", desc: "I break games down after the credits roll." },
-  { Icon: Code2, title: "Coding", desc: "I tinker with small projects and tools between streams." },
-  { Icon: Trophy, title: "Sports", desc: "I love watching baseball and hockey." },
+  {
+    Icon: Gamepad2,
+    title: "Gaming",
+    desc: "RPGs and adventure titles are my go-to.",
+  },
+  {
+    Icon: PenLine,
+    title: "Writing game reviews",
+    desc: "I break games down after the credits roll.",
+  },
+  {
+    Icon: Code2,
+    title: "Coding",
+    desc: "I tinker with small projects and tools between streams.",
+  },
+  {
+    Icon: Trophy,
+    title: "Sports",
+    desc: "I love watching baseball and hockey.",
+  },
 ];
 
 const LIKES = ["Coffee", "Baseball", "Hockey", "RPGs", "Fried / comfort food"];
@@ -48,38 +93,76 @@ export default function About() {
 
             <div className="mt-8 space-y-5 max-w-xl text-[15px] leading-[28px] text-charcoal-brown">
               <p>
-                I'm a <span className="hl">game reviewer, streamer and VTuber</span> with strong opinions on games.
-                Most of what I review gets played live on stream, and some of it off stream when a game is better
-                that way. Either way, I don't review anything until the credits roll, and I don't change a score to
-                match the crowd.
+                I'm a{" "}
+                <span className="hl">game reviewer, streamer and VTuber</span>{" "}
+                with strong opinions on games. Most of what I review gets played
+                live on stream, and some of it off stream when a game is better
+                that way. Either way, I don't review anything until the credits
+                roll, and I don't change a score to match the crowd.
               </p>
               <p>
-                I'm nonbinary, and I identify as both bi and pan. Nonbinary is the label that feels right for me, and
-                I use both bi and pan because I've always identified with bi, while pan describes how gender doesn't really
-                factor into who I'm attracted to. It's just one part of who I am, and while I don't make LGBTQIA+
-                content specifically, I want my space to be welcoming to everyone.
+                I'm nonbinary and use both bi and pan to describe my sexuality.
+                I've identified as bi for a long time, and pan fits me too since
+                gender doesn't play a role in who I'm attracted to. I don't make
+                LGBTQIA+ content, but I want everyone to feel welcome in my
+                space.
               </p>
               <p>
-                The <Link to="/reviews" className="hl underline decoration-pink decoration-2 underline-offset-4">reviews</Link> are
-                the main event, the <Link to="/tier-list" className="hl underline decoration-pink decoration-2 underline-offset-4">tier list</Link> is
-                where they all settle, and the <Link to="/guidelines" className="hl underline decoration-pink decoration-2 underline-offset-4">guidelines</Link> explain
-                why a 5 can still land in F.
+                The{" "}
+                <Link
+                  to="/reviews"
+                  className="hl underline decoration-pink decoration-2 underline-offset-4"
+                >
+                  reviews
+                </Link>{" "}
+                are the main event, the{" "}
+                <Link
+                  to="/tier-list"
+                  className="hl underline decoration-pink decoration-2 underline-offset-4"
+                >
+                  tier list
+                </Link>{" "}
+                is where they all settle, and the{" "}
+                <Link
+                  to="/guidelines"
+                  className="hl underline decoration-pink decoration-2 underline-offset-4"
+                >
+                  guidelines
+                </Link>{" "}
+                explain why a 5 can still land in F.
               </p>
             </div>
-
-            <h2 className="mt-10 text-base text-charcoal-brown">Follow me on socials!</h2>
-            <SocialRow className="mt-4 flex-wrap" />
           </div>
 
           <div className="lg:col-span-5 flex justify-center">
             <div className="about-arch">
-              <Blossom detailed className="about-arch-blossom about-arch-b1 text-mango-yellow" />
-              <Blossom detailed className="about-arch-blossom about-arch-b2 text-pink-dusty" />
-              <Sparkle aria-hidden="true" className="about-arch-sparkle about-arch-s1" />
-              <Sparkle aria-hidden="true" className="about-arch-sparkle about-arch-s2" />
-              <img src={modelImg} alt={`${creator.name}'s VTuber model`} className="about-arch-model" />
-              <span className="about-arch-chip" aria-hidden="true"><PokerChip still /></span>
-              <span className="about-arch-plate">Reviewer, streamer, VTuber</span>
+              <Blossom
+                detailed
+                className="about-arch-blossom about-arch-b1 text-mango-yellow"
+              />
+              <Blossom
+                detailed
+                className="about-arch-blossom about-arch-b2 text-pink-dusty"
+              />
+              <Sparkle
+                aria-hidden="true"
+                className="about-arch-sparkle about-arch-s1"
+              />
+              <Sparkle
+                aria-hidden="true"
+                className="about-arch-sparkle about-arch-s2"
+              />
+              <img
+                src={modelImg}
+                alt={`${creator.name}'s VTuber model`}
+                className="about-arch-model"
+              />
+              <span className="about-arch-chip" aria-hidden="true">
+                <PokerChip still />
+              </span>
+              <span className="about-arch-plate">
+                Reviewer, streamer, VTuber
+              </span>
             </div>
           </div>
         </div>
@@ -91,8 +174,13 @@ export default function About() {
             <h2 className="dex-title">Profile</h2>
             <dl>
               {PROFILE.map(({ label, value, center }) => (
-                <div key={label} className={`dex-row${center ? " items-center" : ""}`}>
-                  <dt className={`dex-label${center ? " !pt-0" : ""}`}>{label}</dt>
+                <div
+                  key={label}
+                  className={`dex-row${center ? " items-center" : ""}`}
+                >
+                  <dt className={`dex-label${center ? " !pt-0" : ""}`}>
+                    {label}
+                  </dt>
                   <dd className="text-charcoal-brown">{value}</dd>
                 </div>
               ))}
@@ -105,7 +193,9 @@ export default function About() {
               <div className="creator-moves">
                 {HOBBIES.map(({ Icon, title, desc }) => (
                   <div key={title} className="creator-move">
-                    <span className="creator-cost" aria-hidden="true"><Icon /></span>
+                    <span className="creator-cost" aria-hidden="true">
+                      <Icon />
+                    </span>
                     <div className="min-w-0">
                       <div className="creator-move-name">{title}</div>
                       <p className="creator-move-text !text-[0.8rem]">{desc}</p>
@@ -120,7 +210,12 @@ export default function About() {
               <h2 className="dex-title">Likes and dislikes</h2>
               <div className="space-y-4">
                 <ChipRow Icon={Heart} label="Likes" items={LIKES} tone="like" />
-                <ChipRow Icon={XIcon} label="Dislikes" items={DISLIKES} tone="dislike" />
+                <ChipRow
+                  Icon={XIcon}
+                  label="Dislikes"
+                  items={DISLIKES}
+                  tone="dislike"
+                />
               </div>
             </div>
           </div>
@@ -129,8 +224,13 @@ export default function About() {
 
       <section className="relative pb-20 md:pb-28">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Wordmark text="Where to watch" className="wordmark text-4xl sm:text-5xl text-charcoal-brown" />
-          <div className={`mt-10 grid grid-cols-1 gap-6 ${creator.pixie.url ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
+          <Wordmark
+            text="Where to watch"
+            className="wordmark text-4xl sm:text-5xl text-charcoal-brown"
+          />
+          <div
+            className={`mt-10 grid grid-cols-1 gap-6 ${creator.pixie.url ? "md:grid-cols-3" : "md:grid-cols-2"}`}
+          >
             <WatchCard
               href={creator.twitch.url}
               color="var(--color-charcoal-brown)"
@@ -164,10 +264,14 @@ export default function About() {
 function ChipRow({ Icon, label, items, tone }) {
   return (
     <div>
-      <div className="dex-label flex items-center gap-1.5 mb-2"><Icon className="w-3.5 h-3.5" /> {label}</div>
+      <div className="dex-label flex items-center gap-1.5 mb-2">
+        <Icon className="w-3.5 h-3.5" /> {label}
+      </div>
       <ul className="flex flex-wrap gap-2">
         {items.map((item) => (
-          <li key={item} className={`dex-chip dex-chip-${tone}`}>{item}</li>
+          <li key={item} className={`dex-chip dex-chip-${tone}`}>
+            {item}
+          </li>
         ))}
       </ul>
     </div>
@@ -176,11 +280,23 @@ function ChipRow({ Icon, label, items, tone }) {
 
 function WatchCard({ href, color, Icon, title, body }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="dex-panel watch-tile group" style={{ "--tier-color": color }}>
-      <span className="watch-tile-icon" aria-hidden="true"><Icon className="w-5 h-5" /></span>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="dex-panel watch-tile group"
+      style={{ "--tier-color": color }}
+    >
+      <span className="watch-tile-icon" aria-hidden="true">
+        <Icon className="w-5 h-5" />
+      </span>
       <div className="min-w-0">
-        <div className="font-sans font-bold text-lg text-charcoal-brown leading-tight">{title}</div>
-        <p className="mt-1 text-sm leading-relaxed text-charcoal-brown/90">{body}</p>
+        <div className="font-sans font-bold text-lg text-charcoal-brown leading-tight">
+          {title}
+        </div>
+        <p className="mt-1 text-sm leading-relaxed text-charcoal-brown/90">
+          {body}
+        </p>
       </div>
       <ArrowUpRight className="w-5 h-5 shrink-0 text-charcoal-brown/80 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
     </a>
