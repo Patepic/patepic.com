@@ -22,14 +22,14 @@ CHARCOAL_BROWN_MUTED = (80, 68, 64, 200)
 TIER_INK = (23, 28, 26)
 
 TIER_COLOR = {
-    "★": (244, 197, 66),
-    "S+": (255, 111, 97),
-    "S": (255, 162, 76),
-    "A": (155, 214, 106),
-    "B": (79, 199, 179),
-    "C": (107, 163, 242),
-    "D": (165, 139, 242),
-    "F": (156, 165, 180),
+    "★": (222, 90, 148),
+    "S+": (160, 143, 221),
+    "S": (111, 177, 224),
+    "A": (108, 196, 161),
+    "B": (169, 207, 115),
+    "C": (237, 211, 107),
+    "D": (242, 154, 92),
+    "F": (228, 106, 106),
 }
 
 TIER_LABEL = {
@@ -76,38 +76,45 @@ def get_tier(review: dict) -> str:
     return "C"
 
 
-FONT_FILES = {"SemiBold": "Medium", "Bold": "Bold", "ExtraBold": "Black"}
-_font_bytes: dict[str, bytes] = {}
-_font_failed_at: dict[str, float] = {}
+FONT_FILE = "Nunito-Variable.woff2"
+FONT_WEIGHTS = {"SemiBold": 700, "Bold": 800, "ExtraBold": 900}
+_font_bytes: Optional[bytes] = None
+_font_failed_at = 0.0
 
 
-def _load_font_bytes(name: str) -> Optional[bytes]:
-    if name in _font_bytes:
-        return _font_bytes[name]
-    if time.time() - _font_failed_at.get(name, 0) < 600:
+def _load_font_bytes() -> Optional[bytes]:
+    global _font_bytes, _font_failed_at
+    if _font_bytes is not None:
+        return _font_bytes
+    if time.time() - _font_failed_at < 600:
         return None
-    local = FONT_DIR / f"MADEOkineSans-{name}.woff2"
+    local = FONT_DIR / FONT_FILE
     try:
         if local.exists():
             data = local.read_bytes()
         else:
-            res = httpx.get(f"{FONT_URL}/MADEOkineSans-{name}.woff2", timeout=10)
+            res = httpx.get(f"{FONT_URL}/{FONT_FILE}", timeout=10)
             res.raise_for_status()
             data = res.content
         ImageFont.truetype(io.BytesIO(data), 12)
     except Exception as e:
-        logger.warning("Share image: font %s unavailable: %s", name, e)
-        _font_failed_at[name] = time.time()
+        logger.warning("Share image: font %s unavailable: %s", FONT_FILE, e)
+        _font_failed_at = time.time()
         return None
-    _font_bytes[name] = data
+    _font_bytes = data
     return data
 
 
 def _font(weight: str, size: int) -> ImageFont.FreeTypeFont:
-    data = _load_font_bytes(FONT_FILES[weight])
+    data = _load_font_bytes()
     if data is None:
         return ImageFont.load_default(size)
-    return ImageFont.truetype(io.BytesIO(data), size)
+    font = ImageFont.truetype(io.BytesIO(data), size)
+    try:
+        font.set_variation_by_axes([FONT_WEIGHTS[weight]])
+    except Exception as e:
+        logger.warning("Share image: could not set font weight %s: %s", weight, e)
+    return font
 
 
 def _mix(a: tuple, b: tuple, t: float) -> tuple:
