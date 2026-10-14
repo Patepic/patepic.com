@@ -835,3 +835,4 @@ a.underline, .prose a { text-decoration-skip-ink: none; }
 .np-body { display: grid; gap: 1.25rem; margin-top: 1.25rem; align-items: center; }
 @media (min-width: 640px) { .np-body { grid-template-columns: 15rem minmax(0, 1fr); gap: 1.75rem; } }
 .np-cover { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: 2px solid var(--color-charcoal-brown); border-radius: 0.75rem; box-shadow: 0 14px 26px -16px color-mix(in srgb, var(--color-charcoal-brown) 70%, transparent); }
+.watch-dark .watch-gutter > span { background: color-mix(in srgb, var(--color-soft-white) 55%, transparent); }

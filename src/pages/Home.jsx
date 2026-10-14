@@ -86,8 +86,8 @@ export default function Home() {
             </div>
           </div>
 
-          <section className="relative py-8 md:py-10 bg-[var(--color-blush)] overflow-x-clip">
-            <WaveDivider color="var(--color-blush)" position="top" mirror />
+          <section className="goty-band watch-dark relative py-8 md:py-10 bg-[var(--color-charcoal-brown)] overflow-x-clip">
+            <WaveDivider color="var(--color-charcoal-brown)" position="top" mirror />
 
             <div className="watch-row">
               <div className="watch-gutter py-20" aria-hidden="true"><span /><span /></div>
@@ -98,7 +98,7 @@ export default function Home() {
               <div className="watch-gutter py-20" aria-hidden="true"><span /><span /></div>
             </div>
 
-            <WaveDivider color="var(--color-blush)" position="bottom" flip />
+            <WaveDivider color="var(--color-charcoal-brown)" position="bottom" flip />
           </section>
         </>
       )}
