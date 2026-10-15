@@ -2,8 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { lazyPage } from "@/lib/lazyPage";
 import { Layout } from "@/components/layout/Layout";
-import { AuthProvider } from "@/context/AuthContext";
-import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Home from "@/pages/Home";
 import TierList from "@/pages/TierList";
 
@@ -19,43 +17,30 @@ const Awards = lazyPage(() => import("@/pages/Awards"));
 const YearInGaming = lazyPage(() => import("@/pages/YearInGaming"));
 const Contact = lazyPage(() => import("@/pages/Contact"));
 const Credits = lazyPage(() => import("@/pages/Credits"));
-const AdminLogin = lazyPage(() => import("@/pages/AdminLogin"));
-const Admin = lazyPage(() => import("@/pages/Admin"));
 const NotFound = lazyPage(() => import("@/pages/NotFound"));
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <AuthProvider>
-          <Suspense fallback={null}>
-            <Routes>
-              <Route element={<Layout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/reviews" element={<Reviews />} />
-                <Route path="/reviews/:slug" element={<ReviewDetail />} />
-                <Route path="/tier-list" element={<TierList />} />
-                <Route path="/awards" element={<Awards />} />
-                <Route path="/year-in-gaming" element={<YearInGaming />} />
-                <Route path="/year-in-gaming/:year" element={<YearInGaming />} />
-                <Route path="/guidelines" element={<Guidelines />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/credits" element={<Credits />} />
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route
-                  path="/admin"
-                  element={
-                    <ProtectedRoute>
-                      <Admin />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
-          </Suspense>
-        </AuthProvider>
+        <Suspense fallback={null}>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/reviews" element={<Reviews />} />
+              <Route path="/reviews/:slug" element={<ReviewDetail />} />
+              <Route path="/tier-list" element={<TierList />} />
+              <Route path="/awards" element={<Awards />} />
+              <Route path="/year-in-gaming" element={<YearInGaming />} />
+              <Route path="/year-in-gaming/:year" element={<YearInGaming />} />
+              <Route path="/guidelines" element={<Guidelines />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/credits" element={<Credits />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </Suspense>
       </BrowserRouter>
 
       <Suspense fallback={null}>

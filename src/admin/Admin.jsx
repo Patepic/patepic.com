@@ -15,17 +15,18 @@ import {
   Clock,
   Trophy,
   Hourglass,
+  LogOut,
 } from "lucide-react";
-import { Input } from "../components/ui/input";
-import { Textarea } from "../components/ui/textarea";
-import { Label } from "../components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../components/ui/select";
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -33,7 +34,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../components/ui/dialog";
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,7 +44,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog";
 import {
   fetchReviews,
   adminCreateReview,
@@ -55,10 +56,11 @@ import {
   adminClearNowPlaying,
   adminDiscardUpload,
   errorMessage,
-} from "../lib/api";
-import { AWARDS_START_YEAR, getYearFromDate } from "../lib/year";
-import { usePageTitle } from "../hooks/usePageTitle";
-import { DesktopOnly } from "../components/DesktopOnly";
+} from "./api";
+import { AWARDS_START_YEAR, getYearFromDate } from "@/lib/year";
+import { usePageTitle } from "@/hooks/usePageTitle";
+import { DesktopOnly } from "./DesktopOnly";
+import { useAuth } from "./AuthContext";
 
 const AWARD_OPTIONS = [
   "Game of the Year",
@@ -100,6 +102,7 @@ const blank = {
 };
 
 export default function Admin() {
+  const { logout } = useAuth();
   usePageTitle("Admin");
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -227,6 +230,13 @@ const paginated = useMemo(() => {
             className="inline-flex items-center gap-2 h-10 px-5 rounded-full bg-charcoal-brown text-white filter hover:brightness-90 text-sm font-semibold"
           >
             <Plus className="w-4 h-4" /> New review
+          </button>
+          <button
+            onClick={logout}
+            data-testid="admin-logout"
+            className="inline-flex items-center gap-2 h-10 px-4 rounded-full bg-white border border-charcoal-brown/15 hover:border-honey text-sm text-charcoal-brown/90"
+          >
+            <LogOut className="w-4 h-4" /> Log out
           </button>
         </div>
       </div>
@@ -1178,7 +1188,7 @@ const AwardsEditor = ({ items, onChange, onAdd, onRemove, usedAwards }) => (
   </div>
 );
 
-const emptyNowPlaying = { title: "", cover_url: "", platform: "", note: "" };
+const emptyNowPlaying = { title: "", cover_url: "", platform: "", note: "", imageCredit: "", imageCreditUrl: "" };
 
 function NowPlayingPanel() {
   const [form, setForm] = useState(emptyNowPlaying);
@@ -1202,7 +1212,7 @@ function NowPlayingPanel() {
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
   const dirty = !saved
     ? Boolean(form.title.trim())
-    : ["title", "cover_url", "platform", "note"].some((k) => (form[k] || "") !== (saved[k] || ""));
+    : ["title", "cover_url", "platform", "note", "imageCredit", "imageCreditUrl"].some((k) => (form[k] || "") !== (saved[k] || ""));
 
   const upload = async (e) => {
     const file = e.target.files?.[0];
@@ -1298,6 +1308,14 @@ function NowPlayingPanel() {
               <input ref={fileInput} type="file" accept="image/*" onChange={upload} className="hidden" />
               <Input value={form.cover_url} onChange={(e) => set("cover_url", e.target.value)} placeholder="…or paste an image URL" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
             </div>
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs text-charcoal-brown/85">Image credit</Label>
+            <Input value={form.imageCredit} onChange={(e) => set("imageCredit", e.target.value)} maxLength={120} placeholder="Artist name (optional)" data-testid="admin-now-playing-credit" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs text-charcoal-brown/85">Artist link</Label>
+            <Input value={form.imageCreditUrl} onChange={(e) => set("imageCreditUrl", e.target.value)} placeholder="https://… (optional)" data-testid="admin-now-playing-credit-url" className="h-10 bg-white border-charcoal-brown/15 text-charcoal-brown" />
           </div>
         </div>
       </div>

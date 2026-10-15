@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LogIn } from "lucide-react";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { useAuth } from "../context/AuthContext";
-import { errorMessage } from "../lib/api";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "./AuthContext";
+import { errorMessage } from "./api";
 import { toast } from "sonner";
-import { usePageTitle } from "../hooks/usePageTitle";
-import { DesktopOnly } from "../components/DesktopOnly";
+import { usePageTitle } from "@/hooks/usePageTitle";
+import { DesktopOnly } from "./DesktopOnly";
 
 export default function AdminLogin() {
   usePageTitle("Admin sign in");

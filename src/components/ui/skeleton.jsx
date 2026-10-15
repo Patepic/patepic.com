@@ -37,31 +37,20 @@ export const SkeletonReviewCard = () => (
   </div>
 );
 
-export const SkeletonVideoCard = ({ size = "sm" }) => {
-  const lg = size === "lg" ? " pc-lg" : "";
-  const body = (layer) => (
-    <>
-      <div className="pc-head">
-        <span className="pc-stage">{NBSP}</span>
-        <span className="pc-title">{layer === "info" ? <Bar className="h-[1.15em] w-1/2 ml-auto" /> : NBSP}</span>
+export const SkeletonVideoCard = ({ size = "sm" }) => (
+  <div className={`pc-wrap phc-wrap phc-video pc-skeleton${size === "lg" ? " phc-video-lg" : ""}`} data-tier="video" style={{ "--tier-color": "var(--color-pink-soft)" }} aria-hidden="true">
+    <div className="photo-card">
+      <span className="phc-tab-wrap"><span className="phc-tab">{NBSP}</span></span>
+      <div className="phc-photo">
+        <div className="phc-window"><Skeleton className="absolute inset-0" /></div>
       </div>
-      <div className="pc-art" style={{ aspectRatio: "16 / 9", boxSizing: "content-box" }}>
-        {layer === "face" && <div className="card-back absolute inset-0" />}
-      </div>
-      <div className="pc-setline">
-        {layer === "info" ? <Bar className="h-[1.2em] w-1/3 ml-auto" /> : <span>{NBSP}</span>}
-      </div>
-    </>
-  );
-  return (
-    <div className={`pc-wrap pc-video${lg}`} style={{ "--tier-color": "var(--color-mango-yellow)" }} aria-hidden="true">
-      <div className={`profile-card${lg}`}>
-        <div className="pc-face">{body("face")}</div>
-        <div className="pc-info">{body("info")}</div>
+      <div className="phc-caption">
+        <Bar className="h-[1.25em] w-3/5 mx-auto" />
+        <p className="video-date">{NBSP}</p>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export const HomeDataSkeleton = () => (
   <div
@@ -351,48 +340,6 @@ const ContactShell = () => (
   </div>
 );
 
-const AdminLoginShell = () => (
-  <div className="min-h-[80vh] grid place-items-center px-4 py-16" aria-label="Loading sign in">
-    <div className="w-full max-w-md" aria-hidden="true">
-      <div className="flex flex-col items-center mb-10">
-        <Skeleton className="h-[2.4rem] w-60" />
-        <Skeleton className="h-4 w-36 mt-3" />
-      </div>
-      <div className="panel-framed p-7">
-        <Skeleton className="h-3 w-12" />
-        <Skeleton className="mt-2 h-12 rounded-lg mb-5" />
-        <Skeleton className="h-3 w-16" />
-        <Skeleton className="mt-2 h-12 rounded-lg mb-7" />
-        <Skeleton className="h-12 rounded-full" />
-      </div>
-    </div>
-  </div>
-);
-
-const AdminShell = () => (
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16" aria-label="Loading admin">
-    <div aria-hidden="true">
-      <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-        <div><Skeleton className="h-[2.5rem] w-72" /><Skeleton className="h-4 w-48 mt-2" /></div>
-        <div className="flex gap-2"><Skeleton className="h-10 w-28 rounded-full" /><Skeleton className="h-10 w-36 rounded-full" /></div>
-      </div>
-      <Skeleton className="h-[17rem] rounded-2xl mb-8" />
-      <Skeleton className="h-11 rounded-lg mb-6" />
-      <div className="rounded-2xl border border-honey overflow-hidden">
-        <Skeleton className="h-11" />
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="flex items-center gap-4 px-5 py-3 border-t border-honey">
-            <Skeleton className="w-10 h-10 rounded-md shrink-0" />
-            <Skeleton className="h-5 w-1/3" />
-            <span className="flex-1" />
-            <Skeleton className="h-5 w-24" />
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-);
-
 const CenteredShell = () => (
   <div className="min-h-[70vh] grid place-items-center px-4" aria-label="Loading page">
     <div className="w-full max-w-md flex flex-col items-center" aria-hidden="true">
@@ -412,8 +359,6 @@ const ROUTE_SHELLS = [
   [/^\/guidelines\/?$/, GuidelinesShell],
   [/^\/about\/?$/, AboutShell],
   [/^\/contact\/?$/, ContactShell],
-  [/^\/admin\/login\/?$/, AdminLoginShell],
-  [/^\/admin\/?$/, AdminShell],
 ];
 
 export const RouteSkeleton = ({ pathname }) => {

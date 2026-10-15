@@ -5,6 +5,7 @@ import {
   useState,
   useCallback,
 } from "react";
+import { fetchMe, login as apiLogin } from "./api";
 
 const AuthContext = createContext(null);
 
@@ -19,19 +20,16 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       return;
     }
-    import("../lib/api").then(({ fetchMe }) =>
-      fetchMe()
-        .then((u) => setUser(u))
-        .catch(() => {
-          localStorage.removeItem("patepic_token");
-          setToken(null);
-          setUser(null);
-        })
-    );
+    fetchMe()
+      .then((u) => setUser(u))
+      .catch(() => {
+        localStorage.removeItem("patepic_token");
+        setToken(null);
+        setUser(null);
+      });
   }, [token]);
 
   const login = useCallback(async (email, password) => {
-    const { login: apiLogin } = await import("../lib/api");
     const data = await apiLogin(email, password);
     localStorage.setItem("patepic_token", data.access_token);
     setToken(data.access_token);

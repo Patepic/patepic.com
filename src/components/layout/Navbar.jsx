@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { Menu, X, LogOut, LayoutDashboard, Twitch, Youtube, Mail } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { Menu, X, Twitch, Youtube, Mail } from "lucide-react";
 import { creator } from "../../data/creator";
-import { useAuth } from "../../context/AuthContext";
 import { PokerChip, WaveEdge } from "../ui/decor";
 import { api } from "../../lib/api";
 
@@ -45,7 +44,6 @@ const iconBtn = "text-white hover:text-pink-soft transition-colors";
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const { user, logout } = useAuth();
   const handle = creator.twitch?.handle ?? creator.twitch?.url?.split("/").pop();
   const live = useTwitchLive(handle);
   const close = () => setOpen(false);
@@ -80,18 +78,6 @@ export const Navbar = () => {
           </a>
         )}
 
-        {user && (
-          <div className="hidden lg:flex fixed right-5 bottom-[4.75rem] z-40 flex-col gap-2 pointer-events-auto">
-            <Link to="/admin" aria-label="Admin" title="Admin"
-              className="w-11 h-11 grid place-items-center rounded-[4px] bg-mango-yellow text-charcoal-brown border border-honey hover:bg-mango-yellow/80 transition-colors">
-              <LayoutDashboard className="w-4 h-4" />
-            </Link>
-            <button onClick={logout} aria-label="Log out" title="Log out"
-              className="w-11 h-11 grid place-items-center rounded-[4px] bg-white text-charcoal-brown border border-honey hover:border-charcoal-brown transition-colors">
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
-        )}
 
         <div className="flex lg:hidden items-center gap-2 ml-auto pointer-events-auto">
           {live?.isLive && (
@@ -128,12 +114,6 @@ export const Navbar = () => {
                     {l.label}
                   </NavLink>
                 ))}
-                {user && (
-                  <>
-                    <Link to="/admin" onClick={close} className="wordmark text-[30px] !leading-none text-mango-yellow hover:text-white">Admin</Link>
-                    <button onClick={() => { logout(); close(); }} className="mt-1 text-sm font-bold uppercase text-white/85 hover:text-pink-soft">Log out</button>
-                  </>
-                )}
               </nav>
 
               <div className="flex items-center gap-6 pt-8">

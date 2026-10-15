@@ -1,6 +1,7 @@
 const API = "https://api.patepic.com/api";
 const SITE = "https://patepic.com";
 const REVIEW_PATH = /^\/reviews\/([^/]+)\/?$/;
+const ADMIN_PAGE = /^\/admin(\/[^.]*)?$/;
 
 const STATIC_PAGES = ["/", "/reviews", "/tier-list", "/awards", "/year-in-gaming", "/guidelines", "/about", "/contact"];
 
@@ -78,6 +79,9 @@ export default {
   async fetch(request, env) {
     const { pathname } = new URL(request.url);
     if (request.method === "GET" && pathname === "/sitemap.xml") return sitemap();
+    if (request.method === "GET" && ADMIN_PAGE.test(pathname)) {
+      return env.ASSETS.fetch(new Request(new URL("/admin/", request.url), request));
+    }
     const match = pathname.match(REVIEW_PATH);
     if (request.method === "GET" && match) return withReviewMeta(request, env, decodeURIComponent(match[1]));
     return env.ASSETS.fetch(request);
