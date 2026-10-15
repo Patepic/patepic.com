@@ -189,8 +189,7 @@ export const PageBackdrop = ({ className = "page-backdrop", chip = false, spin =
 
 export const ChipBackdrop = ({ className = "card-chips" }) => (
   <div className={className} aria-hidden="true">
-    <PokerChip className="page-backdrop-ring page-backdrop-ring-l" />
-    <PokerChip className="page-backdrop-ring page-backdrop-ring-r" reverse />
+    <PokerChip className="card-chip-ring" />
   </div>
 );
 

@@ -1,13 +1,14 @@
 import { Play } from "lucide-react";
 import { useCardTilt } from "../hooks/useCardTilt";
+import { Blossom } from "./ui/decor";
 
-const handleThumbLoad = (fallbackUrl) => (e) => {
-  if (fallbackUrl && e.currentTarget.naturalWidth === 120) {
-    e.currentTarget.src = fallbackUrl;
-  }
+const NEW_DAYS = 7;
+
+const thumbFallback = (fallbackUrl) => (e) => {
+  const img = e.currentTarget;
+  if (!fallbackUrl || img.src === fallbackUrl) return;
+  if (e.type === "error" || img.naturalWidth === 120) img.src = fallbackUrl;
 };
-
-const VIDEO_ART_STYLE = { aspectRatio: "16 / 9", boxSizing: "content-box" };
 
 const uploadDate = (iso) => {
   const d = iso ? new Date(iso) : null;
@@ -16,47 +17,44 @@ const uploadDate = (iso) => {
     : null;
 };
 
-function VideoCardFace({ video, size = "sm", loading = "lazy", testId, className = "" }) {
+const isNew = (iso) => {
+  const t = Date.parse(iso || "");
+  return !Number.isNaN(t) && Date.now() - t < NEW_DAYS * 86400000;
+};
+
+function VideoCardFace({ video, size = "sm", testId, className = "" }) {
   const tilt = useCardTilt(size === "lg" ? 12 : 22);
-  const lg = size === "lg" ? " pc-lg" : "";
   const date = uploadDate(video.publishedAt);
-  const body = (layer) => (
-    <>
-      <div className="pc-head">
-        <span className="pc-stage" aria-hidden="true"><Play className="w-[0.7em] h-[0.7em]" fill="currentColor" /></span>
-        <span className="pc-title">{video.title}</span>
-      </div>
-      <div className="pc-art" style={VIDEO_ART_STYLE}>
-        {layer === "face" && (
-          <img
-            src={video.thumbnail}
-            onLoad={handleThumbLoad(video.thumbnailFallback)}
-            alt=""
-            loading={loading}
-            className="w-full h-full object-cover"
-          />
-        )}
-      </div>
-      <div className="pc-setline">
-        <span>{date ? `Uploaded ${date}` : "YouTube"}</span>
-        <span className="pc-rarity" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" /></svg></span>
-      </div>
-    </>
-  );
+  const fallback = thumbFallback(video.thumbnailFallback);
+  const lg = size === "lg";
+  const src = lg ? video.thumbnail : video.thumbnailSmall || video.thumbnail;
+
   return (
-    <div className={`pc-wrap pc-video${lg} ${className}`} style={{ "--tier-color": "var(--color-mango-yellow)" }} {...tilt}>
-      <a
-        href={video.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-testid={testId}
-        className={`profile-card group${lg}`}
-      >
-        <div className="pc-face" aria-hidden="true">
-          {body("face")}
-          <span className="pc-glare" />
+    <div
+      className={`pc-wrap phc-wrap phc-video${lg ? " phc-video-lg" : ""} ${className}`}
+      data-tier="video"
+      style={{ "--tier-color": "var(--color-pink-soft)" }}
+      {...tilt}
+    >
+      <a href={video.url} target="_blank" rel="noopener noreferrer" data-testid={testId} className="photo-card group">
+        <span className="phc-tab-wrap" aria-hidden="true">
+          <span className="phc-tab"><Play className="phc-tab-play" fill="currentColor" /></span>
+        </span>
+        <Blossom detailed className="phc-blossom phc-b1 text-mango-yellow" />
+        <Blossom detailed className="phc-blossom phc-b2 text-pink-dusty" />
+
+        <div className="phc-photo">
+          <div className="phc-window">
+            <img src={src} onLoad={fallback} onError={fallback} alt="" loading="eager" fetchPriority={lg ? "high" : "low"} decoding="async" />
+            <span className="video-play" aria-hidden="true"><Play fill="currentColor" /></span>
+            {isNew(video.publishedAt) && <span className="video-new">New</span>}
+          </div>
         </div>
-        <div className="pc-info">{body("info")}</div>
+
+        <div className="phc-caption">
+          <p className="phc-title">{video.title}</p>
+          <p className="video-date">{date ? `Uploaded ${date}` : "On YouTube"}</p>
+        </div>
       </a>
     </div>
   );
@@ -68,6 +66,6 @@ export function VideoCard({ video }) {
 
 export function HeroVideo({ video, className = "" }) {
   return (
-    <VideoCardFace video={video} size="lg" loading="eager" testId={`hero-video-${video.id}`} className={className} />
+    <VideoCardFace video={video} size="lg" testId={`hero-video-${video.id}`} className={className} />
   );
 }

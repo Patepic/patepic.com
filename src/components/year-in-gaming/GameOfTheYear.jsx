@@ -30,7 +30,7 @@ export function GameOfTheYear({ data, loading }) {
         <h2 className="wordmark text-4xl sm:text-5xl text-charcoal-brown">Game of the Year</h2>
       </div>
 
-      <div className="goty-band relative bg-[var(--color-charcoal-brown)] py-10 md:py-14 overflow-x-clip">
+      <div className="relative bg-[var(--color-charcoal-brown)] py-10 md:py-14 overflow-x-clip">
         <WaveDivider color="var(--color-charcoal-brown)" position="top" mirror />
         <div className="goty-crown" aria-hidden="true"><Crown /></div>
         <div className="relative isolate max-w-xs mx-auto px-4 sm:px-0">

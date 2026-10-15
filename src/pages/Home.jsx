@@ -69,7 +69,7 @@ export default function Home() {
       </section>
 
       {nowPlaying && (
-        <section className="max-w-3xl mx-auto px-4 sm:px-6 mt-20">
+        <section className="max-w-[44rem] mx-auto px-4 sm:px-6 mt-20">
           <NowPlayingStrip game={nowPlaying} />
         </section>
       )}
@@ -86,7 +86,7 @@ export default function Home() {
             </div>
           </div>
 
-          <section className="goty-band watch-dark relative py-8 md:py-10 bg-[var(--color-charcoal-brown)] overflow-x-clip">
+          <section className="watch-dark relative py-8 md:py-10 bg-[var(--color-charcoal-brown)] overflow-x-clip">
             <WaveDivider color="var(--color-charcoal-brown)" position="top" mirror />
 
             <div className="watch-row">
