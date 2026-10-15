@@ -41,11 +41,40 @@ def _uploads_playlist_id(channel_id: str) -> Optional[str]:
     return "UULF" + channel_id[2:]
 
 
+def _thumb_url(video_id: str, name: str) -> str:
+    return f"https://i.ytimg.com/vi/{video_id}/{name}.jpg"
+
+
 def _thumbnails(video_id: str) -> tuple[str, str]:
-    return (
-        f"https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg",
-        f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg",
-    )
+    return _thumb_url(video_id, "maxresdefault"), _thumb_url(video_id, "hqdefault")
+
+
+async def _thumb_exists(client: httpx.AsyncClient, url: str) -> bool:
+    try:
+        resp = await client.head(url)
+        return resp.status_code == 200
+    except Exception:
+        return False
+
+
+async def _resolve_thumbnails(videos: list[dict]) -> None:
+    """Point each video at thumbnails that actually exist: HD for the big card, 640px for small cards."""
+    if not videos:
+        return
+    async with httpx.AsyncClient(timeout=5, headers=_HEADERS) as client:
+        checks = await asyncio.gather(*(
+            asyncio.gather(
+                _thumb_exists(client, _thumb_url(v["id"], "maxresdefault")),
+                _thumb_exists(client, _thumb_url(v["id"], "sddefault")),
+            )
+            for v in videos
+        ))
+    for v, (has_hd, has_sd) in zip(videos, checks):
+        hq = _thumb_url(v["id"], "hqdefault")
+        sd = _thumb_url(v["id"], "sddefault") if has_sd else hq
+        v["thumbnail"] = _thumb_url(v["id"], "maxresdefault") if has_hd else sd
+        v["thumbnailSmall"] = sd
+        v["thumbnailFallback"] = hq
 
 
 def _parse_feed(xml_bytes: bytes) -> list[dict]:
@@ -148,29 +177,70 @@ async def _channel_url() -> str:
     return fallback
 
 
-async def get_recent_videos() -> dict:
-    def _fresh() -> bool:
-        return (
-            _cache["data"] is not None
-            and _cache["channel_id"] == YOUTUBE_CHANNEL_ID
-            and _cache["expires_at"] > time.time()
-        )
+REFRESH_SECONDS = 30 * 60
 
-    if _fresh():
+_refresh_task: Optional[asyncio.Task] = None
+_loop_task: Optional[asyncio.Task] = None
+
+
+def _cached_for_channel() -> Optional[dict]:
+    if _cache["data"] is not None and _cache["channel_id"] == YOUTUBE_CHANNEL_ID:
         return _cache["data"]
+    return None
 
+
+async def _refresh() -> dict:
     async with _lock:
-        if _fresh():
-            return _cache["data"]
-
         videos = await _fetch_videos()
+        previous = _cached_for_channel()
+        if not videos and previous and previous.get("latest"):
+            _cache["expires_at"] = time.time() + FAILURE_TTL_SECONDS
+            return previous
+
+        shown = videos[:7]
+        await _resolve_thumbnails(shown)
         data = {
-            "latest": videos[0] if videos else None,
-            "recent": videos[1:7],
+            "latest": shown[0] if shown else None,
+            "recent": shown[1:7],
             "channelUrl": await _channel_url(),
         }
-
         _cache["channel_id"] = YOUTUBE_CHANNEL_ID
         _cache["data"] = data
         _cache["expires_at"] = time.time() + (SUCCESS_TTL_SECONDS if videos else FAILURE_TTL_SECONDS)
         return data
+
+
+def _refresh_in_background() -> None:
+    global _refresh_task
+    if _refresh_task is None or _refresh_task.done():
+        _refresh_task = asyncio.create_task(_refresh())
+
+
+async def get_recent_videos() -> dict:
+    cached = _cached_for_channel()
+    if cached is None:
+        return await _refresh()
+    if _cache["expires_at"] <= time.time():
+        _refresh_in_background()
+    return cached
+
+
+async def _refresh_loop() -> None:
+    while True:
+        try:
+            await _refresh()
+        except Exception as e:
+            logger.warning(f"Background YouTube refresh failed: {e}")
+        await asyncio.sleep(REFRESH_SECONDS)
+
+
+def start_video_refresher() -> None:
+    """Keep the video cache warm so visitors never wait on YouTube."""
+    global _loop_task
+    if _loop_task is None or _loop_task.done():
+        _loop_task = asyncio.create_task(_refresh_loop())
+
+
+def stop_video_refresher() -> None:
+    if _loop_task is not None:
+        _loop_task.cancel()

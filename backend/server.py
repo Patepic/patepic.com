@@ -31,7 +31,7 @@ from auth import (
 )
 from storage import upload_image, delete_image_by_url
 from twitch import get_live_status, get_playing_game
-from youtube import get_recent_videos
+from youtube import get_recent_videos, start_video_refresher, stop_video_refresher
 from og import render_share_image
 
 logging.basicConfig(
@@ -143,6 +143,8 @@ class NowPlayingIn(BaseModel):
     cover_url: str = Field("", max_length=1024)
     platform: str = Field("", max_length=60)
     note: str = Field("", max_length=120)
+    imageCredit: str = Field("", max_length=120)
+    imageCreditUrl: str = Field("", max_length=1024)
 
 
 class LoginIn(BaseModel):
@@ -575,6 +577,7 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup():
+    start_video_refresher()
     try:
         await db.users.create_index("email", unique=True)
         await db.reviews.create_index("slug", unique=True)
@@ -607,4 +610,5 @@ async def startup():
 
 @app.on_event("shutdown")
 async def shutdown():
+    stop_video_refresher()
     mongo_client.close()
