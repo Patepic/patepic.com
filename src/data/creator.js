@@ -14,8 +14,8 @@ const base = {
 
   pixie: {
     name: "Pixie",
-    handle: "@pixievgm",
-    url: "https://www.youtube.com/@pixievgm",
+    handle: "@PixieTheHiddenTrack",
+    url: "https://www.youtube.com/@PixieTheHiddenTrack",
   },
 };
 
